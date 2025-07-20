@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits, watch, onMounted } from 'vue';
+import { ref, defineEmits, watch, onMounted as _onMounted } from 'vue';
 
 const props = defineProps({
   note: {
@@ -29,7 +29,7 @@ function emitSave() {
   emit('save', {
     title: title.value,
     content: content.value,
-    tags: tagsInput.value.split(',').map(t => t.trim()).filter(Boolean)
+    tags: tagsInput.value.split(',').map((t: string) => t.trim()).filter(Boolean)
   });
 }
 
