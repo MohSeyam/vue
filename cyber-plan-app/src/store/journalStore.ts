@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 
 export const useJournalStore = defineStore('journal', {
   state: () => ({
-    entries: [],
+    entries: [] as any[],
   }),
   actions: {
     addEntry(entry: any) {
