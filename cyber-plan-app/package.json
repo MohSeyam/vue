@@ -1,0 +1,31 @@
+{
+  "name": "cyber-plan-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "dexie": "^4.0.11",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1",
+    "pinia": "^3.0.3",
+    "turndown": "^7.2.0",
+    "vue": "^3.5.17",
+    "vue-i18n": "^11.1.10",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/tsconfig": "^0.7.0",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.4",
+    "vue-tsc": "^2.2.12"
+  }
+}
