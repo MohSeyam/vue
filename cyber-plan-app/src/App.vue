@@ -1,7 +1,7 @@
 <script setup lang="ts">
+
 // App shell logic
 </script>
-
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
     <nav class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow">
@@ -21,8 +21,6 @@
       <router-view />
     </main>
   </div>
-</template>
-
 <style scoped>
 .logo {
   height: 6em;
