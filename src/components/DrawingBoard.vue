@@ -64,7 +64,6 @@ function clearCanvas() {
   ctx.clearRect(0, 0, canvas.value!.width, canvas.value!.height);
 }
 function emitSave() {
-  const _dataUrl = canvas.value!.toDataURL();
   // You can emit or handle the image data as needed
   // $emit('save', dataUrl);
   alert('Drawing saved! (implement event as needed)');
