@@ -1,5 +1,10 @@
 <template>
   <v-container class="pa-4 pa-md-8 animate-fade-in text-center">
+    <v-row class="mb-4">
+      <v-col cols="12" md="6" class="mx-auto">
+        <ProgressChart :value="progress" label="جولة التعريف" />
+      </v-col>
+    </v-row>
     <v-card class="pa-8 mx-auto" max-width="600">
       <v-icon size="64" color="primary">mdi-shield-account</v-icon>
       <v-card-title class="font-weight-bold text-primary mt-4">{{ t.welcome }}</v-card-title>
@@ -17,5 +22,7 @@
 </template>
 <script setup lang="ts">
 import { inject } from 'vue';
+import ProgressChart from '../components/charts/ProgressChart.vue';
 const { t } = inject('app') as any;
+const progress = 33; // مثال: نسبة التقدم في الجولة التعريفية
 </script>
