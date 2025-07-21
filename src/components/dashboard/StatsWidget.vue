@@ -64,7 +64,7 @@ const doughnutData = computed(() => ({
         plan.allTasks.filter(t => t.type === 'quiz').length,
         plan.allTasks.filter(t => t.type === 'project').length,
         plan.allTasks.filter(t => t.type === 'review').length,
-        plan.allTasks.filter(t => !['quiz','project','review'].includes(t.type)).length
+        plan.allTasks.filter(t => !['quiz','project','review'].includes(t.type ?? '')).length
       ],
       backgroundColor: [
         '#22d3ee', // quiz
