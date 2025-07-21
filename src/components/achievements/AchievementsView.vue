@@ -21,6 +21,14 @@
         <div class="text-lg mt-2">{{ $t('achievements.completedTasks') }}</div>
       </div>
     </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+      <PhaseProgressChart />
+      <SkillsChart />
+    </div>
+    <div class="mb-10">
+      <StatsSummary />
+    </div>
+    <ReportGenerator />
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mt-8">
       <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">{{ $t('achievements.details') }}</h2>
       <ul class="list-disc pl-6 space-y-2">
@@ -35,6 +43,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { usePlanStore } from '@/stores/usePlanStore'
+import PhaseProgressChart from './PhaseProgressChart.vue'
+import SkillsChart from './SkillsChart.vue'
+import StatsSummary from './StatsSummary.vue'
+import ReportGenerator from './ReportGenerator.vue'
 const planStore = usePlanStore()
 const totalTasks = computed(() => planStore.weeks.reduce((acc, w) => acc + w.days.reduce((dacc, d) => dacc + (d.tasks?.length || 0), 0), 0))
 const completedTasks = computed(() => planStore.weeks.reduce((acc, w) => acc + w.days.reduce((dacc, d) => dacc + (d.tasks?.filter(t => t.done).length || 0), 0), 0))
