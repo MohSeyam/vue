@@ -1,124 +1,92 @@
 <template>
-  <div class="space-y-8">
-    <!-- Welcome Header -->
-    <div class="text-center space-y-4">
-      <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-        Welcome to CyberPlan
-      </h1>
-      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-        Your comprehensive cybersecurity learning journey starts here. Track progress, manage tasks, and achieve your goals.
-      </p>
-    </div>
+  <div class="min-h-screen flex bg-gradient-to-tr from-cyan-900 via-blue-900 to-purple-900 font-[Tajawal]">
+    <!-- Sidebar -->
+    <aside class="hidden md:flex flex-col w-20 bg-white/10 backdrop-blur-lg shadow-2xl rounded-r-3xl py-8 items-center space-y-8">
+      <router-link to="/" class="mb-8">
+        <div class="bg-gradient-to-tr from-cyan-400 to-purple-500 rounded-2xl p-3 shadow-lg">
+          <i class="ph ph-shield-check text-3xl text-white"></i>
+        </div>
+      </router-link>
+      <router-link v-for="item in navItems" :key="item.path" :to="item.path" class="group flex flex-col items-center">
+        <span class="text-2xl group-hover:text-cyan-400 transition">{{ item.icon }}</span>
+        <span class="text-xs text-white/60 group-hover:text-cyan-300 mt-1">{{ item.short }}</span>
+      </router-link>
+    </aside>
 
-    <!-- Quick Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-        <div class="flex items-center justify-between">
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col items-center px-4 md:px-16 py-10">
+      <!-- Hero Section -->
+      <section class="w-full max-w-4xl bg-white/10 backdrop-blur-2xl rounded-3xl shadow-2xl p-10 mb-10 relative overflow-hidden animate-fade-in">
+        <div class="absolute -top-10 -right-10 opacity-20">
+          <svg width="160" height="160"><circle cx="80" cy="80" r="80" fill="#fff"/></svg>
+        </div>
+        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
-            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Today's Tasks</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white">8</p>
+            <h1 class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-cyan-300 to-purple-300 bg-clip-text text-transparent mb-4">مرحبًا بك في خطتك السيبرانية</h1>
+            <p class="text-lg text-white/80 mb-6">ابدأ رحلتك في تعلم الأمن السيبراني مع لوحة تحكم تفاعلية، إحصائيات متقدمة، ومهام يومية مصممة خصيصًا لك.</p>
+            <router-link to="/day" class="inline-block px-8 py-3 rounded-full bg-gradient-to-r from-cyan-400 to-purple-500 text-white font-bold shadow-lg hover:scale-105 hover:shadow-2xl transition-all text-lg">ابدأ الآن 🚀</router-link>
           </div>
-          <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
-            <span class="text-2xl">📋</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Study Hours</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white">2.5</p>
-          </div>
-          <div class="w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
-            <span class="text-2xl">⏰</span>
+          <div class="flex items-center justify-center">
+            <img src="/cyber-hero.svg" alt="Cyber Hero" class="w-48 md:w-64 drop-shadow-2xl animate-bounce-slow" />
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Streak</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white">7 days</p>
-          </div>
-          <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
-            <span class="text-2xl">🔥</span>
-          </div>
+      <!-- Stats & Progress -->
+      <section class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+        <div class="bg-gradient-to-tr from-cyan-700 to-blue-800 rounded-2xl shadow-xl p-8 text-white relative overflow-hidden animate-fade-in-up flex flex-col items-center">
+          <i class="ph ph-list-check text-4xl mb-4 text-cyan-200 animate-pulse"></i>
+          <div class="text-3xl font-bold">8</div>
+          <div class="text-lg mt-2">مهام اليوم</div>
         </div>
-      </div>
-    </div>
-
-    <!-- Main Dashboard Content -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <!-- Progress Overview -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-        <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Overall Progress</h2>
-        <div class="flex justify-center mb-4">
-          <ProgressCircle :percent="72" label="Plan Progress" color="#10b981" :size="120" />
+        <div class="bg-gradient-to-tr from-purple-700 to-cyan-700 rounded-2xl shadow-xl p-8 text-white relative overflow-hidden animate-fade-in-up flex flex-col items-center">
+          <i class="ph ph-timer text-4xl mb-4 text-purple-200 animate-pulse"></i>
+          <div class="text-3xl font-bold">2.5</div>
+          <div class="text-lg mt-2">ساعات دراسة</div>
         </div>
-        <div class="text-center">
-          <p class="text-sm text-gray-600 dark:text-gray-400">You're making great progress!</p>
+        <div class="bg-gradient-to-tr from-pink-600 to-purple-700 rounded-2xl shadow-xl p-8 text-white relative overflow-hidden animate-fade-in-up flex flex-col items-center">
+          <i class="ph ph-fire text-4xl mb-4 text-pink-200 animate-pulse"></i>
+          <div class="text-3xl font-bold">7 أيام</div>
+          <div class="text-lg mt-2">سلسلة الإنجاز</div>
         </div>
-      </div>
+      </section>
 
-      <!-- Skills Overview -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-        <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Skills Progress</h2>
-        <SkillBarChart :skills="skills" />
-      </div>
-    </div>
+      <!-- Animated Progress & Achievements -->
+      <section class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+        <div class="bg-white/10 backdrop-blur-2xl rounded-2xl shadow-xl p-8 flex flex-col items-center animate-fade-in-up">
+          <h2 class="text-xl font-bold text-white mb-4">تقدمك العام</h2>
+          <ProgressCircle :percent="72" label="تقدم الخطة" color="#10b981" :size="140" />
+          <p class="text-white/80 mt-4">أنت على الطريق الصحيح! 🚀</p>
+        </div>
+        <div class="bg-white/10 backdrop-blur-2xl rounded-2xl shadow-xl p-8 flex flex-col items-center animate-fade-in-up">
+          <h2 class="text-xl font-bold text-white mb-4">مهاراتك</h2>
+          <SkillBarChart :skills="skills" />
+        </div>
+      </section>
 
-    <!-- Quick Search -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-      <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">البحث السريع</h2>
-      <div class="relative">
-        <input
-          type="text"
-          placeholder="البحث في المهام، الملاحظات، المهارات..."
-          class="w-full px-4 py-3 pl-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-        />
-        <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">🔍</span>
-      </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-      <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">الإجراءات السريعة</h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <router-link 
-          to="/day" 
-          class="flex flex-col items-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
-        >
-          <span class="text-2xl mb-2">📅</span>
-          <span class="text-sm font-medium text-blue-700 dark:text-blue-300">المهام اليومية</span>
-        </router-link>
-        
-        <router-link 
-          to="/notebook" 
-          class="flex flex-col items-center p-4 rounded-lg bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
-        >
-          <span class="text-2xl mb-2">📝</span>
-          <span class="text-sm font-medium text-green-700 dark:text-green-300">إضافة ملاحظة</span>
-        </router-link>
-        
-        <router-link 
-          to="/achievements" 
-          class="flex flex-col items-center p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
-        >
-          <span class="text-2xl mb-2">🏆</span>
-          <span class="text-sm font-medium text-purple-700 dark:text-purple-300">الإنجازات</span>
-        </router-link>
-        
-        <router-link 
-          to="/analytics" 
-          class="flex flex-col items-center p-4 rounded-lg bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors"
-        >
-          <span class="text-2xl mb-2">📊</span>
-          <span class="text-sm font-medium text-orange-700 dark:text-orange-300">التحليلات</span>
-        </router-link>
-      </div>
-    </div>
+      <!-- Quick Actions -->
+      <section class="w-full max-w-4xl bg-white/10 backdrop-blur-2xl rounded-2xl shadow-xl p-8 flex flex-col items-center animate-fade-in-up">
+        <h2 class="text-xl font-bold text-white mb-6">إجراءات سريعة</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
+          <router-link to="/day" class="flex flex-col items-center p-4 rounded-xl bg-gradient-to-tr from-cyan-400 to-blue-500 text-white font-bold shadow-lg hover:scale-105 hover:shadow-2xl transition-all text-lg ring-2 ring-cyan-300/30">
+            <i class="ph ph-calendar-check text-3xl mb-2"></i>
+            المهام اليومية
+          </router-link>
+          <router-link to="/notebook" class="flex flex-col items-center p-4 rounded-xl bg-gradient-to-tr from-green-400 to-cyan-500 text-white font-bold shadow-lg hover:scale-105 hover:shadow-2xl transition-all text-lg ring-2 ring-green-300/30">
+            <i class="ph ph-note-pencil text-3xl mb-2"></i>
+            إضافة ملاحظة
+          </router-link>
+          <router-link to="/achievements" class="flex flex-col items-center p-4 rounded-xl bg-gradient-to-tr from-pink-400 to-purple-500 text-white font-bold shadow-lg hover:scale-105 hover:shadow-2xl transition-all text-lg ring-2 ring-pink-300/30">
+            <i class="ph ph-trophy text-3xl mb-2"></i>
+            الإنجازات
+          </router-link>
+          <router-link to="/analytics" class="flex flex-col items-center p-4 rounded-xl bg-gradient-to-tr from-yellow-400 to-pink-500 text-white font-bold shadow-lg hover:scale-105 hover:shadow-2xl transition-all text-lg ring-2 ring-yellow-300/30">
+            <i class="ph ph-chart-bar text-3xl mb-2"></i>
+            التحليلات
+          </router-link>
+        </div>
+      </section>
+    </main>
   </div>
 </template>
 
@@ -126,10 +94,51 @@
 import ProgressCircle from '@/components/ProgressCircle.vue';
 import SkillBarChart from '@/components/SkillBarChart.vue';
 
+const navItems = [
+  { path: '/day', icon: '📅', short: 'اليومي' },
+  { path: '/notebook', icon: '📝', short: 'ملاحظات' },
+  { path: '/achievements', icon: '🏆', short: 'إنجازات' },
+  { path: '/analytics', icon: '📊', short: 'تحليل' },
+  { path: '/profile', icon: '👤', short: 'حساب' },
+  { path: '/settings', icon: '⚙️', short: 'إعدادات' }
+];
+
 const skills = [
-  { name: 'Network Security', value: 80, color: '#3b82f6' },
-  { name: 'Web Security', value: 65, color: '#f59e0b' },
-  { name: 'Forensics', value: 45, color: '#10b981' },
-  { name: 'Cryptography', value: 30, color: '#8b5cf6' }
+  { name: 'أمن الشبكات', value: 80, color: '#3b82f6' },
+  { name: 'أمن الويب', value: 65, color: '#f59e0b' },
+  { name: 'التحليل الجنائي', value: 45, color: '#10b981' },
+  { name: 'التشفير', value: 30, color: '#8b5cf6' }
 ];
 </script>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+
+.animate-fade-in {
+  animation: fadeIn 1s cubic-bezier(.4,0,.2,1) both;
+}
+.animate-fade-in-up {
+  animation: fadeInUp 1s cubic-bezier(.4,0,.2,1) both;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.font-\[Tajawal\] {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* Custom slow bounce for hero image */
+.animate-bounce-slow {
+  animation: bounceSlow 2.5s infinite alternate;
+}
+@keyframes bounceSlow {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-16px); }
+}
+</style>
