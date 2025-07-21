@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { usePlanStore } from '@/stores/usePlanStore'
-import jsPDF from 'jspdf'
 const planStore = usePlanStore()
 const exportLang = ref('ar')
 const exportType = ref('pdf')

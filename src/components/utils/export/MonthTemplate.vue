@@ -1,8 +1,8 @@
 <template>
   <v-card class="pa-6 mb-4" elevation="8">
-    <v-card-title class="font-weight-bold text-primary mb-2">{{ month.title[$i18n.locale] || month.title.en }}</v-card-title>
+    <v-card-title class="font-weight-bold text-primary mb-2">{{ props.month.title[$i18n.locale] || props.month.title.en }}</v-card-title>
     <v-list dense>
-      <v-list-item v-for="w in month.weeks" :key="w.week">
+      <v-list-item v-for="w in props.month.weeks" :key="w.week">
         <v-list-item-title class="font-weight-bold">{{ $t('plan.week', 'الأسبوع') }} {{ w.week }}: {{ w.title[$i18n.locale] || w.title.en }}</v-list-item-title>
       </v-list-item>
     </v-list>

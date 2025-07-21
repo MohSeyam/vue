@@ -20,10 +20,9 @@
   </v-app>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useTheme } from 'vuetify'
-import { useRouter } from 'vue-router'
 const drawer = ref(false)
 const { locale } = useI18n()
 const theme = useTheme()
