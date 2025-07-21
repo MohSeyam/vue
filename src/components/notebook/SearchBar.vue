@@ -2,7 +2,7 @@
   <div class="relative">
     <input
       :value="modelValue"
-      @input="emit('update:modelValue', $event.target.value)"
+      @input="emit('update:modelValue', ($event.target as HTMLInputElement)?.value)"
       :placeholder="$t('notebook.search')"
       class="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-primary-600"
       type="text"

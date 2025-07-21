@@ -11,9 +11,10 @@ export interface Resource {
 }
 
 export interface Task {
-  id: string;
+  id?: string;
   title: LocalizedString;
   done: boolean;
+  type?: string;
   duration: number;
   description: LocalizedString;
 }
@@ -33,20 +34,27 @@ export interface Note {
 export interface Day {
   key: string;
   day: LocalizedString;
-  topic: LocalizedString;
+  date?: string;
+  topic?: LocalizedString;
   tasks: Task[];
-  resources: Resource[];
-  notes_prompt: NotesPrompt;
+  resources?: Resource[];
+  notes_prompt?: NotesPrompt;
 }
 
 export interface Week {
-  id: string;
+  id?: string;
+  week?: number;
+  phase?: number;
   title: LocalizedString;
+  objective?: LocalizedString;
   days: Day[];
+  resources?: Resource[];
+  notes_prompt?: NotesPrompt;
 }
 
 export interface Phase {
-  id: string;
+  id?: string;
   title: LocalizedString;
+  goal?: LocalizedString;
   weeks: Week[];
 }
