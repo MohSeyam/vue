@@ -1,7 +1,9 @@
 {
   "tasks": {
     "noTasks": "No tasks for today.",
-    "done": "Completed"
+    "done": "Completed",
+    "title": "Tasks",
+    "min": "min"
   },
   "pomodoro": {
     "work": "Work",
@@ -18,6 +20,11 @@
   },
   "resources": {
     "noResources": "No resources for today.",
-    "open": "Open link"
+    "open": "Open link",
+    "title": "Resources"
+  },
+  "week": {
+    "noDayData": "No data for this day.",
+    "notFound": "Week not found."
   }
 }
