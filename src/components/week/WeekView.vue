@@ -1,63 +1,30 @@
 <template>
-  <div class="max-w-4xl mx-auto py-10 px-4">
-    <div v-if="week">
-      <!-- Week Header -->
-      <div class="mb-8 text-center">
-        <h1 class="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-2">{{ getText(week.title ?? {en:'',ar:''}) }}</h1>
-        <p class="text-lg text-gray-600 dark:text-gray-300">{{ getText(week.objective ?? {en:'',ar:''}) }}</p>
-      </div>
-      <!-- Day Tabs -->
-      <DayTabs :days="week.days.map(d => ({ id: d.key, date: d.key }))" v-model:activeDayIndex="activeDayIndex" />
-      <div v-if="activeDay">
-        <div class="mb-6">
-          <h2 class="text-xl font-bold text-cyan-700 dark:text-cyan-300 mb-2">{{ getText(activeDay.day ?? {en:'',ar:''}) }} - {{ getText(activeDay.topic ?? {en:'',ar:''}) }}</h2>
-        </div>
-        <!-- Tasks -->
-        <div class="mb-6">
-          <h3 class="text-lg font-bold mb-2 text-gray-900 dark:text-white">{{ $t('tasks.title') }}</h3>
-          <ul class="space-y-3">
-            <li v-for="task in activeDay.tasks" :key="task.id" class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-gray-700 shadow-sm">
-              <span class="font-bold text-cyan-500">{{ task.type }}</span>
-              <span class="text-xs text-gray-400">{{ task.duration }} {{ $t('tasks.min') }}</span>
-              <span class="flex-1">{{ getText(task.description ?? {en:'',ar:''}) }}</span>
-            </li>
-          </ul>
-        </div>
-        <!-- Resources -->
-        <div v-if="activeDay.resources && activeDay.resources.length" class="mb-6">
-          <h3 class="text-lg font-bold mb-2 text-gray-900 dark:text-white">{{ $t('resources.title') }}</h3>
-          <ul class="space-y-2">
-            <li v-for="res in activeDay.resources" :key="res.url">
-              <a :href="res.url" target="_blank" class="text-cyan-600 dark:text-cyan-300 hover:underline font-bold">{{ res.title }}</a>
-              <span class="text-xs text-gray-400 ml-2">({{ res.type }})</span>
-            </li>
-          </ul>
-        </div>
-        <!-- Notes Prompt -->
-        <div v-if="activeDay.notes_prompt">
-          <h3 class="text-lg font-bold mb-2 text-gray-900 dark:text-white">{{ getText(activeDay.notes_prompt.title ?? {en:'',ar:''}) }}</h3>
-          <ul class="list-disc pl-6 space-y-1">
-            <li v-for="point in activeDay.notes_prompt.points" :key="point.ar">{{ getText(point ?? {en:'',ar:''}) }}</li>
-          </ul>
-        </div>
-      </div>
-      <div v-else class="text-center text-gray-400 mt-8">{{ $t('week.noDayData') }}</div>
-    </div>
-    <div v-else class="text-center text-gray-400">{{ $t('week.notFound') }}</div>
-  </div>
+  <v-container fluid class="py-8">
+    <v-row justify="center">
+      <v-col cols="12" md="8">
+        <v-card class="pa-6 mb-4" elevation="8">
+          <v-card-title class="font-weight-bold text-primary mb-2">{{ week.title[$i18n.locale] || week.title.en }}</v-card-title>
+          <v-card-subtitle class="mb-4">{{ week.objective?.[$i18n.locale] || week.objective?.en }}</v-card-subtitle>
+          <v-list dense>
+            <v-list-item v-for="d in week.days" :key="d.key">
+              <v-list-item-title class="font-weight-bold">{{ d.day[$i18n.locale] || d.day.en }}: {{ d.topic?.[$i18n.locale] || d.topic?.en }}</v-list-item-title>
+              <v-list-item-subtitle>
+                <v-card class="pa-3 my-2" elevation="2">
+                  <v-list dense>
+                    <v-list-item v-for="t in d.tasks" :key="t.id">
+                      <v-list-item-icon><v-icon color="primary">mdi-checkbox-blank-circle-outline</v-icon></v-list-item-icon>
+                      <v-list-item-title>{{ t.description[$i18n.locale] || t.description.en }} ({{ t.type || '' }}, {{ t.duration }} min)</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-card>
+              </v-list-item-subtitle>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { usePlanStore } from '@/stores/usePlanStore'
-import { getText } from '@/utils/getText'
-import DayTabs from './DayTabs.vue'
-const route = useRoute()
-const planStore = usePlanStore()
-const week = computed(() => planStore.weeks.find(w => w.week === Number(route.params.id)))
-const activeDayIndex = ref(0)
-const activeDay = computed(() => week.value?.days[activeDayIndex.value])
-onMounted(() => {
-  if (week.value && week.value.days.length > 0) activeDayIndex.value = 0
-})
+const props = defineProps({ week: Object })
 </script>

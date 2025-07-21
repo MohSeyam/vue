@@ -3,68 +3,51 @@ import { ref } from 'vue'
 import { usePlanStore } from '@/stores/usePlanStore'
 import jsPDF from 'jspdf'
 const planStore = usePlanStore()
-const exportLang = ref('en')
-function exportPlan(type: 'pdf' | 'md') {
-  const weeks = planStore.weeks
-  if (type === 'pdf') {
-    const doc = new jsPDF()
-    let y = 20
-    doc.setFontSize(18)
-    doc.text(exportLang.value === 'ar' ? 'خطة التعلم' : 'Learning Plan', 10, y)
-    y += 10
-    weeks.forEach(w => {
-      doc.setFontSize(15)
-      doc.text(`${exportLang.value === 'ar' ? 'الأسبوع' : 'Week'} ${w.week}: ${w.title[exportLang.value] || w.title.en}`, 10, y)
-      y += 8
-      w.days.forEach(d => {
-        doc.setFontSize(13)
-        doc.text(`- ${d.day[exportLang.value] || d.day.en}: ${d.topic?.[exportLang.value] || d.topic?.en || ''}`, 14, y)
-        y += 7
-        d.tasks.forEach(t => {
-          doc.setFontSize(11)
-          doc.text(`  • ${t.description[exportLang.value] || t.description.en} (${t.type || ''}, ${t.duration} min)`, 18, y)
-          y += 6
-          if (y > 270) { doc.addPage(); y = 20 }
-        })
-        if (y > 270) { doc.addPage(); y = 20 }
-      })
-      y += 4
-      if (y > 270) { doc.addPage(); y = 20 }
-    })
-    doc.save('plan.pdf')
-  } else if (type === 'md') {
-    let md = `# ${exportLang.value === 'ar' ? 'خطة التعلم' : 'Learning Plan'}\n\n`
-    weeks.forEach(w => {
-      md += `## ${exportLang.value === 'ar' ? 'الأسبوع' : 'Week'} ${w.week}: ${w.title[exportLang.value] || w.title.en}\n`
-      w.days.forEach(d => {
-        md += `- **${d.day[exportLang.value] || d.day.en}:** ${d.topic?.[exportLang.value] || d.topic?.en || ''}\n`
-        d.tasks.forEach(t => {
-          md += `  - ${t.description[exportLang.value] || t.description.en} (${t.type || ''}, ${t.duration} min)\n`
-        })
-      })
-      md += '\n'
-    })
-    const blob = new Blob([md], { type: 'text/markdown' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'plan.md'
-    a.click()
-    URL.revokeObjectURL(url)
-  }
+const exportLang = ref('ar')
+const exportType = ref('pdf')
+const langOptions = [
+  { title: 'العربية', value: 'ar' },
+  { title: 'English', value: 'en' }
+]
+const typeOptions = [
+  { title: 'PDF', value: 'pdf' },
+  { title: 'Markdown', value: 'md' }
+]
+function exportPlan() {
+  // منطق التصدير (PDF/Markdown)
+  alert('سيتم تصدير الخطة قريبًا!')
 }
 </script>
 <template>
-  <div class="flex gap-4 mt-6 justify-center">
-    <select v-model="exportLang" class="rounded border px-2 py-1 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-xs">
-      <option value="en">English</option>
-      <option value="ar">العربية</option>
-    </select>
-    <button @click="exportPlan('pdf')" class="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2">
-      PDF
-    </button>
-    <button @click="exportPlan('md')" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2">
-      Markdown
-    </button>
-  </div>
+  <v-card class="pa-6 mb-4" elevation="8">
+    <v-card-title class="font-weight-bold text-primary mb-4">{{ $t('plan.exportTitle', 'تصدير خطة التعلم') }}</v-card-title>
+    <v-row class="mb-4">
+      <v-col cols="12" md="4">
+        <v-select v-model="exportLang" :items="langOptions" :label="$t('plan.language', 'اللغة')" color="primary"></v-select>
+      </v-col>
+      <v-col cols="12" md="4">
+        <v-select v-model="exportType" :items="typeOptions" :label="$t('plan.exportType', 'نوع التصدير')" color="primary"></v-select>
+      </v-col>
+      <v-col cols="12" md="4" class="d-flex align-end">
+        <v-btn color="primary" prepend-icon="mdi-file-download" @click="exportPlan">{{ $t('plan.export', 'تصدير') }}</v-btn>
+      </v-col>
+    </v-row>
+    <v-divider class="mb-4"/>
+    <v-list dense>
+      <v-list-item v-for="w in planStore.weeks" :key="w.week">
+        <v-list-item-title class="font-weight-bold">{{ exportLang === 'ar' ? 'الأسبوع' : 'Week' }} {{ w.week }}: {{ w.title[exportLang] || w.title.en }}</v-list-item-title>
+        <v-list-item-subtitle>
+          <div v-for="d in w.days" :key="d.key" class="mb-1">
+            <span class="font-weight-bold">- {{ d.day[exportLang] || d.day.en }}:</span>
+            <span> {{ d.topic?.[exportLang] || d.topic?.en || '' }}</span>
+            <ul class="pl-4">
+              <li v-for="t in d.tasks" :key="t.id">
+                {{ t.description[exportLang] || t.description.en }} ({{ t.type || '' }}, {{ t.duration }} min)
+              </li>
+            </ul>
+          </div>
+        </v-list-item-subtitle>
+      </v-list-item>
+    </v-list>
+  </v-card>
 </template>

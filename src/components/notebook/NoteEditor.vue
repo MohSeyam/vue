@@ -1,11 +1,13 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600">
+  <v-dialog v-model="dialog" max-width="700">
     <v-card>
       <v-card-title class="font-weight-bold text-primary">{{ note && note.id ? $t('notebook.editNote') : $t('notebook.addNote') }}</v-card-title>
       <v-form @submit.prevent="save">
         <v-card-text>
           <v-text-field v-model="title" :label="$t('notebook.title')" required class="mb-4"/>
-          <v-textarea v-model="content" :label="$t('notebook.content')" rows="5" auto-grow required class="mb-4"/>
+          <div class="mb-4">
+            <TipTapEditor v-model="content" :rtl="isRTL" />
+          </div>
           <v-combobox v-model="tags" :items="allTags" :label="$t('notebook.tags')" multiple chips clearable class="mb-2"/>
         </v-card-text>
         <v-card-actions class="justify-end">
@@ -19,6 +21,9 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
 import { useNotebookStore } from '@/stores/useNotebookStore'
+import TipTapEditor from '@/components/common/TipTapEditor.vue'
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n()
 const props = defineProps({ note: Object })
 const emit = defineEmits(['save', 'close'])
 const store = useNotebookStore()
@@ -26,6 +31,7 @@ const dialog = ref(true)
 const title = ref('')
 const content = ref('')
 const tags = ref([])
+const isRTL = computed(() => locale.value === 'ar')
 const allTags = computed(() => Array.from(new Set(store.notes.flatMap(n => n.tags || []))))
 watch(() => props.note, (n) => {
   if (n) {
