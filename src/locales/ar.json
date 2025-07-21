@@ -43,7 +43,13 @@
     "graphTitle": "العلاقات البيانية بين الملاحظات",
     "graphDesc": "سيتم قريبًا عرض العلاقات بين الملاحظات بشكل بياني تفاعلي.",
     "allTags": "الكل",
-    "export": "تصدير"
+    "export": "تصدير",
+    "toastSaved": "تم حفظ الملاحظة بنجاح!",
+    "toastDeleted": "تم حذف الملاحظة!",
+    "toastExportedPDF": "تم تصدير الملاحظات كـ PDF!",
+    "toastExportedMD": "تم تصدير الملاحظات كـ Markdown!",
+    "toastNoNotes": "لا توجد ملاحظات للتصدير!",
+    "toastTemplate": "تم إدراج القالب!"
   },
   "sidebar": {
     "dashboard": "الرئيسية",
@@ -76,6 +82,7 @@
     "tasks": "مهام",
     "completed": "منجز",
     "exportPDF": "تصدير PDF",
-    "exportMD": "تصدير Markdown"
+    "exportMD": "تصدير Markdown",
+    "notesCount": "عدد الملاحظات: {count}"
   }
 }
