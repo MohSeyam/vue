@@ -14,17 +14,17 @@
     <v-list density="compact" class="mb-2">
       <v-list-item>
         <v-list-item-icon><v-icon color="primary">mdi-calendar-week</v-icon></v-list-item-icon>
-        <v-list-item-title>{{ $t('dashboard.weeks', 'عدد الأسابيع') }}</v-list-item-title>
+        <v-list-item-title>{{ $t('dashboard.weeks', 'عدد الأسابيع') || '' }}</v-list-item-title>
         <v-list-item-action><span class="font-weight-bold">{{ stats.weeks }}</span></v-list-item-action>
       </v-list-item>
       <v-list-item>
         <v-list-item-icon><v-icon color="secondary">mdi-checkbox-multiple-marked-outline</v-icon></v-list-item-icon>
-        <v-list-item-title>{{ $t('dashboard.tasks', 'عدد المهام') }}</v-list-item-title>
+        <v-list-item-title>{{ $t('dashboard.tasks', 'عدد المهام') || '' }}</v-list-item-title>
         <v-list-item-action><span class="font-weight-bold">{{ stats.tasks }}</span></v-list-item-action>
       </v-list-item>
       <v-list-item>
         <v-list-item-icon><v-icon color="success">mdi-calendar-range</v-icon></v-list-item-icon>
-        <v-list-item-title>{{ $t('dashboard.days', 'عدد الأيام') }}</v-list-item-title>
+        <v-list-item-title>{{ $t('dashboard.days', 'عدد الأيام') || '' }}</v-list-item-title>
         <v-list-item-action><span class="font-weight-bold">{{ stats.days }}</span></v-list-item-action>
       </v-list-item>
     </v-list>
