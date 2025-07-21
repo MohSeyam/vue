@@ -23,6 +23,7 @@ export const useNotebookStore = defineStore('notebook', () => {
   }
   async function addNote(note: Note) {
     note.id = crypto.randomUUID()
+    if (!note.taskId) note.taskId = ''
     await db.notes.add(note)
     await loadNotes()
   }

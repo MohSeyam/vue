@@ -18,7 +18,6 @@
 import { ref, computed } from 'vue'
 import JournalEntry from './JournalEntry.vue'
 import { usePlanStore } from '@/stores/usePlanStore'
-const props = defineProps<{ entries: any[] }>()
 const expandedIds = ref<string[]>([])
 const planStore = usePlanStore()
 const daysMap = computed(() => {
@@ -30,11 +29,11 @@ const daysMap = computed(() => {
   })
   return map
 })
-function getDayLabel(week, dayKey) {
+function getDayLabel(week: number, dayKey: string) {
   const d = daysMap.value[`${week}|${dayKey}`]
   return d ? d.label : dayKey
 }
-function getDayDate(week, dayKey) {
+function getDayDate(week: number, dayKey: string) {
   const d = daysMap.value[`${week}|${dayKey}`]
   return d?.date
 }

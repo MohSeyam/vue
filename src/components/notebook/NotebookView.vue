@@ -61,6 +61,8 @@ import GraphViewModal from './GraphViewModal.vue'
 import type { Note } from '@/types/plan'
 import jsPDF from 'jspdf'
 import TurndownService from 'turndown'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const store = useNotebookStore()
 const planStore = usePlanStore()
 const showEditor = ref(false)
@@ -133,21 +135,21 @@ function saveNote(note: Note) {
   if (note.id) store.updateNote(note)
   else store.addNote({ ...note, taskId: selectedTaskId.value })
   closeEditor()
-  toastRef.value?.show($t('notebook.toastSaved'), 'success')
+  toastRef.value?.show(t('notebook.toastSaved'), 'success')
 }
 function deleteNote(id: string) {
   store.deleteNote(id)
-  toastRef.value?.show($t('notebook.toastDeleted'), 'success')
+  toastRef.value?.show(t('notebook.toastDeleted'), 'success')
 }
 function insertTemplate(tpl: Note) {
   editingNote.value = { ...tpl, id: '', tags: [], taskId: selectedTaskId.value }
   showEditor.value = true
-  toastRef.value?.show($t('notebook.toastTemplate'), 'info')
+  toastRef.value?.show(t('notebook.toastTemplate'), 'info')
 }
 async function exportNotes(type: 'pdf' | 'md') {
   showExport.value = false
   const notes = filteredNotes.value
-  if (!notes.length) return toastRef.value?.show($t('notebook.toastNoNotes'), 'error')
+  if (!notes.length) return toastRef.value?.show(t('notebook.toastNoNotes'), 'error')
   if (type === 'pdf') {
     const doc = new jsPDF()
     notes.forEach((note, i) => {
@@ -168,7 +170,7 @@ async function exportNotes(type: 'pdf' | 'md') {
       if (i < notes.length - 1) doc.addPage()
     })
     doc.save('notes.pdf')
-    toastRef.value?.show($t('notebook.toastExportedPDF'), 'success')
+    toastRef.value?.show(t('notebook.toastExportedPDF'), 'success')
   } else if (type === 'md') {
     const turndownService = new TurndownService()
     let md = ''
@@ -189,7 +191,7 @@ async function exportNotes(type: 'pdf' | 'md') {
     a.download = 'notes.md'
     a.click()
     URL.revokeObjectURL(url)
-    toastRef.value?.show($t('notebook.toastExportedMD'), 'success')
+    toastRef.value?.show(t('notebook.toastExportedMD'), 'success')
   }
 }
 </script>
