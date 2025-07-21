@@ -28,7 +28,7 @@ const currentMode = ref<typeof modes[number]>('work');
 const timeLeft = ref(durations[currentMode.value]);
 const running = ref(false);
 const completedSessions = ref(0);
-let timer: number | null = null;
+let timer: ReturnType<typeof setInterval> | null = null;
 
 const minutes = computed(() => String(Math.floor(timeLeft.value / 60)).padStart(2, '0'));
 const seconds = computed(() => String(timeLeft.value % 60).padStart(2, '0'));
