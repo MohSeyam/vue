@@ -35,7 +35,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useNotebookStore } from '@/stores/useNotebookStore'
 import { getText } from '@/utils/getText'
 import NoteCard from './NoteCard.vue'
@@ -46,11 +46,25 @@ import NoteTemplates from './NoteTemplates.vue'
 import TagFilter from './TagFilter.vue'
 import GraphViewModal from './GraphViewModal.vue'
 import type { Note } from '@/types/plan'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
+import TurndownService from 'turndown'
 const store = useNotebookStore()
 const showEditor = ref(false)
 const editingNote = ref<Note|null>(null)
 const openGraph = ref(false)
 const showExport = ref(false)
+const search = ref('')
+const selectedTag = ref('')
+const filteredNotes = computed(() => {
+  let notes = store.notes
+  if (selectedTag.value) notes = notes.filter(n => n.tags?.includes(selectedTag.value))
+  if (search.value) {
+    const q = search.value.toLowerCase()
+    notes = notes.filter(n => getText(n.title).toLowerCase().includes(q) || getText(n.content).toLowerCase().includes(q))
+  }
+  return notes
+})
 function openEditor() {
   editingNote.value = null
   showEditor.value = true
@@ -75,10 +89,37 @@ function insertTemplate(tpl: Note) {
   editingNote.value = { ...tpl, id: '', tags: [] }
   showEditor.value = true
 }
-function exportNotes(type: 'pdf' | 'md') {
+async function exportNotes(type: 'pdf' | 'md') {
   showExport.value = false
-  // منطق التصدير سيضاف لاحقاً
-  alert('Export as ' + type.toUpperCase() + ' coming soon!')
+  const notes = filteredNotes.value
+  if (!notes.length) return alert('No notes to export!')
+  if (type === 'pdf') {
+    const doc = new jsPDF()
+    notes.forEach((note, i) => {
+      doc.setFontSize(14)
+      doc.text(getText(note.title), 10, 20 + i * 40)
+      doc.setFontSize(11)
+      doc.text(getText(note.content), 10, 28 + i * 40)
+      if (note.tags?.length) doc.text('Tags: ' + note.tags.join(', '), 10, 36 + i * 40)
+      if (i < notes.length - 1) doc.addPage()
+    })
+    doc.save('notes.pdf')
+  } else if (type === 'md') {
+    const turndownService = new TurndownService()
+    let md = ''
+    notes.forEach(note => {
+      md += `# ${getText(note.title)}\n\n${turndownService.turndown(getText(note.content))}\n`
+      if (note.tags?.length) md += `\n**Tags:** ${note.tags.join(', ')}\n`
+      md += '\n---\n'
+    })
+    const blob = new Blob([md], { type: 'text/markdown' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'notes.md'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
 }
 </script>
 <style scoped>
