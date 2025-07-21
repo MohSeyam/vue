@@ -52,9 +52,6 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive, computed, provide, onMounted, watch, markRaw } from 'vue'
-import { useI18n } from 'vue-i18n'
-// استورد بيانات الخطة والترجمات والثوابت من ملف منفصل لاحقًا
-import planData from '@/data/PlanData.json'
 import translations from '@/data/translations.json'
 import phases from '@/data/phases.json'
 
@@ -83,18 +80,14 @@ onMounted(() => {
   theme.value = localStorage.getItem('cyberPlanTheme') || 'dark'
   document.documentElement.lang = lang.value
   document.documentElement.dir = lang.value === 'ar' ? 'rtl' : 'ltr'
-  // تحميل حالة التطبيق من localStorage أو تهيئة جديدة
-  // ...
 })
 watch(appState, (newState) => {
   if (newState) {
     localStorage.setItem('cyberPlanProgress', JSON.stringify(newState))
   }
 }, { deep: true })
-// توفير الحالة لكل المكونات
 provide('app', { lang, theme, view, setView, appState, t, phases })
-// ربط المكونات الديناميكية (سيتم استيرادها وربطها لاحقًا)
-const components = {
+const components: Record<string, any> = {
   dashboard: markRaw({}),
   achievements: markRaw({}),
   notebook: markRaw({}),
