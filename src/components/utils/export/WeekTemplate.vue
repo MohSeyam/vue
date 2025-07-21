@@ -71,33 +71,23 @@ function exportWeek() {
 }
 </script>
 <template>
-  <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex flex-col items-center">
-    <div class="flex gap-2 mb-2 w-full justify-between">
-      <div class="flex gap-2">
-        <select v-model="exportLang" class="rounded border px-2 py-1 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-xs">
-          <option value="en">English</option>
-          <option value="ar">العربية</option>
-        </select>
-        <select v-model="exportType" class="rounded border px-2 py-1 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-xs">
-          <option value="pdf">PDF</option>
-          <option value="md">Markdown</option>
-          <option value="html">HTML</option>
-        </select>
-      </div>
-      <button @click="exportWeek" class="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-        {{ $t('plan.export') }}
-      </button>
-    </div>
-    <div class="mb-4 mt-2">
-      <span v-html="logoSvg" class="block mx-auto" style="width:48px;height:48px;"></span>
-    </div>
-    <h3 class="text-lg font-bold mb-2">{{ $t('plan.weeksList') }}</h3>
-    <ul>
-      <li v-for="w in weeks" :key="w.week" class="mb-2">
-        <div class="font-bold text-cyan-700 dark:text-cyan-300">{{ $t('plan.week') }} {{ w.week }} - {{ w.title[$i18n.locale] || w.title.en }}</div>
-        <div class="text-xs text-gray-500">{{ $t('plan.days') }}: {{ w.days }} | {{ $t('plan.tasks') }}: {{ w.tasks }} | {{ $t('plan.totalMinutes') }}: {{ w.minutes }} | {{ $t('plan.sources') }}: {{ w.sources }}</div>
-      </li>
-    </ul>
-  </div>
+  <v-card class="pa-6 mb-4" elevation="8">
+    <v-card-title class="font-weight-bold text-primary mb-2">{{ week.title[$i18n.locale] || week.title.en }}</v-card-title>
+    <v-card-subtitle class="mb-4">{{ week.objective?.[$i18n.locale] || week.objective?.en }}</v-card-subtitle>
+    <v-list dense>
+      <v-list-item v-for="d in week.days" :key="d.key">
+        <v-list-item-title class="font-weight-bold">{{ d.day[$i18n.locale] || d.day.en }}: {{ d.topic?.[$i18n.locale] || d.topic?.en }}</v-list-item-title>
+        <v-list-item-subtitle>
+          <ul class="pl-4">
+            <li v-for="t in d.tasks" :key="t.id">
+              {{ t.description[$i18n.locale] || t.description.en }} ({{ t.type || '' }}, {{ t.duration }} min)
+            </li>
+          </ul>
+        </v-list-item-subtitle>
+      </v-list-item>
+    </v-list>
+    <v-card-actions class="justify-end mt-4">
+      <v-btn color="primary" prepend-icon="mdi-file-download" @click="exportWeek">{{ $t('plan.export', 'تصدير الأسبوع') }}</v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
