@@ -55,7 +55,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { usePlanStore } from '@/stores/usePlanStore'
-import type { Week, Day } from '@/types/plan'
+import type { Week } from '@/types/plan'
 import DayTabs from './DayTabs.vue'
 import TaskList from './TaskList.vue'
 import PomodoroTimer from './PomodoroTimer.vue'
