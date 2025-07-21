@@ -15,8 +15,8 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 12v9m0 0l-3-3m3 3l3-3" />
           </svg>
         </div>
-        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">{{ phase.title }}</h2>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">{{ phase.goal }}</p>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">{{ getText(phase.title) }}</h2>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">{{ phase.goal ? getText(phase.goal) : '' }}</p>
         <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-2">
           <div class="bg-gradient-to-r from-cyan-400 to-purple-500 h-2 rounded-full" :style="{ width: getPhaseProgress(phase) + '%' }"></div>
         </div>
@@ -54,7 +54,7 @@
       <ul class="space-y-2">
         <li v-for="task in todaysTasks" :key="task.id" class="flex items-center">
           <span class="inline-block w-3 h-3 rounded-full mr-2" :class="task.done ? 'bg-green-400' : 'bg-gray-300 dark:bg-gray-600'" />
-          <span :class="task.done ? 'line-through text-gray-400' : ''">{{ task.title }}</span>
+          <span :class="task.done ? 'line-through text-gray-400' : ''">{{ getText(task.title) }}</span>
         </li>
         <li v-if="todaysTasks.length === 0" class="text-gray-400">لا توجد مهام اليوم.</li>
       </ul>
@@ -64,22 +64,39 @@
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
 import { usePlanStore } from '@/stores/usePlanStore'
-import type { Phase, Task } from '@/types/plan'
+import type { Phase, Task, Week } from '@/types/plan'
+import { getText } from '@/utils/getText'
 const planStore = usePlanStore()
-const phases = planStore.phases as Phase[]
+
+// استخرج المراحل من الأسابيع
+const phases = computed(() => {
+  const map = new Map<number, Phase>()
+  for (const w of planStore.weeks) {
+    const phaseId = w.phase || 1
+    if (!map.has(phaseId)) {
+      map.set(phaseId, {
+        id: String(phaseId),
+        title: w.title, // أو يمكن تخصيص عنوان المرحلة
+        goal: w.objective, // أو يمكن تخصيص هدف المرحلة
+        weeks: []
+      })
+    }
+    map.get(phaseId)!.weeks.push(w)
+  }
+  return Array.from(map.values())
+})
+
 onMounted(() => {
   if (!planStore.planLoaded) planStore.loadPlan()
 })
-const totalPhases = computed(() => phases.length)
-const totalWeeks = computed(() => phases.reduce((acc: number, p: Phase) => acc + (p.weeks?.length || 0), 0))
-const totalTasks = computed(() => phases.reduce((acc: number, p: Phase) => acc + (p.weeks?.reduce((wacc: number, w) => wacc + (w.days?.reduce((dacc: number, d) => dacc + (d.tasks?.length || 0), 0) || 0), 0) || 0), 0))
+const totalPhases = computed(() => phases.value.length)
+const totalWeeks = computed(() => planStore.weeks.length)
+const totalTasks = computed(() => planStore.weeks.reduce((acc, w) => acc + w.days.reduce((dacc, d) => dacc + (d.tasks?.length || 0), 0), 0))
 const todaysTasks = computed(() => {
   const today = new Date().toISOString().slice(0, 10)
-  for (const phase of phases) {
-    for (const week of phase.weeks || []) {
-      for (const day of week.days || []) {
-        if (day.date === today) return day.tasks || []
-      }
+  for (const w of planStore.weeks) {
+    for (const day of w.days || []) {
+      if (day.date === today) return day.tasks || []
     }
   }
   return [] as Task[]
