@@ -1,0 +1,23 @@
+{
+  "tasks": {
+    "noTasks": "لا توجد مهام لهذا اليوم.",
+    "done": "تم الإنجاز"
+  },
+  "pomodoro": {
+    "work": "عمل",
+    "shortBreak": "استراحة قصيرة",
+    "longBreak": "استراحة طويلة",
+    "start": "ابدأ",
+    "pause": "إيقاف مؤقت",
+    "reset": "إعادة",
+    "sessions": "جلسات مكتملة"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "language": "اللغة"
+  },
+  "resources": {
+    "noResources": "لا توجد موارد لهذا اليوم.",
+    "open": "فتح الرابط"
+  }
+}
