@@ -21,6 +21,13 @@ export interface NotesPrompt {
   points: LocalizedString[];
 }
 
+export interface Note {
+  id: string
+  title: LocalizedString
+  content: LocalizedString
+  tags?: string[]
+}
+
 export interface Day {
   key: string;
   day: LocalizedString;
