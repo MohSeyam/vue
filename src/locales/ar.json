@@ -52,5 +52,12 @@
   "common": {
     "save": "حفظ",
     "cancel": "إلغاء"
+  },
+  "achievements": {
+    "title": "الإنجازات",
+    "progress": "نسبة الإنجاز",
+    "completedTasks": "المهام المنجزة",
+    "totalTasks": "إجمالي المهام",
+    "details": "تفاصيل الإنجاز"
   }
 }
