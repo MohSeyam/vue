@@ -60,7 +60,6 @@ import AchievementsView from './components/achievements/AchievementsView.vue';
 import PhaseView from './components/phase/PhaseView.vue';
 import WeekView from './components/week/WeekView.vue';
 import DayView from './pages/DayView.vue';
-import SidebarMenu from './components/sidebar/SidebarMenu.vue';
 
 const lang = ref('ar')
 const theme = ref('dark')
