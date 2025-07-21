@@ -32,12 +32,14 @@
     "addNote": "Add Note",
     "editNote": "Edit Note",
     "noNotes": "No notes yet.",
+    "addEntry": "Add Entry",
+    "editEntry": "Edit Entry",
     "titleEn": "Title (English)",
     "titleAr": "Title (Arabic)",
     "contentEn": "Content (English)",
     "contentAr": "Content (Arabic)",
     "tags": "Tags",
-    "tagsHint": "e.g. basics, security, networks",
+    "tagsHint": "e.g. review, security, learning",
     "search": "Search notes...",
     "templates": "Templates",
     "graphTitle": "Notes Graph Relationships",
@@ -86,6 +88,9 @@
     "notesCount": "Notes count: {count}"
   },
   "journal": {
-    "copy": "Copy Content"
+    "copy": "Copy Content",
+    "allTags": "All Tags",
+    "search": "Search journal...",
+    "exportLang": "Export Language"
   }
 }
