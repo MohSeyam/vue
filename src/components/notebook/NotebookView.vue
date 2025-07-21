@@ -150,7 +150,7 @@ async function exportNotes(type: 'pdf' | 'md') {
   if (type === 'pdf') {
     const doc = new jsPDF()
     notes.forEach((note, i) => {
-      const info = getTaskInfo(note.taskId)
+      const info = getTaskInfo(note.taskId || '')
       const title = getText(note.title, exportLang.value)
       const content = getText(note.content, exportLang.value)
       let header = ''
@@ -172,7 +172,7 @@ async function exportNotes(type: 'pdf' | 'md') {
     const turndownService = new TurndownService()
     let md = ''
     notes.forEach(note => {
-      const info = getTaskInfo(note.taskId)
+      const info = getTaskInfo(note.taskId || '')
       let header = ''
       if (info) {
         header = `> ${getText(info.week.title, exportLang.value)} / ${getText(info.day.day, exportLang.value)} / ${getText(info.task.description, exportLang.value)}`
