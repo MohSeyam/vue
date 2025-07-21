@@ -6,10 +6,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-const today = ref('')
-onMounted(() => {
-  const d = new Date()
-  today.value = d.toLocaleDateString()
-})
+import { storeToRefs } from 'pinia'
+import { useDashboardStore } from '@/stores/useDashboardStore'
+const { today } = storeToRefs(useDashboardStore())
 </script>
