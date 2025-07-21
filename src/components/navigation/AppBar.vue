@@ -19,6 +19,11 @@
   </v-app-bar>
 </template>
 <script setup lang="ts">
-// لا حاجة لتعريف props هنا إذا لم تُستخدم
+defineProps<{
+  modelValue: string;
+  lang: string;
+  theme: string;
+  title: string;
+}>();
 const emit = defineEmits(['update:modelValue', 'toggle-lang', 'toggle-theme', 'go-dashboard']);
 </script>
