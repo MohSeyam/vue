@@ -21,8 +21,20 @@
   </v-container>
 </template>
 <script setup lang="ts">
-import { inject } from 'vue';
+import { inject, computed } from 'vue';
 import ProgressChart from '../components/charts/ProgressChart.vue';
-const { t } = inject('app') as any;
-const progress = 33; // مثال: نسبة التقدم في الجولة التعريفية
+const { t, appState } = inject('app') as any;
+const progress = computed(() => {
+  // مثال: إذا أكمل أول ملاحظة أو أول أسبوع
+  let val = 0;
+  if (appState.value?.notes) {
+    const firstNote = Object.values(appState.value.notes).some((w: any) => Object.values(w.days).some((d: any) => Object.keys(d).length > 0));
+    if (firstNote) val += 50;
+  }
+  if (appState.value?.progress) {
+    const weekComplete = Object.values(appState.value.progress).some((w: any) => Object.values(w.days).every((d: any) => d.tasks.every((s: string) => s === 'completed')));
+    if (weekComplete) val += 50;
+  }
+  return val;
+});
 </script>
