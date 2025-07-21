@@ -42,7 +42,8 @@
     "templates": "Templates",
     "graphTitle": "Notes Graph Relationships",
     "graphDesc": "Graph visualization of note relationships coming soon.",
-    "allTags": "All"
+    "allTags": "All",
+    "export": "Export"
   },
   "sidebar": {
     "dashboard": "Dashboard",

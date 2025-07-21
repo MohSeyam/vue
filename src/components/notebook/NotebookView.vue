@@ -1,12 +1,22 @@
 <template>
   <div class="max-w-5xl mx-auto py-10 px-4">
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
       <h1 class="text-2xl font-bold">{{ $t('notebook.title') }}</h1>
-      <div class="flex gap-2">
+      <div class="flex gap-2 flex-wrap">
         <button @click="openGraph = true" class="bg-cyan-100 dark:bg-cyan-900 text-cyan-700 dark:text-cyan-200 px-3 py-2 rounded-lg shadow hover:bg-cyan-200 dark:hover:bg-cyan-800 transition flex items-center gap-2">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
           {{ $t('notebook.graphTitle') }}
         </button>
+        <div class="relative">
+          <button @click="showExport = !showExport" class="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200 px-3 py-2 rounded-lg shadow hover:bg-green-200 dark:hover:bg-green-800 transition flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            {{ $t('notebook.export') }}
+          </button>
+          <div v-if="showExport" class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded shadow-lg z-10">
+            <button @click="exportNotes('pdf')" class="block w-full text-left px-4 py-2 hover:bg-cyan-100 dark:hover:bg-cyan-900">PDF</button>
+            <button @click="exportNotes('md')" class="block w-full text-left px-4 py-2 hover:bg-cyan-100 dark:hover:bg-cyan-900">Markdown</button>
+          </div>
+        </div>
         <button @click="openEditor()" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
           {{ $t('notebook.addNote') }}
@@ -40,6 +50,7 @@ const store = useNotebookStore()
 const showEditor = ref(false)
 const editingNote = ref<Note|null>(null)
 const openGraph = ref(false)
+const showExport = ref(false)
 function openEditor() {
   editingNote.value = null
   showEditor.value = true
@@ -63,6 +74,11 @@ function deleteNote(id: string) {
 function insertTemplate(tpl: Note) {
   editingNote.value = { ...tpl, id: '', tags: [] }
   showEditor.value = true
+}
+function exportNotes(type: 'pdf' | 'md') {
+  showExport.value = false
+  // منطق التصدير سيضاف لاحقاً
+  alert('Export as ' + type.toUpperCase() + ' coming soon!')
 }
 </script>
 <style scoped>
