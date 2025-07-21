@@ -74,6 +74,7 @@ function exportPhase() {
     URL.revokeObjectURL(url)
   }
 }
+const props = defineProps<{ phase: any }>()
 </script>
 <template>
   <v-card class="pa-6 mb-4" elevation="8">

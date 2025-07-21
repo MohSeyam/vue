@@ -15,5 +15,5 @@
   </v-card>
 </template>
 <script setup lang="ts">
-const props = defineProps({ week: Object, progress: Number })
+const props = defineProps<{ week: any, progress: number }>()
 </script>
