@@ -106,7 +106,7 @@ function exportEntries(type: 'pdf' | 'md' | 'html') {
   if (type === 'pdf') {
     const doc = new jsPDF()
     list.forEach((entry, i) => {
-      const info = getDayInfo(selectedWeek.value, selectedDayKey.value)
+      const info = getDayInfo(Number(selectedWeek.value), selectedDayKey.value)
       const dayLabel = info.day ? (info.day.day?.[exportLang.value] || info.day.day?.en) : selectedDayKey.value
       const weekLabel = info.week ? (info.week.title?.[exportLang.value] || info.week.title?.en) : selectedWeek.value
       doc.setFontSize(12)
@@ -121,7 +121,7 @@ function exportEntries(type: 'pdf' | 'md' | 'html') {
   } else if (type === 'md') {
     let md = ''
     list.forEach(entry => {
-      const info = getDayInfo(selectedWeek.value, selectedDayKey.value)
+      const info = getDayInfo(Number(selectedWeek.value), selectedDayKey.value)
       const dayLabel = info.day ? (info.day.day?.[exportLang.value] || info.day.day?.en) : selectedDayKey.value
       const weekLabel = info.week ? (info.week.title?.[exportLang.value] || info.week.title?.en) : selectedWeek.value
       md += `> ${weekLabel} / ${dayLabel}\n# تدوينة\n\n${entry.content}\n`
@@ -139,7 +139,7 @@ function exportEntries(type: 'pdf' | 'md' | 'html') {
   } else if (type === 'html') {
     let html = '<html><body>'
     list.forEach(entry => {
-      const info = getDayInfo(selectedWeek.value, selectedDayKey.value)
+      const info = getDayInfo(Number(selectedWeek.value), selectedDayKey.value)
       const dayLabel = info.day ? (info.day.day?.[exportLang.value] || info.day.day?.en) : selectedDayKey.value
       const weekLabel = info.week ? (info.week.title?.[exportLang.value] || info.week.title?.en) : selectedWeek.value
       html += `<h2>${weekLabel} / ${dayLabel}</h2>`
