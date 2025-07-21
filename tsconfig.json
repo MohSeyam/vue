@@ -8,7 +8,9 @@
       "vite/client",
       "vuetify",
       "lowlight"
-    ]
+    ],
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
   "files": [],
   "references": [
