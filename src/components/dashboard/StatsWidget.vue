@@ -79,7 +79,7 @@ const doughnutData = computed(() => ({
 const doughnutOptions = {
   responsive: true,
   plugins: {
-    legend: { display: true, position: 'bottom', labels: { color: '#fff', font: { size: 13 } } }
+    legend: { display: true, position: 'bottom' as const, labels: { color: '#fff', font: { size: 13 } } }
   }
 }
 </script>
