@@ -47,16 +47,25 @@ import JournalDialog from '../components/dialogs/JournalDialog.vue';
 import ExportMenu from '../components/export/ExportMenu.vue';
 import AdvancedSearch from '../components/search/AdvancedSearch.vue';
 import { ref, computed, inject } from 'vue';
-const { lang, t, appState } = inject('app') as any;
+const { lang, t, appState, plan } = inject('app') as any;
 const allJournals = computed(() => {
   if (!appState.value || !appState.value.journals) return [];
   const journalsList: any[] = [];
   Object.keys(appState.value.journals).forEach(dayKey => {
     const journal = appState.value.journals[dayKey];
     if (journal) {
+      // ابحث عن اليوم في الخطة
+      let dayTitle = '';
+      for (const week of plan.value) {
+        const day = week.days.find((d: any) => d.key === dayKey);
+        if (day) {
+          dayTitle = day.day[lang.value];
+          break;
+        }
+      }
       journalsList.push({
         ...journal,
-        dayTitle: `اليوم ${dayKey}`,
+        dayTitle,
       });
     }
   });
