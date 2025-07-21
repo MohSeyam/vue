@@ -29,12 +29,10 @@ import { useJournalStore } from '@/stores/useJournalStore'
 import Toast from '@/components/common/Toast.vue'
 import JournalEntriesList from './JournalEntriesList.vue'
 import JournalEntry from './JournalEntry.vue'
-import jsPDF from 'jspdf'
 const planStore = usePlanStore()
 const journalStore = useJournalStore()
 const showEditor = ref(false)
 const editingEntry = ref<any>(null)
-const showExport = ref(false)
 const search = ref('')
 const selectedTag = ref('')
 const toastRef = ref()
@@ -54,7 +52,6 @@ const filteredEntries = computed(() => {
   }
   return list
 })
-const exportLang = ref('en')
 onMounted(() => {
   if (!planStore.planLoaded) planStore.loadPlan()
   setTimeout(() => {
@@ -93,10 +90,5 @@ function saveEntry(entry: any) {
 function deleteEntry() {
   // حذف التدوينة (يمكنك إضافة منطق الحذف هنا)
   toastRef.value?.show('تم حذف التدوينة!', 'success')
-}
-function getDayInfo(weekNum: number, dayKey: string) {
-  const w = planStore.weeks.find(w => String(w.week) === String(weekNum))
-  const d = w?.days.find(d => d.key === dayKey)
-  return { week: w, day: d }
 }
 </script>

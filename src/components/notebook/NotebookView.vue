@@ -92,7 +92,6 @@ const filteredNotes = computed(() => {
   }
   return notes
 })
-const exportLang = ref('en')
 function getTaskInfo(taskId: string) {
   for (const w of planStore.weeks) {
     for (const d of w.days) {
