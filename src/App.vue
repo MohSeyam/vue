@@ -51,7 +51,61 @@
   </v-app>
 </template>
 <script setup lang="ts">
-// سيتم ربط Pinia/i18n/Vuetify/Composables هنا كما في الكود المقترح
+import { ref, reactive, computed, provide, onMounted, watch, markRaw } from 'vue'
+import { useI18n } from 'vue-i18n'
+// استورد بيانات الخطة والترجمات والثوابت من ملف منفصل لاحقًا
+import planData from '@/data/PlanData.json'
+import translations from '@/data/translations.json'
+import phases from '@/data/phases.json'
+
+const lang = ref('ar')
+const theme = ref('dark')
+const view = reactive({ page: 'dashboard', params: {} })
+const appState = ref<any>(null)
+const t = computed(() => translations[lang.value])
+
+const setView = (newView: any) => {
+  view.page = newView.page
+  view.params = newView.params || {}
+}
+const toggleTheme = () => {
+  theme.value = theme.value === 'light' ? 'dark' : 'light'
+  localStorage.setItem('cyberPlanTheme', theme.value)
+}
+const toggleLang = () => {
+  lang.value = lang.value === 'ar' ? 'en' : 'ar'
+  document.documentElement.lang = lang.value
+  document.documentElement.dir = lang.value === 'ar' ? 'rtl' : 'ltr'
+  localStorage.setItem('cyberPlanLang', lang.value)
+}
+onMounted(() => {
+  lang.value = localStorage.getItem('cyberPlanLang') || 'ar'
+  theme.value = localStorage.getItem('cyberPlanTheme') || 'dark'
+  document.documentElement.lang = lang.value
+  document.documentElement.dir = lang.value === 'ar' ? 'rtl' : 'ltr'
+  // تحميل حالة التطبيق من localStorage أو تهيئة جديدة
+  // ...
+})
+watch(appState, (newState) => {
+  if (newState) {
+    localStorage.setItem('cyberPlanProgress', JSON.stringify(newState))
+  }
+}, { deep: true })
+// توفير الحالة لكل المكونات
+provide('app', { lang, theme, view, setView, appState, t, phases })
+// ربط المكونات الديناميكية (سيتم استيرادها وربطها لاحقًا)
+const components = {
+  dashboard: markRaw({}),
+  achievements: markRaw({}),
+  notebook: markRaw({}),
+  phase: markRaw({}),
+  week: markRaw({}),
+  day: markRaw({}),
+  sidebar: markRaw({}),
+}
+const currentViewComponent = computed(() => {
+  return components[view.page] || components.dashboard
+})
 </script>
 <style scoped>
 body {
