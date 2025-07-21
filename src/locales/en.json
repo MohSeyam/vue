@@ -90,6 +90,7 @@
   "journal": {
     "copy": "Copy Content",
     "allTags": "All Tags",
-    "search": "Search journal..."
+    "search": "Search journal...",
+    "exportLang": "Export Language"
   }
 }
