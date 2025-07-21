@@ -16,9 +16,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed } from 'vue'
-const props = defineProps<{ days: { id: string; date: string }[]; activeDayIndex: number }>()
-const emit = defineEmits(['update:activeDayIndex'])
+defineProps<{ days: { id: string; date: string }[]; activeDayIndex: number }>()
+defineEmits(['update:activeDayIndex'])
 function getDayName(date: string, idx: number) {
   // Return Arabic day name or fallback to index
   const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت']
