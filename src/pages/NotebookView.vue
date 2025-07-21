@@ -61,7 +61,7 @@ const allNotes = computed(() => {
       Object.keys(dayNotes).forEach(taskId => {
         const note = dayNotes[taskId];
         const week = plan.value.find((w: any) => w.week == weekKey);
-        const day = week?.days[dayIdx];
+        const day = week?.days[Number(dayIdx)];
         notesList.push({
           ...note,
           weekTitle: week ? week.title[lang.value] : '',
