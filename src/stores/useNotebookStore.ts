@@ -9,7 +9,7 @@ class NotebookDB extends Dexie {
   constructor() {
     super('notebookDB')
     this.version(1).stores({
-      notes: 'id'
+      notes: 'id,taskId'
     })
   }
 }
@@ -34,8 +34,11 @@ export const useNotebookStore = defineStore('notebook', () => {
     await db.notes.delete(id)
     await loadNotes()
   }
+  function getNotesByTaskId(taskId: string) {
+    return notes.value.filter(n => n.taskId === taskId)
+  }
 
   loadNotes()
 
-  return { notes, loadNotes, addNote, updateNote, deleteNote }
+  return { notes, loadNotes, addNote, updateNote, deleteNote, getNotesByTaskId }
 })
