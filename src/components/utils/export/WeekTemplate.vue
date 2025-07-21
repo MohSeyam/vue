@@ -14,6 +14,7 @@ const weeks = computed(() => plan.weeks.map(w => ({
   minutes: w.days.reduce((acc, d) => acc + d.tasks.reduce((tacc, t) => tacc + (t.duration || 0), 0), 0),
   sources: w.days.reduce((acc, d) => acc + (d.resources?.length || 0), 0)
 })))
+const props = defineProps<{ week: any }>()
 function exportWeek() {
   if (exportType.value === 'pdf') {
     const doc = new jsPDF()
@@ -72,10 +73,10 @@ function exportWeek() {
 </script>
 <template>
   <v-card class="pa-6 mb-4" elevation="8">
-    <v-card-title class="font-weight-bold text-primary mb-2">{{ week.title[$i18n.locale] || week.title.en }}</v-card-title>
-    <v-card-subtitle class="mb-4">{{ week.objective?.[$i18n.locale] || week.objective?.en }}</v-card-subtitle>
+    <v-card-title class="font-weight-bold text-primary mb-2">{{ props.week.title[$i18n.locale] || props.week.title.en }}</v-card-title>
+    <v-card-subtitle class="mb-4">{{ props.week.objective?.[$i18n.locale] || props.week.objective?.en }}</v-card-subtitle>
     <v-list dense>
-      <v-list-item v-for="d in week.days" :key="d.key">
+      <v-list-item v-for="d in props.week.days" :key="d.key">
         <v-list-item-title class="font-weight-bold">{{ d.day[$i18n.locale] || d.day.en }}: {{ d.topic?.[$i18n.locale] || d.topic?.en }}</v-list-item-title>
         <v-list-item-subtitle>
           <ul class="pl-4">

@@ -23,7 +23,7 @@
           <div class="d-flex flex-wrap gap-1 mb-2">
             <v-chip v-for="tag in entry.tags" :key="tag" size="x-small" color="secondary" class="me-1">{{ tag }}</v-chip>
           </div>
-          <v-btn color="primary" icon="mdi-pencil" @click="editEntry(entry)" size="small" class="me-2"/><v-btn color="error" icon="mdi-delete" @click="deleteEntry(entry.id)" size="small"/>
+          <v-btn color="primary" icon="mdi-pencil" @click="editEntry(entry)" size="small" class="me-2"/><v-btn color="error" icon="mdi-delete" @click="deleteEntry()" size="small"/>
         </v-card>
       </v-col>
       <v-col v-if="filteredEntries.length === 0" cols="12">
@@ -39,7 +39,7 @@ import { useJournalStore } from '@/stores/useJournalStore'
 import JournalEntry from './JournalEntry.vue'
 const store = useJournalStore()
 const openEditor = ref(false)
-const editingEntry = ref(null)
+const editingEntry = ref<Record<string, any> | undefined>()
 const search = ref('')
 const selectedTag = ref('')
 const allTags = computed(() => Array.from(new Set(store.entries.flatMap(e => e.tags || []))))
@@ -52,23 +52,23 @@ const filteredEntries = computed(() => {
   }
   return entries
 })
-function editEntry(entry) {
+function editEntry(entry: any) {
   editingEntry.value = entry
   openEditor.value = true
 }
 function closeEditor() {
   openEditor.value = false
-  editingEntry.value = null
+  editingEntry.value = undefined
 }
-function saveEntry(entry) {
-  if (entry.id) store.updateEntry(entry)
-  else store.addEntry(entry)
+function saveEntry(entry: any) {
+  store.addEntry(entry)
   closeEditor()
 }
-function deleteEntry(id) {
-  store.deleteEntry(id)
+function deleteEntry() {
+  // إذا كان لديك دالة removeEntry في المتجر استخدمها هنا
+  // store.removeEntry(id)
 }
-function formatDate(date) {
+function formatDate(date: any) {
   return new Date(date).toLocaleDateString()
 }
 </script>

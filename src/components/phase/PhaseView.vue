@@ -3,10 +3,10 @@
     <v-row justify="center">
       <v-col cols="12" md="8">
         <v-card class="pa-6 mb-4" elevation="8">
-          <v-card-title class="font-weight-bold text-primary mb-2">{{ phase.title[$i18n.locale] || phase.title.en }}</v-card-title>
-          <v-card-subtitle class="mb-4">{{ phase.objective?.[$i18n.locale] || phase.objective?.en }}</v-card-subtitle>
+          <v-card-title class="font-weight-bold text-primary mb-2">{{ props.phase.title[$i18n.locale] || props.phase.title.en }}</v-card-title>
+          <v-card-subtitle class="mb-4">{{ props.phase.objective?.[$i18n.locale] || props.phase.objective?.en }}</v-card-subtitle>
           <v-list dense>
-            <v-list-item v-for="w in phase.weeks" :key="w.week">
+            <v-list-item v-for="w in props.phase.weeks" :key="w.week">
               <v-list-item-title class="font-weight-bold">{{ $t('plan.week', 'الأسبوع') }} {{ w.week }}: {{ w.title[$i18n.locale] || w.title.en }}</v-list-item-title>
               <v-list-item-subtitle>
                 <v-card class="pa-3 my-2" elevation="2">
@@ -32,5 +32,5 @@
   </v-container>
 </template>
 <script setup lang="ts">
-const props = defineProps({ phase: Object })
+const props = defineProps<{ phase: any }>()
 </script>
