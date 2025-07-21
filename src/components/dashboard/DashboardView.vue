@@ -64,7 +64,7 @@
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
 import { usePlanStore } from '@/stores/usePlanStore'
-import type { Phase, Task, Week } from '@/types/plan'
+import type { Phase, Task } from '@/types/plan'
 import { getText } from '@/utils/getText'
 const planStore = usePlanStore()
 
