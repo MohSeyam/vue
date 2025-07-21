@@ -92,5 +92,9 @@
     "allTags": "All Tags",
     "search": "Search journal...",
     "exportLang": "Export Language"
+  },
+  "dashboard": {
+    "welcome": "Welcome to the Dashboard!",
+    "simple": "Start your journey here. Use the icons above to navigate."
   }
 }
