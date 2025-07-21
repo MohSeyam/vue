@@ -1,11 +1,17 @@
 import { ref, computed, watch, reactive, onMounted } from 'vue';
+import planData from '../data/planData.json';
+import phases from '../data/phases.json';
+import translations from '../data/translations.json';
 
-export function useCyberPlan(planData: any[], phases: any, translations: any) {
+export function useCyberPlan() {
   const lang = ref('ar');
   const theme = ref('dark');
   const view = reactive({ page: 'dashboard', params: {} });
   const appState = ref<any>(null);
   const t = computed(() => translations[lang.value]);
+  const plan = ref(planData);
+  const phaseList = ref(phases);
+  const translationData = ref(translations);
 
   const setView = (newView: { page: string, params?: any }) => {
     view.page = newView.page;
@@ -28,7 +34,6 @@ export function useCyberPlan(planData: any[], phases: any, translations: any) {
     theme.value = savedTheme;
     document.documentElement.lang = savedLang;
     document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
-    // يمكن إضافة منطق استعادة التقدم هنا
   });
   watch(appState, (newState) => {
     if (newState) {
@@ -36,5 +41,5 @@ export function useCyberPlan(planData: any[], phases: any, translations: any) {
     }
   }, { deep: true });
 
-  return { lang, theme, view, appState, t, setView, toggleTheme, toggleLang };
+  return { lang, theme, view, appState, t, setView, toggleTheme, toggleLang, plan, phaseList, translationData };
 }
