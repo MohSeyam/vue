@@ -38,7 +38,10 @@
     "contentAr": "Content (Arabic)",
     "tags": "Tags",
     "tagsHint": "e.g. basics, security, networks",
-    "search": "Search notes..."
+    "search": "Search notes...",
+    "templates": "Templates",
+    "graphTitle": "Notes Graph Relationships",
+    "graphDesc": "Graph visualization of note relationships coming soon."
   },
   "sidebar": {
     "dashboard": "Dashboard",
