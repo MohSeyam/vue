@@ -43,17 +43,25 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { usePlanStore } from '@/stores/usePlanStore'
+import { useNotebookStore } from '@/stores/useNotebookStore'
+import { useJournalStore } from '@/stores/useJournalStore'
 import PhaseProgressChart from './PhaseProgressChart.vue'
 import SkillsChart from './SkillsChart.vue'
 import StatsSummary from './StatsSummary.vue'
 import ReportGenerator from './ReportGenerator.vue'
 const planStore = usePlanStore()
+const notebookStore = useNotebookStore()
+const journalStore = useJournalStore()
 const totalTasks = computed(() => planStore.weeks.reduce((acc, w) => acc + w.days.reduce((dacc, d) => dacc + (d.tasks?.length || 0), 0), 0))
 const completedTasks = computed(() => planStore.weeks.reduce((acc, w) => acc + w.days.reduce((dacc, d) => dacc + (d.tasks?.filter(t => t.done).length || 0), 0), 0))
 const progress = computed(() => totalTasks.value ? Math.round((completedTasks.value / totalTasks.value) * 100) : 0)
+const notesCount = computed(() => notebookStore.notes.length)
+const journalCount = computed(() => journalStore.entries.length)
 const details = computed(() => [
   { label: 'achievements.totalTasks', value: totalTasks.value },
   { label: 'achievements.completedTasks', value: completedTasks.value },
-  { label: 'achievements.progress', value: progress.value + '%' }
+  { label: 'achievements.progress', value: progress.value + '%' },
+  { label: 'achievements.notesCount', value: notesCount.value },
+  { label: 'achievements.journalCount', value: journalCount.value }
 ])
 </script>

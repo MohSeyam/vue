@@ -1,100 +1,91 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-export interface Task {
-  id: number
-  title: string
-  due: string
-  completed: boolean
-  priority: 'low' | 'medium' | 'high'
-  description?: string
-}
-export interface CalendarEvent {
-  id: number
-  title: string
-  time: string
-  description?: string
-}
-export interface Phase {
-  name: string
-  description: string
-  progress: number // 0-100
-  start: string
-  end: string
-}
-
 export const useDashboardStore = defineStore('dashboard', () => {
-  // الوقت الحالي والمنطقة الزمنية
-  const timezone = ref<string>('Asia/Riyadh')
-  const time = ref<string>(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: timezone.value }))
-  // تاريخ اليوم
+  // LocalClock
+  const time = ref<string>(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))
   const today = ref<string>(new Date().toLocaleDateString())
-  // أحداث اليوم في التقويم
-  const events = ref<CalendarEvent[]>([
-    { id: 1, title: 'جلسة مذاكرة', time: '18:00', description: 'مراجعة الأمن السيبراني' }
+  const timezone = ref<string>(Intl.DateTimeFormat().resolvedOptions().timeZone)
+  const showDate = ref<boolean>(true)
+  const clockLang = ref<'ar' | 'en'>('ar')
+
+  // LocalCalendar
+  const calendarEvents = ref<Array<{ id: number; title: string; date: string }>>([
+    { id: 1, title: 'اختبار قصير', date: today.value },
+    { id: 2, title: 'جلسة مذاكرة', date: today.value }
   ])
-  // قائمة المهام القادمة
-  const upcomingTasks = ref<Task[]>([
-    { id: 1, title: 'مراجعة الدرس 3', due: '2024-06-10', completed: false, priority: 'high', description: 'مراجعة مفاهيم الشبكات' },
-    { id: 2, title: 'حل اختبار قصير', due: '2024-06-12', completed: false, priority: 'medium' }
+  const weekDays = ref<Array<string>>(['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'])
+
+  // UpcomingTasks
+  const upcomingTasks = ref<Array<{
+    id: number;
+    title: string;
+    due: string;
+    priority: 'low' | 'medium' | 'high';
+    status: 'pending' | 'done';
+    description?: string;
+  }>>([
+    { id: 1, title: 'مراجعة الدرس 3', due: today.value, priority: 'high', status: 'pending', description: 'مراجعة مفاهيم الشبكات' },
+    { id: 2, title: 'حل واجب', due: today.value, priority: 'medium', status: 'done', description: 'حل تمارين التشفير' }
   ])
-  // إحصائيات متعددة
+
+  // StatsWidget
   const stats = ref({
     weeks: 12,
     completedTasks: 8,
     notes: 15,
-    studyDays: 22
+    studyDays: 20
   })
-  // تفاصيل المرحلة الحالية
-  const currentPhase = ref<Phase>({
-    name: 'الأساسيات',
-    description: 'تعلم أساسيات الأمن السيبراني.',
-    progress: 40,
-    start: '2024-05-01',
-    end: '2024-06-30'
-  })
+  const selectedStat = ref<'weeks' | 'completedTasks' | 'notes' | 'studyDays'>('weeks')
+
+  // PhaseCard
+  const currentPhase = ref<string>('الأساسيات')
+  const phaseDescription = ref<string>('تعلم أساسيات الأمن السيبراني.')
+  const phaseProgress = ref<number>(40) // نسبة مئوية
+  const phaseStart = ref<string>('2024-05-01')
+  const phaseEnd = ref<string>('2024-06-01')
 
   // تحديث الوقت كل ثانية
   setInterval(() => {
-    time.value = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: timezone.value })
+    time.value = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     today.value = new Date().toLocaleDateString()
   }, 1000)
 
   // Getters
   const hasUpcomingTasks = computed(() => upcomingTasks.value.length > 0)
-  const todayEvents = computed(() => events.value)
+  const todayEvents = computed(() => calendarEvents.value.filter(e => e.date === today.value))
+  const pendingTasks = computed(() => upcomingTasks.value.filter(t => t.status === 'pending'))
 
   // Actions
-  function addTask(title: string, due: string, priority: 'low'|'medium'|'high' = 'low', description?: string) {
-    upcomingTasks.value.push({ id: Date.now(), title, due, completed: false, priority, description })
+  function addTask(title: string, due: string, priority: 'low' | 'medium' | 'high', description?: string) {
+    upcomingTasks.value.push({ id: Date.now(), title, due, priority, status: 'pending', description })
   }
   function setWeeks(n: number) {
     stats.value.weeks = n
   }
-  function setCurrentPhase(phase: Phase) {
-    currentPhase.value = phase
+  function setCurrentPhase(name: string, desc?: string) {
+    currentPhase.value = name
+    if (desc) phaseDescription.value = desc
   }
-  function setTimezone(tz: string) {
-    timezone.value = tz
+  function setPhaseProgress(p: number) {
+    phaseProgress.value = p
   }
-  function addEvent(title: string, time: string, description?: string) {
-    events.value.push({ id: Date.now(), title, time, description })
+  function setSelectedStat(stat: typeof selectedStat.value) {
+    selectedStat.value = stat
   }
 
   return {
-    time,
-    timezone,
-    today,
-    events,
-    todayEvents,
-    upcomingTasks,
-    stats,
-    currentPhase,
-    hasUpcomingTasks,
-    addTask,
-    setWeeks,
-    setCurrentPhase,
-    setTimezone,
-    addEvent
+    // Clock
+    time, today, timezone, showDate, clockLang,
+    // Calendar
+    calendarEvents, weekDays, todayEvents,
+    // Tasks
+    upcomingTasks, hasUpcomingTasks, pendingTasks,
+    // Stats
+    stats, selectedStat, setSelectedStat,
+    // Phase
+    currentPhase, phaseDescription, phaseProgress, phaseStart, phaseEnd,
+    // Actions
+    addTask, setWeeks, setCurrentPhase, setPhaseProgress
   }
 })

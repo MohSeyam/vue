@@ -4,6 +4,15 @@
     <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
       <h1 class="text-2xl font-bold">{{ $t('notebook.title') }}</h1>
       <div class="flex gap-2 flex-wrap">
+        <select v-model="selectedWeek" class="rounded border px-2 py-1 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-xs">
+          <option v-for="w in weekOptions" :key="w.value" :value="w.value">{{ w.label }}</option>
+        </select>
+        <select v-model="selectedDayKey" class="rounded border px-2 py-1 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-xs">
+          <option v-for="d in dayOptions" :key="d.value" :value="d.value">{{ d.label }}</option>
+        </select>
+        <select v-model="selectedTaskId" class="rounded border px-2 py-1 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-xs">
+          <option v-for="t in taskOptions" :key="t.value" :value="t.value">{{ t.label }}</option>
+        </select>
         <button @click="openGraph = true" class="bg-cyan-100 dark:bg-cyan-900 text-cyan-700 dark:text-cyan-200 px-3 py-2 rounded-lg shadow hover:bg-cyan-200 dark:hover:bg-cyan-800 transition flex items-center gap-2">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
           {{ $t('notebook.graphTitle') }}
@@ -37,8 +46,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useNotebookStore } from '@/stores/useNotebookStore'
+import { usePlanStore } from '@/stores/usePlanStore'
 import { getText } from '@/utils/getText'
 import Toast from '@/components/common/Toast.vue'
 import NoteCard from './NoteCard.vue'
@@ -52,6 +62,7 @@ import type { Note } from '@/types/plan'
 import jsPDF from 'jspdf'
 import TurndownService from 'turndown'
 const store = useNotebookStore()
+const planStore = usePlanStore()
 const showEditor = ref(false)
 const editingNote = ref<Note|null>(null)
 const openGraph = ref(false)
@@ -59,8 +70,22 @@ const showExport = ref(false)
 const search = ref('')
 const selectedTag = ref('')
 const toastRef = ref()
+// اختيار الأسبوع/اليوم/المهمة
+const selectedWeek = ref('')
+const selectedDayKey = ref('')
+const selectedTaskId = ref('')
+const weekOptions = computed(() => planStore.weeks.map(w => ({ label: getText(w.title), value: String(w.week) })))
+const dayOptions = computed(() => {
+  const week = planStore.weeks.find(w => String(w.week) === selectedWeek.value)
+  return week ? week.days.map(d => ({ label: getText(d.day), value: d.key })) : []
+})
+const taskOptions = computed(() => {
+  const week = planStore.weeks.find(w => String(w.week) === selectedWeek.value)
+  const day = week?.days.find(d => d.key === selectedDayKey.value)
+  return day ? day.tasks.map(t => ({ label: getText(t.description), value: t.id })) : []
+})
 const filteredNotes = computed(() => {
-  let notes = store.notes
+  let notes = store.getNotesByTaskId(selectedTaskId.value)
   if (selectedTag.value) notes = notes.filter(n => n.tags?.includes(selectedTag.value))
   if (search.value) {
     const q = search.value.toLowerCase()
@@ -68,8 +93,32 @@ const filteredNotes = computed(() => {
   }
   return notes
 })
+const exportLang = ref('en')
+function getTaskInfo(taskId: string) {
+  for (const w of planStore.weeks) {
+    for (const d of w.days) {
+      const t = d.tasks.find(t => t.id === taskId)
+      if (t) return {
+        week: w,
+        day: d,
+        task: t
+      }
+    }
+  }
+  return null
+}
+onMounted(() => {
+  if (!planStore.planLoaded) planStore.loadPlan()
+  setTimeout(() => {
+    if (planStore.weeks.length) {
+      selectedWeek.value = String(planStore.weeks[0].week)
+      selectedDayKey.value = planStore.weeks[0].days[0].key
+      selectedTaskId.value = planStore.weeks[0].days[0].tasks[0]?.id || ''
+    }
+  }, 300)
+})
 function openEditor() {
-  editingNote.value = null
+  editingNote.value = { id: '', taskId: selectedTaskId.value, title: { en: '', ar: '' }, content: { en: '', ar: '' }, tags: [] }
   showEditor.value = true
 }
 function editNote(note: Note) {
@@ -82,7 +131,7 @@ function closeEditor() {
 }
 function saveNote(note: Note) {
   if (note.id) store.updateNote(note)
-  else store.addNote(note)
+  else store.addNote({ ...note, taskId: selectedTaskId.value })
   closeEditor()
   toastRef.value?.show($t('notebook.toastSaved'), 'success')
 }
@@ -91,7 +140,7 @@ function deleteNote(id: string) {
   toastRef.value?.show($t('notebook.toastDeleted'), 'success')
 }
 function insertTemplate(tpl: Note) {
-  editingNote.value = { ...tpl, id: '', tags: [] }
+  editingNote.value = { ...tpl, id: '', tags: [], taskId: selectedTaskId.value }
   showEditor.value = true
   toastRef.value?.show($t('notebook.toastTemplate'), 'info')
 }
@@ -102,11 +151,20 @@ async function exportNotes(type: 'pdf' | 'md') {
   if (type === 'pdf') {
     const doc = new jsPDF()
     notes.forEach((note, i) => {
+      const info = getTaskInfo(note.taskId)
+      const title = getText(note.title, exportLang.value)
+      const content = getText(note.content, exportLang.value)
+      let header = ''
+      if (info) {
+        header = `${getText(info.week.title, exportLang.value)} / ${getText(info.day.day, exportLang.value)} / ${getText(info.task.description, exportLang.value)}`
+      }
+      doc.setFontSize(12)
+      doc.text(header, 10, 16 + i * 50)
       doc.setFontSize(14)
-      doc.text(getText(note.title), 10, 20 + i * 40)
+      doc.text(title, 10, 24 + i * 50)
       doc.setFontSize(11)
-      doc.text(getText(note.content), 10, 28 + i * 40)
-      if (note.tags?.length) doc.text('Tags: ' + note.tags.join(', '), 10, 36 + i * 40)
+      doc.text(content, 10, 32 + i * 50)
+      if (note.tags?.length) doc.text('Tags: ' + note.tags.join(', '), 10, 40 + i * 50)
       if (i < notes.length - 1) doc.addPage()
     })
     doc.save('notes.pdf')
@@ -115,7 +173,12 @@ async function exportNotes(type: 'pdf' | 'md') {
     const turndownService = new TurndownService()
     let md = ''
     notes.forEach(note => {
-      md += `# ${getText(note.title)}\n\n${turndownService.turndown(getText(note.content))}\n`
+      const info = getTaskInfo(note.taskId)
+      let header = ''
+      if (info) {
+        header = `> ${getText(info.week.title, exportLang.value)} / ${getText(info.day.day, exportLang.value)} / ${getText(info.task.description, exportLang.value)}`
+      }
+      md += `${header}\n# ${getText(note.title, exportLang.value)}\n\n${turndownService.turndown(getText(note.content, exportLang.value))}\n`
       if (note.tags?.length) md += `\n**Tags:** ${note.tags.join(', ')}\n`
       md += '\n---\n'
     })
