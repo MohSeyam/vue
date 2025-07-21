@@ -50,7 +50,8 @@ import NoteDialog from '../components/dialogs/NoteDialog.vue';
 import ExportMenu from '../components/export/ExportMenu.vue';
 import AdvancedSearch from '../components/search/AdvancedSearch.vue';
 import { ref, computed, inject } from 'vue';
-const { lang, t, appState } = inject('app') as any;
+const { lang, t, appState, plan } = inject('app') as any;
+// استخراج جميع الملاحظات من appState (أو من الخطة إذا لزم)
 const allNotes = computed(() => {
   if (!appState.value || !appState.value.notes) return [];
   const notesList: any[] = [];
@@ -59,9 +60,12 @@ const allNotes = computed(() => {
       const dayNotes = appState.value.notes[weekKey].days[dayIdx];
       Object.keys(dayNotes).forEach(taskId => {
         const note = dayNotes[taskId];
+        const week = plan.value.find((w: any) => w.week == weekKey);
+        const day = week?.days[dayIdx];
         notesList.push({
           ...note,
-          weekTitle: `الأسبوع ${weekKey}`,
+          weekTitle: week ? week.title[lang.value] : '',
+          dayTitle: day ? day.day[lang.value] : '',
           taskDescription: note.title,
         });
       });
