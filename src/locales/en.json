@@ -52,5 +52,12 @@
   "common": {
     "save": "Save",
     "cancel": "Cancel"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "progress": "Progress",
+    "completedTasks": "Completed Tasks",
+    "totalTasks": "Total Tasks",
+    "details": "Achievement Details"
   }
 }
