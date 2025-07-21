@@ -38,7 +38,12 @@
     "contentAr": "المحتوى (عربي)",
     "tags": "الوسوم",
     "tagsHint": "مثال: أساسيات, أمن, شبكات",
-    "search": "بحث في الملاحظات..."
+    "search": "بحث في الملاحظات...",
+    "templates": "قوالب جاهزة",
+    "graphTitle": "العلاقات البيانية بين الملاحظات",
+    "graphDesc": "سيتم قريبًا عرض العلاقات بين الملاحظات بشكل بياني تفاعلي.",
+    "allTags": "الكل",
+    "export": "تصدير"
   },
   "sidebar": {
     "dashboard": "الرئيسية",
@@ -52,5 +57,25 @@
   "common": {
     "save": "حفظ",
     "cancel": "إلغاء"
+  },
+  "achievements": {
+    "title": "الإنجازات",
+    "progress": "نسبة الإنجاز",
+    "completedTasks": "المهام المنجزة",
+    "totalTasks": "إجمالي المهام",
+    "details": "تفاصيل الإنجاز",
+    "phaseProgress": "تقدم المراحل",
+    "skills": "المهارات",
+    "skill_network": "الشبكات",
+    "skill_linux": "لينكس",
+    "skill_web": "تطبيقات الويب",
+    "skill_crypto": "التشفير",
+    "stats": "إحصائيات",
+    "weeks": "أسابيع",
+    "days": "أيام",
+    "tasks": "مهام",
+    "completed": "منجز",
+    "exportPDF": "تصدير PDF",
+    "exportMD": "تصدير Markdown"
   }
 }

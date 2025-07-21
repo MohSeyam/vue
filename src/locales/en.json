@@ -38,7 +38,12 @@
     "contentAr": "Content (Arabic)",
     "tags": "Tags",
     "tagsHint": "e.g. basics, security, networks",
-    "search": "Search notes..."
+    "search": "Search notes...",
+    "templates": "Templates",
+    "graphTitle": "Notes Graph Relationships",
+    "graphDesc": "Graph visualization of note relationships coming soon.",
+    "allTags": "All",
+    "export": "Export"
   },
   "sidebar": {
     "dashboard": "Dashboard",
@@ -52,5 +57,25 @@
   "common": {
     "save": "Save",
     "cancel": "Cancel"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "progress": "Progress",
+    "completedTasks": "Completed Tasks",
+    "totalTasks": "Total Tasks",
+    "details": "Achievement Details",
+    "phaseProgress": "Phase Progress",
+    "skills": "Skills",
+    "skill_network": "Networking",
+    "skill_linux": "Linux",
+    "skill_web": "Web Apps",
+    "skill_crypto": "Cryptography",
+    "stats": "Statistics",
+    "weeks": "Weeks",
+    "days": "Days",
+    "tasks": "Tasks",
+    "completed": "Completed",
+    "exportPDF": "Export PDF",
+    "exportMD": "Export Markdown"
   }
 }
