@@ -33,15 +33,6 @@ const emit = defineEmits(['edit', 'delete'])
 const search = ref('')
 const selectedTag = ref('')
 const allTags = computed(() => Array.from(new Set(props.notes.flatMap(n => n.tags || []))))
-const filteredNotes = computed(() => {
-  let notes = props.notes
-  if (selectedTag.value) notes = notes.filter(n => n.tags?.includes(selectedTag.value))
-  if (search.value) {
-    const q = search.value.toLowerCase()
-    notes = notes.filter(n => getText(n.title).toLowerCase().includes(q) || getText(n.content).toLowerCase().includes(q))
-  }
-  return notes
-})
 </script>
 <style scoped>
 .fade-enter-active, .fade-leave-active { transition: opacity 0.3s; }

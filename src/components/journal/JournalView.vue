@@ -71,7 +71,7 @@ function openEditor() {
   editingEntry.value = { id: '', dayKey: selectedDayKey.value, content: '', createdAt: new Date().toISOString(), tags: [] }
   showEditor.value = true
 }
-function editEntry(entry) {
+function editEntry(entry: any) {
   editingEntry.value = entry
   showEditor.value = true
 }
@@ -79,7 +79,7 @@ function closeEditor() {
   showEditor.value = false
   editingEntry.value = null
 }
-function saveEntry(entry) {
+function saveEntry(entry: any) {
   if (!selectedWeek.value || !selectedDayKey.value) {
     toastRef.value?.show('اختر الأسبوع واليوم أولاً!', 'error')
     return
@@ -93,16 +93,16 @@ function saveEntry(entry) {
   }
   closeEditor()
 }
-function deleteEntry(id) {
+function deleteEntry(id: string) {
   // حذف التدوينة (يمكنك إضافة منطق الحذف هنا)
   toastRef.value?.show('تم حذف التدوينة!', 'success')
 }
-function getDayInfo(weekNum, dayKey) {
+function getDayInfo(weekNum: number, dayKey: string) {
   const w = planStore.weeks.find(w => String(w.week) === String(weekNum))
   const d = w?.days.find(d => d.key === dayKey)
   return { week: w, day: d }
 }
-function exportEntries(type) {
+function exportEntries(type: 'pdf' | 'md' | 'html') {
   showExport.value = false
   const list = filteredEntries.value
   if (!list.length) return toastRef.value?.show('لا توجد تدوينات للتصدير!', 'error')

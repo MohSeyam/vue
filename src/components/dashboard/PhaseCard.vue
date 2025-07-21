@@ -13,7 +13,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import { usePlanStore } from '@/stores/usePlanStore'
 const { currentWeek, getWeekTitle } = usePlanStore()
 </script>
