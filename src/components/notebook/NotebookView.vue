@@ -93,6 +93,20 @@ const filteredNotes = computed(() => {
   }
   return notes
 })
+const exportLang = ref('en')
+function getTaskInfo(taskId: string) {
+  for (const w of planStore.weeks) {
+    for (const d of w.days) {
+      const t = d.tasks.find(t => t.id === taskId)
+      if (t) return {
+        week: w,
+        day: d,
+        task: t
+      }
+    }
+  }
+  return null
+}
 onMounted(() => {
   if (!planStore.planLoaded) planStore.loadPlan()
   setTimeout(() => {
@@ -137,11 +151,20 @@ async function exportNotes(type: 'pdf' | 'md') {
   if (type === 'pdf') {
     const doc = new jsPDF()
     notes.forEach((note, i) => {
+      const info = getTaskInfo(note.taskId)
+      const title = getText(note.title, exportLang.value)
+      const content = getText(note.content, exportLang.value)
+      let header = ''
+      if (info) {
+        header = `${getText(info.week.title, exportLang.value)} / ${getText(info.day.day, exportLang.value)} / ${getText(info.task.description, exportLang.value)}`
+      }
+      doc.setFontSize(12)
+      doc.text(header, 10, 16 + i * 50)
       doc.setFontSize(14)
-      doc.text(getText(note.title), 10, 20 + i * 40)
+      doc.text(title, 10, 24 + i * 50)
       doc.setFontSize(11)
-      doc.text(getText(note.content), 10, 28 + i * 40)
-      if (note.tags?.length) doc.text('Tags: ' + note.tags.join(', '), 10, 36 + i * 40)
+      doc.text(content, 10, 32 + i * 50)
+      if (note.tags?.length) doc.text('Tags: ' + note.tags.join(', '), 10, 40 + i * 50)
       if (i < notes.length - 1) doc.addPage()
     })
     doc.save('notes.pdf')
@@ -150,7 +173,12 @@ async function exportNotes(type: 'pdf' | 'md') {
     const turndownService = new TurndownService()
     let md = ''
     notes.forEach(note => {
-      md += `# ${getText(note.title)}\n\n${turndownService.turndown(getText(note.content))}\n`
+      const info = getTaskInfo(note.taskId)
+      let header = ''
+      if (info) {
+        header = `> ${getText(info.week.title, exportLang.value)} / ${getText(info.day.day, exportLang.value)} / ${getText(info.task.description, exportLang.value)}`
+      }
+      md += `${header}\n# ${getText(note.title, exportLang.value)}\n\n${turndownService.turndown(getText(note.content, exportLang.value))}\n`
       if (note.tags?.length) md += `\n**Tags:** ${note.tags.join(', ')}\n`
       md += '\n---\n'
     })
