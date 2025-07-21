@@ -15,5 +15,5 @@
 </template>
 <script setup lang="ts">
 import type { Week } from '@/types/plan'
-const props = defineProps<{ week: Week; progress: number }>()
+defineProps<{ week: Week; progress: number }>()
 </script>
