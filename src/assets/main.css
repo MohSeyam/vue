@@ -1,0 +1,16 @@
+body {
+  @apply bg-gradient-to-br from-cyan-50 via-purple-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900;
+}
+.card {
+  @apply rounded-xl shadow-card dark:shadow-card-dark bg-white dark:bg-gray-800 p-4;
+}
+
+/* تحسين النصوص في الوضع الليلي */
+.dark .text-gray-600, .dark .text-gray-500 {
+  color: #cbd5e1 !important;
+}
+
+/* تحسين زر اللغة وزر الوضع */
+.navbar-btn {
+  @apply p-2 rounded-full bg-white/20 hover:bg-white/40 dark:bg-gray-700 dark:hover:bg-gray-600 transition;
+}
