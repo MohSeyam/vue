@@ -27,12 +27,9 @@ import { ref, computed, onMounted } from 'vue'
 import { usePlanStore } from '@/stores/usePlanStore'
 import { useJournalStore } from '@/stores/useJournalStore'
 import Toast from '@/components/common/Toast.vue'
-import TagFilter from './TagFilter.vue'
-import SearchBar from './SearchBar.vue'
 import JournalEntriesList from './JournalEntriesList.vue'
 import JournalEntry from './JournalEntry.vue'
 import jsPDF from 'jspdf'
-import TurndownService from 'turndown'
 const planStore = usePlanStore()
 const journalStore = useJournalStore()
 const showEditor = ref(false)

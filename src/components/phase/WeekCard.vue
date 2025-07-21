@@ -7,11 +7,11 @@
     </div>
     <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-1">{{ week.title[locale] || week.title.en }}</h2>
     <div class="flex gap-2 text-xs text-gray-500 dark:text-gray-300 mb-2">
-      <span>🗓️ {{ daysCount }} {{ $t('plan.days') }}</span>
+      <span>🗓️ {{ daysCount(week) }} {{ $t('plan.days') }}</span>
       <span>•</span>
-      <span>📝 {{ tasksCount }} {{ $t('plan.tasks') }}</span>
+      <span>📝 {{ tasksCount(week) }} {{ $t('plan.tasks') }}</span>
       <span>•</span>
-      <span>⏱️ {{ totalHours }}h</span>
+      <span>⏱️ {{ totalHours(week) }}h</span>
     </div>
     <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-2">
       <div class="bg-gradient-to-r from-cyan-400 to-purple-500 h-2 rounded-full transition-all duration-700" :style="{ width: progress + '%' }"></div>
@@ -21,12 +21,11 @@
 </template>
 <script setup lang="ts">
 import type { Week } from '@/types/plan'
-import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 defineProps<{ week: Week; progress: number }>()
 const { locale } = useI18n()
-const daysCount = computed(() => week.days.length)
-const tasksCount = computed(() => week.days.reduce((acc, d) => acc + d.tasks.length, 0))
-const totalMinutes = computed(() => week.days.reduce((acc, d) => acc + d.tasks.reduce((tacc, t) => tacc + (t.duration || 0), 0), 0))
-const totalHours = computed(() => Math.floor(totalMinutes.value / 60))
+function daysCount(week: Week) { return week.days.length }
+function tasksCount(week: Week) { return week.days.reduce((acc, d) => acc + d.tasks.length, 0) }
+function totalMinutes(week: Week) { return week.days.reduce((acc, d) => acc + d.tasks.reduce((tacc, t) => tacc + (t.duration || 0), 0), 0) }
+function totalHours(week: Week) { return Math.floor(totalMinutes(week) / 60) }
 </script>

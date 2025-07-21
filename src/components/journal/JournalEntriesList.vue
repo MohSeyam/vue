@@ -18,6 +18,7 @@
 import { ref, computed } from 'vue'
 import JournalEntry from './JournalEntry.vue'
 import { usePlanStore } from '@/stores/usePlanStore'
+defineProps<{ entries: any[] }>()
 const expandedIds = ref<string[]>([])
 const planStore = usePlanStore()
 const daysMap = computed(() => {
