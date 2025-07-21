@@ -1,11 +1,11 @@
 <template>
-  <v-app>
+  <v-app :class="theme.global.current.value.dark ? 'dark' : ''">
     <v-app-bar color="primary" dark>
       <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-toolbar-title>مدير الأمن السيبراني</v-toolbar-title>
       <v-spacer />
       <v-btn icon @click="toggleLocale"><v-icon>mdi-translate</v-icon></v-btn>
-      <v-btn icon @click="toggleTheme"><v-icon>{{ theme === 'dark' ? 'mdi-weather-night' : 'mdi-white-balance-sunny' }}</v-icon></v-btn>
+      <v-btn icon @click="toggleTheme"><v-icon>{{ theme.global.current.value.dark ? 'mdi-weather-night' : 'mdi-white-balance-sunny' }}</v-icon></v-btn>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" app :right="$vuetify.locale.rtl">
       <v-list>
@@ -20,10 +20,9 @@
   </v-app>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useTheme } from 'vuetify'
-import { useRouter } from 'vue-router'
 const drawer = ref(false)
 const { locale } = useI18n()
 const theme = useTheme()

@@ -17,7 +17,8 @@ import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import Highlight from '@tiptap/extension-highlight'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
-import { lowlight } from 'lowlight/lib/core'
+// @ts-ignore
+import * as lowlight from 'lowlight'
 const props = defineProps({ modelValue: String, rtl: Boolean })
 const emit = defineEmits(['update:modelValue'])
 const editor = ref()

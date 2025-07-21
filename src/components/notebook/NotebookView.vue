@@ -19,12 +19,11 @@
       <v-col v-for="note in filteredNotes" :key="note.id" cols="12" sm="6" md="4">
         <v-card class="pa-4 mb-4" elevation="6">
           <v-card-title class="font-weight-bold text-primary">{{ getText(note.title) }}</v-card-title>
-          <v-card-subtitle class="text-caption text-gray-500 mb-2">{{ formatDate(note.createdAt) }}</v-card-subtitle>
           <v-card-text class="mb-2">{{ getText(note.content).slice(0, 120) }}...</v-card-text>
           <div class="d-flex flex-wrap gap-1 mb-2">
             <v-chip v-for="tag in note.tags" :key="tag" size="x-small" color="secondary" class="me-1">{{ tag }}</v-chip>
           </div>
-          <v-btn color="primary" icon="mdi-pencil" @click="editNote(note)" size="small" class="me-2"/><v-btn color="error" icon="mdi-delete" @click="deleteNote(note.id)" size="small"/>
+          <v-btn color="primary" icon="mdi-pencil" @click="editNote(note)" size="small" class="me-2"/>
         </v-card>
       </v-col>
       <v-col v-if="filteredNotes.length === 0" cols="12">
@@ -37,13 +36,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useNotebookStore } from '@/stores/useNotebookStore'
-import { usePlanStore } from '@/stores/usePlanStore'
 import { getText } from '@/utils/getText'
 import NoteEditor from './NoteEditor.vue'
 const store = useNotebookStore()
-const planStore = usePlanStore()
 const openEditor = ref(false)
-const editingNote = ref(null)
+const editingNote = ref<any>(null)
 const search = ref('')
 const selectedTag = ref('')
 const allTags = computed(() => Array.from(new Set(store.notes.flatMap(n => n.tags || []))))
@@ -56,7 +53,7 @@ const filteredNotes = computed(() => {
   }
   return notes
 })
-function editNote(note) {
+function editNote(note: any) {
   editingNote.value = note
   openEditor.value = true
 }
@@ -64,15 +61,8 @@ function closeEditor() {
   openEditor.value = false
   editingNote.value = null
 }
-function saveNote(note) {
-  if (note.id) store.updateNote(note)
-  else store.addNote(note)
+function saveNote(note: any) {
+  store.addNote(note)
   closeEditor()
-}
-function deleteNote(id) {
-  store.deleteNote(id)
-}
-function formatDate(date) {
-  return new Date(date).toLocaleDateString()
 }
 </script>

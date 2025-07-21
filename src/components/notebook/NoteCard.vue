@@ -1,13 +1,23 @@
 <template>
-  <transition name="fade">
-    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow relative group transition hover:scale-[1.02]">
-      <button @click="$emit('edit', note)" class="absolute top-2 right-10 text-gray-400 hover:text-primary-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 11l6 6M3 21h6v-6H3v6z"/></svg></button>
-      <button @click="$emit('delete', note.id)" class="absolute top-2 right-2 text-gray-400 hover:text-red-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
-      <h2 class="font-bold text-lg mb-2" v-html="highlight(getText(note.title))"></h2>
-      <p class="text-gray-600 dark:text-gray-300 whitespace-pre-line" v-html="highlight(getText(note.content))"></p>
-      <div v-if="note.tags?.length" class="mt-2 text-xs text-gray-400">{{ note.tags.join(', ') }}</div>
-    </div>
-  </transition>
+  <v-card class="note-card mb-2" elevation="6">
+    <v-card-title class="d-flex align-center justify-space-between pb-0">
+      <span class="font-weight-bold text-primary" v-html="highlight(getText(note.title))"></span>
+      <div>
+        <v-btn icon size="small" color="primary" variant="text" @click="$emit('edit', note)">
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+        <v-btn icon size="small" color="error" variant="text" @click="$emit('delete', note.id)">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+    </v-card-title>
+    <v-card-text class="pt-2 pb-1">
+      <div class="text-body-2 text-grey-darken-2" v-html="highlight(getText(note.content))"></div>
+      <div v-if="note.tags?.length" class="mt-2">
+        <v-chip v-for="tag in note.tags" :key="tag" size="x-small" color="secondary" class="me-1">#{{ tag }}</v-chip>
+      </div>
+    </v-card-text>
+  </v-card>
 </template>
 <script setup lang="ts">
 import { getText } from '@/utils/getText'
@@ -15,11 +25,17 @@ import type { Note } from '@/types/plan'
 const props = defineProps<{ note: Note, search?: string }>()
 function highlight(text: string) {
   if (!props.search) return text
-  const q = props.search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const q = props.search.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&')
   return text.replace(new RegExp(q, 'gi'), m => `<mark class='bg-yellow-200 dark:bg-yellow-600 rounded'>${m}</mark>`)
 }
 </script>
 <style scoped>
-.fade-enter-active, .fade-leave-active { transition: opacity 0.3s; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
+.note-card {
+  border-radius: 18px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.note-card:hover {
+  box-shadow: 0 6px 32px 0 #22d3ee33, 0 1.5px 6px 0 #0001;
+  transform: translateY(-2px) scale(1.015);
+}
 </style>

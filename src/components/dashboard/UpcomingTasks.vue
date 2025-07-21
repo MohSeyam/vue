@@ -1,19 +1,14 @@
 <template>
-  <div class="flex flex-col items-center bg-white dark:bg-gray-800 rounded-xl shadow p-4 w-full">
-    <svg class="w-8 h-8 text-pink-500 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
-    <div v-if="plan.upcomingTasks.length" class="w-full">
-      <ul class="text-sm text-gray-700 dark:text-gray-200 w-full">
-        <li v-for="task in plan.upcomingTasks" :key="task.id" class="mb-1 flex flex-col border-b border-gray-100 dark:border-gray-700 pb-1">
-          <div class="flex justify-between items-center">
-            <span class="font-bold">{{ plan.getTaskDesc(task) }}</span>
-          </div>
-          <div class="text-xs text-gray-400 mt-0.5">{{ plan.getTaskDesc(task) }}</div>
-        </li>
-      </ul>
-    </div>
-    <div v-else class="text-lg font-bold">{{ $t('dashboard.noUpcoming') }}</div>
-    <div class="text-xs text-gray-400 mt-1">{{ $t('dashboard.upcoming') }}</div>
-  </div>
+  <v-card class="pa-4 text-center" elevation="8">
+    <v-card-title class="font-weight-bold text-primary mb-2">{{ $t('dashboard.upcoming', 'المهام القادمة') }}</v-card-title>
+    <v-list dense v-if="plan.upcomingTasks.length">
+      <v-list-item v-for="task in plan.upcomingTasks" :key="task.id">
+        <v-list-item-title class="font-weight-bold">{{ plan.getTaskDesc(task) }}</v-list-item-title>
+        <v-list-item-subtitle>{{ plan.getTaskDesc(task) }}</v-list-item-subtitle>
+      </v-list-item>
+    </v-list>
+    <v-alert v-else type="info" color="primary">{{ $t('dashboard.noUpcoming', 'لا توجد مهام قادمة') }}</v-alert>
+  </v-card>
 </template>
 <script setup lang="ts">
 import { usePlanStore } from '@/stores/usePlanStore'

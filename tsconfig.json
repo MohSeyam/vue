@@ -3,6 +3,11 @@
     "typeRoots": [
       "./node_modules/@types",
       "./src/types"
+    ],
+    "types": [
+      "vite/client",
+      "vuetify",
+      "lowlight"
     ]
   },
   "files": [],
