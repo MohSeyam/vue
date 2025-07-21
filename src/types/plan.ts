@@ -7,6 +7,7 @@ export interface Day {
   id: string;
   date: string;
   tasks: Task[];
+  resources?: any[];
 }
 export interface Week {
   id: string;
