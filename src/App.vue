@@ -51,7 +51,7 @@
   </v-app>
 </template>
 <script setup lang="ts">
-import { ref, reactive, computed, provide, onMounted, watch, markRaw } from 'vue'
+import { ref, reactive, computed, provide, onMounted, watch } from 'vue'
 import translations from '@/data/translations.json'
 import phases from '@/data/phases.json'
 import DashboardView from './pages/DashboardView.vue';
