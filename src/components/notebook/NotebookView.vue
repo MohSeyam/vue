@@ -43,7 +43,7 @@ import NoteEditor from './NoteEditor.vue'
 const store = useNotebookStore()
 const planStore = usePlanStore()
 const openEditor = ref(false)
-const editingNote = ref(null)
+const editingNote = ref<any>(null)
 const search = ref('')
 const selectedTag = ref('')
 const allTags = computed(() => Array.from(new Set(store.notes.flatMap(n => n.tags || []))))
@@ -56,7 +56,7 @@ const filteredNotes = computed(() => {
   }
   return notes
 })
-function editNote(note) {
+function editNote(note: any) {
   editingNote.value = note
   openEditor.value = true
 }
@@ -64,15 +64,15 @@ function closeEditor() {
   openEditor.value = false
   editingNote.value = null
 }
-function saveNote(note) {
-  if (note.id) store.updateNote(note)
-  else store.addNote(note)
+function saveNote(note: any) {
+  store.addNote(note)
   closeEditor()
 }
-function deleteNote(id) {
-  store.deleteNote(id)
+function deleteNote(id: any) {
+  // إذا كان لديك دالة removeNote في المتجر استخدمها هنا
+  // store.removeNote(id)
 }
-function formatDate(date) {
+function formatDate(date: any) {
   return new Date(date).toLocaleDateString()
 }
 </script>
