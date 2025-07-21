@@ -92,5 +92,16 @@
     "allTags": "All Tags",
     "search": "Search journal...",
     "exportLang": "Export Language"
-  }
+  },
+  "dashboard": {
+    "welcome": "Welcome to the Dashboard!",
+    "simple": "Start your journey here. Use the icons above to navigate."
+  },
+  "clock": "Local Time",
+  "calendar": "Calendar",
+  "upcoming": "Upcoming Tasks",
+  "noUpcoming": "No upcoming tasks",
+  "weeks": "Weeks",
+  "currentPhase": "Current Phase",
+  "phase": "Phase"
 }
