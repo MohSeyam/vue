@@ -36,7 +36,7 @@ export const useNotebookStore = defineStore('notebook', () => {
     await loadNotes()
   }
   function getNotesByTaskId(taskId: string) {
-    return notes.value.filter(n => n.taskId === taskId)
+    return notes.value.filter(n => n.taskId && n.taskId === taskId)
   }
 
   loadNotes()
