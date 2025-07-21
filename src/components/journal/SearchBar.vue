@@ -12,5 +12,6 @@
   </div>
 </template>
 <script setup lang="ts">
+defineProps<{ modelValue: string }>()
 const emit = defineEmits(['update:modelValue'])
 </script>

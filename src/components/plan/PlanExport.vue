@@ -12,15 +12,15 @@ function exportPlan(type: 'pdf' | 'md') {
     doc.setFontSize(18)
     doc.text(exportLang.value === 'ar' ? 'خطة التعلم' : 'Learning Plan', 10, y)
     y += 10
-    weeks.forEach((w, wi) => {
+    weeks.forEach(w => {
       doc.setFontSize(15)
       doc.text(`${exportLang.value === 'ar' ? 'الأسبوع' : 'Week'} ${w.week}: ${w.title[exportLang.value] || w.title.en}`, 10, y)
       y += 8
-      w.days.forEach((d, di) => {
+      w.days.forEach(d => {
         doc.setFontSize(13)
         doc.text(`- ${d.day[exportLang.value] || d.day.en}: ${d.topic?.[exportLang.value] || d.topic?.en || ''}`, 14, y)
         y += 7
-        d.tasks.forEach((t, ti) => {
+        d.tasks.forEach(t => {
           doc.setFontSize(11)
           doc.text(`  • ${t.description[exportLang.value] || t.description.en} (${t.type || ''}, ${t.duration} min)`, 18, y)
           y += 6

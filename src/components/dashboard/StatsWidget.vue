@@ -10,15 +10,16 @@
 </template>
 <script setup lang="ts">
 import { usePlanStore } from '@/stores/usePlanStore'
+import { computed } from 'vue'
 const plan = usePlanStore()
 const statLabels = {
   weeks: 'عدد الأسابيع',
   tasks: 'عدد المهام',
   days: 'عدد الأيام'
 }
-const stats = {
+const stats = computed(() => ({
   weeks: plan.weeks.length,
   tasks: plan.allTasks.length,
   days: plan.allDays.length
-}
+}))
 </script>
