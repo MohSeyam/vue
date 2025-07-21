@@ -6,10 +6,10 @@
         <v-btn icon="mdi-close" variant="text" @click="$emit('close')"></v-btn>
       </v-card-title>
       <v-card-subtitle>{{ t.noteOnTask }} "{{ taskDescription }}"</v-card-subtitle>
-      <v-card-text class="quill-container">
+      <v-card-text>
         <v-text-field :label="t.noteTitle" v-model="note.title" variant="outlined" class="mb-4" />
         <v-text-field :label="t.keywords" v-model="note.keywords" variant="outlined" class="mb-4" hint="مفصولة بفاصلة" />
-        <QuillEditor v-model="note.content" :rtl="lang === 'ar'" />
+        <TipTapEditor v-model="note.content" :rtl="lang === 'ar'" />
       </v-card-text>
       <v-card-actions class="pa-4">
         <v-btn color="error" @click="$emit('delete')">{{ t.deleteNote }}</v-btn>
@@ -21,7 +21,7 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-import QuillEditor from '../common/QuillEditor.vue';
+import TipTapEditor from '../common/TipTapEditor.vue';
 import { ref, watch } from 'vue';
 const props = defineProps<{ modelValue: boolean, note: any, lang: string, t: any, taskDescription: string }>();
 const emit = defineEmits(['update:modelValue', 'save', 'delete', 'close']);
