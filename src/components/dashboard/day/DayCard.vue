@@ -3,12 +3,15 @@
     <v-card-title class="font-weight-bold">{{ dayTitle }}</v-card-title>
     <v-card-subtitle>{{ dayTopic }}</v-card-subtitle>
     <v-card-text>
-      <div class="d-flex flex-wrap ga-2">
-        <v-chip v-for="task in tasks" :key="task.id" color="primary" variant="tonal">{{ task.type }}</v-chip>
-      </div>
+      <v-list density="compact">
+        <v-list-item v-for="task in tasks" :key="task.id">
+          <v-list-item-title>{{ task.description }}</v-list-item-title>
+          <v-list-item-subtitle>{{ task.type }} - {{ task.duration }} دقيقة</v-list-item-subtitle>
+        </v-list-item>
+      </v-list>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="primary" @click="$emit('go-day', dayKey)">{{ t.journalOnDay }}</v-btn>
+      <v-btn color="primary" @click="$emit('view-day', dayKey)">{{ t.day }}</v-btn>
     </v-card-actions>
   </v-card>
 </template>

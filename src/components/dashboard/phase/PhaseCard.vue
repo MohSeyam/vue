@@ -3,11 +3,11 @@
     <v-card-title class="font-weight-bold">{{ phaseTitle }}</v-card-title>
     <v-card-subtitle>{{ phaseRange }}</v-card-subtitle>
     <v-card-text>
-      <v-progress-linear :model-value="progress" color="success" height="8" rounded></v-progress-linear>
-      <div class="mt-2 text-caption text-grey">{{ progress.toFixed(0) }}%</div>
+      <v-progress-linear :model-value="progress" color="success" height="8" rounded />
+      <div class="mt-2 text-caption text-grey">{{ progress }}% {{ t.tasksCompleted }}</div>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="primary" @click="$emit('go-phase', phaseId)">{{ t.planOverview }}</v-btn>
+      <v-btn color="primary" @click="$emit('view-phase', phaseId)">{{ t.planOverview }}</v-btn>
     </v-card-actions>
   </v-card>
 </template>
