@@ -1,5 +1,6 @@
 <template>
   <div class="max-w-5xl mx-auto py-10 px-4">
+    <Toast ref="toastRef" />
     <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
       <h1 class="text-2xl font-bold">{{ $t('notebook.title') }}</h1>
       <div class="flex gap-2 flex-wrap">
@@ -7,8 +8,8 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
           {{ $t('notebook.graphTitle') }}
         </button>
-        <div class="relative">
-          <button @click="showExport = !showExport" class="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200 px-3 py-2 rounded-lg shadow hover:bg-green-200 dark:hover:bg-green-800 transition flex items-center gap-2">
+        <div class="relative" @click.outside="showExport = false">
+          <button :disabled="!filteredNotes.length" @click="showExport = !showExport" class="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200 px-3 py-2 rounded-lg shadow hover:bg-green-200 dark:hover:bg-green-800 transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
             {{ $t('notebook.export') }}
           </button>
@@ -23,8 +24,9 @@
         </button>
       </div>
     </div>
+    <div class="mb-2 text-sm text-gray-500 dark:text-gray-300">{{ $t('notebook.notesCount', { count: filteredNotes.length }) }}</div>
     <NoteTemplates @insert="insertTemplate" />
-    <NoteGrid :notes="store.notes" @edit="editNote" @delete="deleteNote" />
+    <NoteGrid :notes="filteredNotes" :search="search" @edit="editNote" @delete="deleteNote" />
     <NoteEditor
       v-if="showEditor"
       :note="editingNote"
@@ -38,6 +40,7 @@
 import { ref, computed } from 'vue'
 import { useNotebookStore } from '@/stores/useNotebookStore'
 import { getText } from '@/utils/getText'
+import Toast from '@/components/common/Toast.vue'
 import NoteCard from './NoteCard.vue'
 import NoteEditor from './NoteEditor.vue'
 import SearchBar from './SearchBar.vue'
@@ -47,7 +50,6 @@ import TagFilter from './TagFilter.vue'
 import GraphViewModal from './GraphViewModal.vue'
 import type { Note } from '@/types/plan'
 import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
 import TurndownService from 'turndown'
 const store = useNotebookStore()
 const showEditor = ref(false)
@@ -56,6 +58,7 @@ const openGraph = ref(false)
 const showExport = ref(false)
 const search = ref('')
 const selectedTag = ref('')
+const toastRef = ref()
 const filteredNotes = computed(() => {
   let notes = store.notes
   if (selectedTag.value) notes = notes.filter(n => n.tags?.includes(selectedTag.value))
@@ -81,18 +84,21 @@ function saveNote(note: Note) {
   if (note.id) store.updateNote(note)
   else store.addNote(note)
   closeEditor()
+  toastRef.value?.show($t('notebook.toastSaved'), 'success')
 }
 function deleteNote(id: string) {
   store.deleteNote(id)
+  toastRef.value?.show($t('notebook.toastDeleted'), 'success')
 }
 function insertTemplate(tpl: Note) {
   editingNote.value = { ...tpl, id: '', tags: [] }
   showEditor.value = true
+  toastRef.value?.show($t('notebook.toastTemplate'), 'info')
 }
 async function exportNotes(type: 'pdf' | 'md') {
   showExport.value = false
   const notes = filteredNotes.value
-  if (!notes.length) return alert('No notes to export!')
+  if (!notes.length) return toastRef.value?.show($t('notebook.toastNoNotes'), 'error')
   if (type === 'pdf') {
     const doc = new jsPDF()
     notes.forEach((note, i) => {
@@ -104,6 +110,7 @@ async function exportNotes(type: 'pdf' | 'md') {
       if (i < notes.length - 1) doc.addPage()
     })
     doc.save('notes.pdf')
+    toastRef.value?.show($t('notebook.toastExportedPDF'), 'success')
   } else if (type === 'md') {
     const turndownService = new TurndownService()
     let md = ''
@@ -119,6 +126,7 @@ async function exportNotes(type: 'pdf' | 'md') {
     a.download = 'notes.md'
     a.click()
     URL.revokeObjectURL(url)
+    toastRef.value?.show($t('notebook.toastExportedMD'), 'success')
   }
 }
 </script>
