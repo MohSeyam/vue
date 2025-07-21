@@ -36,7 +36,7 @@
 import { inject, computed } from 'vue';
 import ProgressChart from '../components/charts/ProgressChart.vue';
 import ExportMenu from '../components/export/ExportMenu.vue';
-const { lang, theme, t, toggleLang, toggleTheme } = inject('app') as any;
+const { lang, theme, t, toggleLang, toggleTheme, appState } = inject('app') as any;
 const themeOptions = [
   { title: t.value.themeLight, value: 'light' },
   { title: t.value.themeDark, value: 'dark' },
@@ -45,6 +45,17 @@ const langOptions = [
   { title: 'العربية', value: 'ar' },
   { title: 'English', value: 'en' },
 ];
-const progress = 75; // مثال: نسبة التقدم الكلية
-const settingsData = { theme, lang };
+const progress = computed(() => {
+  // مثال: نسبة التقدم الكلية من appState
+  if (!appState.value?.progress) return 0;
+  let total = 0, completed = 0;
+  Object.values(appState.value.progress).forEach((w: any) => {
+    Object.values(w.days).forEach((d: any) => {
+      total += d.tasks.length;
+      completed += d.tasks.filter((s: string) => s === 'completed').length;
+    });
+  });
+  return total > 0 ? Math.round((completed / total) * 100) : 0;
+});
+const settingsData = computed(() => ({ theme: theme.value, lang: lang.value }));
 </script>
