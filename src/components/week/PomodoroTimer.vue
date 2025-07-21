@@ -1,80 +1,42 @@
 <template>
-  <div class="flex flex-col items-center gap-4">
-    <div class="flex gap-2 mb-2">
-      <button v-for="mode in modes" :key="mode.key" @click="setMode(mode.key)"
-        :class="[modeKey === mode.key ? 'bg-cyan-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300', 'px-4 py-1 rounded-full font-bold transition']">
-        {{ $t(`pomodoro.${mode.key}`) }}
-      </button>
-    </div>
-    <div class="text-5xl font-mono font-bold text-cyan-600 dark:text-cyan-400">
-      {{ minutes }}:{{ seconds < 10 ? '0' + seconds : seconds }}
-    </div>
-    <div class="flex gap-3 mt-2">
-      <button @click="toggle" class="px-4 py-2 rounded-lg font-bold bg-gradient-to-r from-cyan-400 to-purple-500 text-white shadow hover:scale-105 transition">
-        <span v-if="!running">{{ $t('pomodoro.start') }}</span>
-        <span v-else>{{ $t('pomodoro.pause') }}</span>
-      </button>
-      <button @click="reset" class="px-4 py-2 rounded-lg font-bold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-        {{ $t('pomodoro.reset') }}
-      </button>
-    </div>
-    <div class="text-xs text-gray-500 mt-2">{{ $t('pomodoro.sessions') }}: {{ sessions }}</div>
-  </div>
+  <v-card class="pa-6 mb-4 text-center" elevation="8">
+    <v-card-title class="font-weight-bold text-primary mb-2">Pomodoro Timer</v-card-title>
+    <v-card-text>
+      <v-progress-circular :size="120" :width="10" :value="progress" color="primary" class="mb-4">
+        <span class="text-2xl font-bold">{{ minutes }}:{{ seconds < 10 ? '0' : '' }}{{ seconds }}</span>
+      </v-progress-circular>
+      <div class="d-flex justify-center gap-2 mt-2">
+        <v-btn color="primary" @click="start" :disabled="running">{{ $t('timer.start', 'بدء') }}</v-btn>
+        <v-btn color="error" @click="stop" :disabled="!running">{{ $t('timer.stop', 'إيقاف') }}</v-btn>
+        <v-btn color="secondary" @click="reset">{{ $t('timer.reset', 'إعادة') }}</v-btn>
+      </div>
+    </v-card-text>
+  </v-card>
 </template>
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-useI18n()
-const modes = [
-  { key: 'work', duration: 25 },
-  { key: 'shortBreak', duration: 5 },
-  { key: 'longBreak', duration: 15 }
-]
-const modeKey = ref('work')
-const duration = ref(25 * 60)
-const timer = ref<number | null>(null)
+import { ref, computed, onBeforeUnmount } from 'vue'
+const totalSeconds = 25 * 60
+const time = ref(totalSeconds)
 const running = ref(false)
-const timeLeft = ref(duration.value)
-const sessions = ref(0)
-const minutes = computed(() => Math.floor(timeLeft.value / 60))
-const seconds = computed(() => timeLeft.value % 60)
-function setMode(key: string) {
-  modeKey.value = key
-  const mode = modes.find(m => m.key === key)
-  if (mode) {
-    duration.value = mode.duration * 60
-    timeLeft.value = duration.value
-    running.value = false
-    clearTimer()
-  }
+let interval: any = null
+const minutes = computed(() => Math.floor(time.value / 60))
+const seconds = computed(() => time.value % 60)
+const progress = computed(() => 100 * (1 - time.value / totalSeconds))
+function start() {
+  if (running.value) return
+  running.value = true
+  interval = setInterval(() => {
+    if (time.value > 0) time.value--
+    else stop()
+  }, 1000)
 }
-function tick() {
-  if (timeLeft.value > 0) {
-    timeLeft.value--
-  } else {
-    running.value = false
-    clearTimer()
-    sessions.value++
-  }
-}
-function toggle() {
-  running.value = !running.value
-  if (running.value) {
-    timer.value = setInterval(tick, 1000) as unknown as number
-  } else {
-    clearTimer()
-  }
+function stop() {
+  running.value = false
+  clearInterval(interval)
 }
 function reset() {
-  timeLeft.value = duration.value
-  running.value = false
-  clearTimer()
+  stop()
+  time.value = totalSeconds
 }
-function clearTimer() {
-  if (timer.value) {
-    clearInterval(timer.value)
-    timer.value = null
-  }
-}
-watch(modeKey, () => reset())
+onBeforeUnmount(() => stop())
 </script>
