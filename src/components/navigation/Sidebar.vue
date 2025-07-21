@@ -1,23 +1,26 @@
 <template>
-  <aside class="hidden md:flex flex-col w-20 h-screen bg-white/10 dark:bg-gray-900/80 backdrop-blur-lg shadow-2xl rounded-r-3xl py-8 items-center space-y-8 fixed top-0 left-0 z-40">
-    <router-link to="/dashboard" class="mb-8 group">
-      <div class="bg-gradient-to-tr from-cyan-400 to-purple-500 rounded-2xl p-3 shadow-lg flex items-center justify-center">
-        <!-- Heroicon: ShieldCheck -->
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-white group-hover:text-cyan-200 transition">
+  <nav class="fixed top-0 left-0 w-full h-16 bg-white/80 dark:bg-gray-900/90 backdrop-blur-lg shadow z-50 flex items-center justify-between px-4 md:px-12">
+    <div class="flex items-center gap-4">
+      <router-link to="/dashboard" class="flex items-center gap-2 group">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-cyan-500 group-hover:text-purple-500 transition">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 3.25c-2.956 1.31-5.91 2.09-8.25 2.25v5.25c0 7.25 6.25 10.25 8.25 10.25s8.25-3 8.25-10.25V5.5c-2.34-.16-5.294-.94-8.25-2.25z" />
           <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 12.75l1.5 1.5 3-3" />
         </svg>
-      </div>
-    </router-link>
-    <div class="flex flex-col space-y-6 w-full">
-      <router-link v-for="item in navItems" :key="item.path" :to="item.path" class="group flex flex-col items-center w-full py-2" :class="$route.path.startsWith(item.path) ? 'bg-cyan-100/20 dark:bg-cyan-900/30' : ''">
-        <span class="mb-1">
-          <component :is="item.icon" class="w-7 h-7 text-cyan-400 group-hover:text-purple-400 transition" />
-        </span>
-        <span class="text-xs text-white/70 group-hover:text-cyan-200 transition">{{ item.label }}</span>
+        <span class="font-bold text-lg text-cyan-700 dark:text-cyan-200 hidden sm:block">CyberPlan</span>
       </router-link>
     </div>
-  </aside>
+    <div class="flex items-center gap-2 md:gap-6">
+      <router-link v-for="item in navItems" :key="item.path" :to="item.path"
+        class="group flex flex-col items-center justify-center px-2 md:px-3 py-1 md:py-2 rounded-lg transition relative"
+        :class="$route.path.startsWith(item.path) ? 'bg-cyan-100/60 dark:bg-cyan-900/40 shadow text-cyan-700 dark:text-cyan-200' : 'text-gray-500 dark:text-gray-300 hover:text-cyan-500'">
+        <span>
+          <component :is="item.icon" class="w-7 h-7" />
+        </span>
+        <span class="text-xs mt-1 hidden md:block">{{ item.label }}</span>
+      </router-link>
+    </div>
+  </nav>
+  <div class="h-16"></div> <!-- Spacer for fixed navbar -->
 </template>
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
@@ -39,17 +42,14 @@ const SettingsIcon = {
   template: `<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M10.5 6.75h3m-1.5 0v10.5m0 0h-3m3 0h3' /></svg>`
 }
 const navItems = [
-  { path: '/dashboard', icon: shallowRef(HomeIcon), label: 'الرئيسية' },
-  { path: '/notebook', icon: shallowRef(NotebookIcon), label: 'الملاحظات' },
-  { path: '/achievements', icon: shallowRef(TrophyIcon), label: 'الإنجازات' },
-  { path: '/journal', icon: shallowRef(ChartBarIcon), label: 'التدوين' },
-  { path: '/settings', icon: shallowRef(SettingsIcon), label: 'الإعدادات' }
+  { path: '/dashboard', icon: shallowRef(HomeIcon), label: $t('sidebar.dashboard') },
+  { path: '/notebook', icon: shallowRef(NotebookIcon), label: $t('sidebar.notebook') },
+  { path: '/achievements', icon: shallowRef(TrophyIcon), label: $t('sidebar.achievements') },
+  { path: '/journal', icon: shallowRef(ChartBarIcon), label: $t('sidebar.journal') },
+  { path: '/settings', icon: shallowRef(SettingsIcon), label: $t('sidebar.settings') }
 ]
 const $route = useRoute()
 </script>
 <style scoped>
-.router-link-exact-active {
-  background: linear-gradient(90deg, #06b6d4 0%, #a78bfa 100%) !important;
-  color: #fff !important;
-}
+nav { font-family: inherit; }
 </style>
