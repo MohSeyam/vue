@@ -4,8 +4,9 @@
       <JournalEntry
         :entry="entry"
         :dayLabel="getDayLabel(entry.week, entry.dayKey)"
-        :expanded="expandedId === entry.id"
-        @toggle="expandedId = expandedId === entry.id ? null : entry.id"
+        :dayDate="getDayDate(entry.week, entry.dayKey)"
+        :expanded="expandedIds.includes(entry.id)"
+        @toggle="toggleExpand(entry.id)"
         @edit="$emit('edit', entry)"
         @delete="$emit('delete', entry.id)"
       />
@@ -14,15 +15,34 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import JournalEntry from './JournalEntry.vue'
 import { usePlanStore } from '@/stores/usePlanStore'
 const props = defineProps<{ entries: any[] }>()
-const expandedId = ref(null)
+const expandedIds = ref<string[]>([])
 const planStore = usePlanStore()
+const daysMap = computed(() => {
+  const map: Record<string, { label: string, date?: string }> = {}
+  planStore.weeks.forEach(w => {
+    w.days.forEach(d => {
+      map[`${w.week}|${d.key}`] = { label: d.day.en, date: d.date }
+    })
+  })
+  return map
+})
 function getDayLabel(week, dayKey) {
-  const w = planStore.weeks.find(w => String(w.week) === String(week))
-  const d = w?.days.find(d => d.key === dayKey)
-  return d ? d.day.en : dayKey
+  const d = daysMap.value[`${week}|${dayKey}`]
+  return d ? d.label : dayKey
+}
+function getDayDate(week, dayKey) {
+  const d = daysMap.value[`${week}|${dayKey}`]
+  return d?.date
+}
+function toggleExpand(id: string) {
+  if (expandedIds.value.includes(id)) {
+    expandedIds.value = expandedIds.value.filter(eid => eid !== id)
+  } else {
+    expandedIds.value.push(id)
+  }
 }
 </script>

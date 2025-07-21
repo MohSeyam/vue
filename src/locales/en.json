@@ -84,5 +84,8 @@
     "exportPDF": "Export PDF",
     "exportMD": "Export Markdown",
     "notesCount": "Notes count: {count}"
+  },
+  "journal": {
+    "copy": "Copy Content"
   }
 }
