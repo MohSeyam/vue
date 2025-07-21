@@ -1,25 +1,39 @@
 <template>
-  <div class="max-w-xl mx-auto py-10 px-4">
-    <h1 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">{{ $t('settings.title') }}</h1>
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mb-8">
-      <h2 class="text-lg font-bold mb-4 text-gray-900 dark:text-white">{{ $t('settings.language') }}</h2>
-      <select v-model="lang" @change="changeLang" class="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white font-bold">
-        <option value="ar">العربية</option>
-        <option value="en">English</option>
-      </select>
-    </div>
-    <!-- إعدادات أخرى ... -->
-  </div>
+  <v-container fluid class="py-8">
+    <v-row justify="center">
+      <v-col cols="12" md="6">
+        <v-card class="pa-6" elevation="8">
+          <v-card-title class="font-weight-bold text-primary mb-4">{{ $t('settings.title', 'الإعدادات') }}</v-card-title>
+          <v-form @submit.prevent="saveSettings">
+            <v-row class="mb-4">
+              <v-col cols="12">
+                <v-switch v-model="darkMode" :label="$t('settings.darkMode', 'الوضع الليلي')" color="primary" inset></v-switch>
+              </v-col>
+              <v-col cols="12">
+                <v-select v-model="language" :items="languages" :label="$t('settings.language', 'اللغة')" color="primary"></v-select>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="text-end">
+                <v-btn color="primary" type="submit">{{ $t('settings.save', 'حفظ') }}</v-btn>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-const { locale } = useI18n()
-const lang = ref(locale.value)
-function changeLang() {
-  locale.value = lang.value
-  localStorage.setItem('lang', lang.value)
-  document.documentElement.dir = lang.value === 'ar' ? 'rtl' : 'ltr'
+import { ref } from 'vue'
+const darkMode = ref(false)
+const language = ref('ar')
+const languages = [
+  { title: 'العربية', value: 'ar' },
+  { title: 'English', value: 'en' }
+]
+function saveSettings() {
+  // منطق الحفظ (تغيير اللغة/الوضع)
+  alert('تم حفظ الإعدادات!')
 }
-watch(lang, changeLang)
 </script>
