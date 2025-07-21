@@ -1,7 +1,9 @@
 <template>
-  <div :class="[$settings.theme === 'dark' ? 'dark' : '', 'min-h-screen bg-gray-50 dark:bg-gray-900']">
+  <div :class="[$settings.theme === 'dark' ? 'dark' : '', 'min-h-screen bg-gray-50 dark:bg-gray-900 flex']">
     <Sidebar />
-    <router-view />
+    <main class="flex-1">
+      <router-view />
+    </main>
     <Toast />
   </div>
 </template>
