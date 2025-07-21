@@ -1,15 +1,73 @@
 <template>
   <div class="flex gap-4 mt-6 justify-center">
-    <button class="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2">
+    <select v-model="exportLang" class="rounded border px-2 py-1 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-xs">
+      <option value="en">English</option>
+      <option value="ar">العربية</option>
+    </select>
+    <button @click="exportAchievements('pdf')" class="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-      {{ $t('achievements.exportPDF') }}
+      PDF
     </button>
-    <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2">
+    <button @click="exportAchievements('md')" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-      {{ $t('achievements.exportMD') }}
+      Markdown
     </button>
   </div>
 </template>
 <script setup lang="ts">
-// واجهة فقط حالياً
+import { computed, ref } from 'vue'
+import { usePlanStore } from '@/stores/usePlanStore'
+import { useNotebookStore } from '@/stores/useNotebookStore'
+import { useJournalStore } from '@/stores/useJournalStore'
+import jsPDF from 'jspdf'
+const planStore = usePlanStore()
+const notebookStore = useNotebookStore()
+const journalStore = useJournalStore()
+const exportLang = ref('en')
+const totalTasks = computed(() => planStore.weeks.reduce((acc, w) => acc + w.days.reduce((dacc, d) => dacc + (d.tasks?.length || 0), 0), 0))
+const completedTasks = computed(() => planStore.weeks.reduce((acc, w) => acc + w.days.reduce((dacc, d) => dacc + (d.tasks?.filter(t => t.done).length || 0), 0), 0))
+const progress = computed(() => totalTasks.value ? Math.round((completedTasks.value / totalTasks.value) * 100) : 0)
+const notesCount = computed(() => notebookStore.notes.length)
+const journalCount = computed(() => journalStore.entries.length)
+function exportAchievements(type: 'pdf' | 'md') {
+  const labels = {
+    en: {
+      title: 'Achievements Report',
+      totalTasks: 'Total Tasks',
+      completedTasks: 'Completed Tasks',
+      progress: 'Progress',
+      notes: 'Notes',
+      journals: 'Journal Entries'
+    },
+    ar: {
+      title: 'تقرير الإنجازات',
+      totalTasks: 'إجمالي المهام',
+      completedTasks: 'المهام المنجزة',
+      progress: 'نسبة الإنجاز',
+      notes: 'الملاحظات',
+      journals: 'تدوينات اليومية'
+    }
+  }[exportLang.value]
+  if (type === 'pdf') {
+    const doc = new jsPDF()
+    doc.setFontSize(18)
+    doc.text(labels.title, 10, 20)
+    doc.setFontSize(13)
+    doc.text(`${labels.totalTasks}: ${totalTasks.value}`, 10, 40)
+    doc.text(`${labels.completedTasks}: ${completedTasks.value}`, 10, 50)
+    doc.text(`${labels.progress}: ${progress.value}%`, 10, 60)
+    doc.text(`${labels.notes}: ${notesCount.value}`, 10, 70)
+    doc.text(`${labels.journals}: ${journalCount.value}`, 10, 80)
+    doc.save('achievements.pdf')
+  } else if (type === 'md') {
+    let md = `# ${labels.title}\n\n- ${labels.totalTasks}: ${totalTasks.value}\n- ${labels.completedTasks}: ${completedTasks.value}\n- ${labels.progress}: ${progress.value}%\n- ${labels.notes}: ${notesCount.value}\n- ${labels.journals}: ${journalCount.value}\n`
+    const blob = new Blob([md], { type: 'text/markdown' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'achievements.md'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+}
 </script>
