@@ -48,7 +48,7 @@
 import { useI18n } from 'vue-i18n'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { computed } from 'vue'
-const { locale, t } = useI18n()
+const { locale } = useI18n()
 const settings = useSettingsStore()
 const theme = computed(() => settings.theme)
 function toggleLocale() {
