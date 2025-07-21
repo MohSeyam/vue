@@ -5,9 +5,20 @@
       <path stroke-linecap="round" stroke-linejoin="round" d="M24 12v12l8 4" stroke="currentColor" stroke-width="3" />
     </svg>
     <h1 class="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-2">{{ $t('dashboard.welcome') }}</h1>
-    <p class="text-lg text-gray-600 dark:text-gray-300">{{ $t('dashboard.simple') }}</p>
+    <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">{{ $t('dashboard.simple') }}</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-3xl mt-4">
+      <LocalClock />
+      <LocalCalendar />
+      <UpcomingTasks />
+      <StatsWidget />
+      <PhaseCard />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
-// لا حاجة لأي منطق هنا
+import LocalClock from './LocalClock.vue'
+import LocalCalendar from './LocalCalendar.vue'
+import UpcomingTasks from './UpcomingTasks.vue'
+import StatsWidget from './StatsWidget.vue'
+import PhaseCard from './PhaseCard.vue'
 </script>

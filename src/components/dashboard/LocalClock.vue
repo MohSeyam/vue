@@ -6,14 +6,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-const time = ref('')
-function update() {
-  const d = new Date()
-  time.value = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-}
-onMounted(() => {
-  update()
-  setInterval(update, 1000)
-})
+import { storeToRefs } from 'pinia'
+import { useDashboardStore } from '@/stores/useDashboardStore'
+const { time } = storeToRefs(useDashboardStore())
 </script>
