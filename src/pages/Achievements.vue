@@ -1,28 +1,18 @@
 <template>
-  <div class="p-8 max-w-3xl mx-auto">
-    <h1 class="text-3xl font-bold mb-4 text-center">Achievements</h1>
-    <div class="flex flex-col md:flex-row gap-8 justify-center items-center mb-8">
-      <ProgressCircle :percent="90" label="Phase Completion" color="#f59e42" />
-      <StatsSummary :stats="stats" />
-    </div>
-    <SkillBarChart :skills="skills" />
-  </div>
+  <v-container class="pa-4 pa-md-8 animate-fade-in">
+    <v-row class="mb-4">
+      <v-col cols="12" md="6">
+        <ExportMenu :data="achievements" filename="achievements" />
+      </v-col>
+    </v-row>
+    <AchievementsList :achievements="achievements" />
+  </v-container>
 </template>
-
 <script setup lang="ts">
-import ProgressCircle from '@/components/ProgressCircle.vue';
-import StatsSummary from '@/components/StatsSummary.vue';
-import SkillBarChart from '@/components/SkillBarChart.vue';
-
-const stats = [
-  { icon: '🏅', value: 7, label: 'Badges' },
-  { icon: '📈', value: 5, label: 'Phases Complete' },
-  { icon: '🎯', value: 21, label: 'Goals Met' }
-];
-
-const skills = [
-  { name: 'Network', value: 95, color: '#3b82f6' },
-  { name: 'Web', value: 88, color: '#f59e42' },
-  { name: 'Forensics', value: 70, color: '#10b981' }
+import AchievementsList from '../components/dashboard/achievements/AchievementsList.vue';
+import ExportMenu from '../components/export/ExportMenu.vue';
+const achievements = [
+  { id: 'a1', title: 'أول ملاحظة', date: '2024-05-01' },
+  { id: 'a2', title: 'إكمال أسبوع', date: '2024-05-07' },
 ];
 </script>
