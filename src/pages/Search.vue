@@ -1,18 +1,13 @@
 <template>
-  <div class="space-y-8">
-    <!-- Search Header -->
-    <div class="text-center space-y-4">
-      <h1 class="text-3xl font-bold text-gray-900 dark:text-white">البحث المتقدم</h1>
-      <p class="text-gray-600 dark:text-gray-400">ابحث في جميع محتويات التطبيق بسهولة وسرعة</p>
-    </div>
-
-    <!-- Advanced Search Component -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-      <AdvancedSearch />
-    </div>
-  </div>
+  <v-container class="pa-4 pa-md-8 animate-fade-in">
+    <AdvancedSearch :items="items" :tags="tags" />
+  </v-container>
 </template>
-
 <script setup lang="ts">
-import AdvancedSearch from '@/components/Search/AdvancedSearch.vue';
+import AdvancedSearch from '../components/search/AdvancedSearch.vue';
+const items = [
+  { id: 'n1', title: 'ملاحظة حول الأمن السيبراني', date: '2024-05-01', tags: ['أمن', 'ملاحظة'] },
+  { id: 'j1', title: 'يومية السبت', date: '2024-05-02', tags: ['يومية'] },
+];
+const tags = ['أمن', 'ملاحظة', 'يومية'];
 </script>
