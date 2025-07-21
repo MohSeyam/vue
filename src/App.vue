@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$settings.theme === 'dark' ? 'dark' : '', 'min-h-screen bg-gray-50 dark:bg-gray-900 flex']">
+  <div :class="[$settings.theme.value === 'dark' ? 'dark' : '', 'min-h-screen bg-gray-50 dark:bg-gray-900 flex']">
     <Sidebar />
     <main class="flex-1">
       <router-view />

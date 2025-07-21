@@ -64,14 +64,15 @@
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
 import { usePlanStore } from '@/stores/usePlanStore'
+import type { Phase, Task } from '@/types/plan'
 const planStore = usePlanStore()
-const { phases } = planStore
+const phases = planStore.phases as Phase[]
 onMounted(() => {
   if (!planStore.planLoaded) planStore.loadPlan()
 })
 const totalPhases = computed(() => phases.length)
-const totalWeeks = computed(() => phases.reduce((acc, p) => acc + (p.weeks?.length || 0), 0))
-const totalTasks = computed(() => phases.reduce((acc, p) => acc + (p.weeks?.reduce((wacc, w) => wacc + (w.days?.reduce((dacc, d) => dacc + (d.tasks?.length || 0), 0) || 0), 0) || 0), 0))
+const totalWeeks = computed(() => phases.reduce((acc: number, p: Phase) => acc + (p.weeks?.length || 0), 0))
+const totalTasks = computed(() => phases.reduce((acc: number, p: Phase) => acc + (p.weeks?.reduce((wacc: number, w) => wacc + (w.days?.reduce((dacc: number, d) => dacc + (d.tasks?.length || 0), 0) || 0), 0) || 0), 0))
 const todaysTasks = computed(() => {
   const today = new Date().toISOString().slice(0, 10)
   for (const phase of phases) {
@@ -81,11 +82,11 @@ const todaysTasks = computed(() => {
       }
     }
   }
-  return []
+  return [] as Task[]
 })
-function getPhaseProgress(phase) {
-  const total = (phase.weeks || []).reduce((acc, w) => acc + (w.days?.reduce((dacc, d) => dacc + (d.tasks?.length || 0), 0) || 0), 0)
-  const done = (phase.weeks || []).reduce((acc, w) => acc + (w.days?.reduce((dacc, d) => dacc + (d.tasks?.filter(t => t.done).length || 0), 0) || 0), 0)
+function getPhaseProgress(phase: Phase) {
+  const total = (phase.weeks || []).reduce((acc: number, w) => acc + (w.days?.reduce((dacc: number, d) => dacc + (d.tasks?.length || 0), 0) || 0), 0)
+  const done = (phase.weeks || []).reduce((acc: number, w) => acc + (w.days?.reduce((dacc: number, d) => dacc + (d.tasks?.filter((t: Task) => t.done).length || 0), 0) || 0), 0)
   return total ? Math.round((done / total) * 100) : 0
 }
 </script>

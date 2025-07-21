@@ -1,4 +1,5 @@
-import Dexie, { Table } from 'dexie'
+import Dexie from 'dexie'
+import type { Table } from 'dexie'
 
 // قاعدة بيانات محلية باستخدام Dexie.js
 export class CyberPlanDB extends Dexie {
