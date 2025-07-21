@@ -33,8 +33,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
-import { Note } from '@/types/plan'
+import { ref, watch } from 'vue'
+import type { Note } from '@/types/plan'
 const props = defineProps<{ note?: Note|null }>()
 const emit = defineEmits(['save', 'close'])
 
