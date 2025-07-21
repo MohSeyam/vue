@@ -9,8 +9,9 @@ const logoSvg = `<svg width='48' height='48' viewBox='0 0 48 48' fill='none' xml
 const phases = computed(() => {
   const map = new Map<number, { phase: number, weeks: number, tasks: number, minutes: number, sources: number }>()
   for (const w of plan.weeks) {
-    if (!map.has(w.phase)) map.set(w.phase, { phase: w.phase, weeks: 0, tasks: 0, minutes: 0, sources: 0 })
-    const p = map.get(w.phase)
+    const phaseId = w.phase ?? 0
+    if (!map.has(phaseId)) map.set(phaseId, { phase: phaseId, weeks: 0, tasks: 0, minutes: 0, sources: 0 })
+    const p = map.get(phaseId)!
     p.weeks++
     p.tasks += w.days.reduce((acc, d) => acc + d.tasks.length, 0)
     p.minutes += w.days.reduce((acc, d) => acc + d.tasks.reduce((tacc, t) => tacc + (t.duration || 0), 0), 0)

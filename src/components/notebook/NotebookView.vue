@@ -51,12 +51,9 @@ import { useNotebookStore } from '@/stores/useNotebookStore'
 import { usePlanStore } from '@/stores/usePlanStore'
 import { getText } from '@/utils/getText'
 import Toast from '@/components/common/Toast.vue'
-import NoteCard from './NoteCard.vue'
 import NoteEditor from './NoteEditor.vue'
-import SearchBar from './SearchBar.vue'
 import NoteGrid from './NoteGrid.vue'
 import NoteTemplates from './NoteTemplates.vue'
-import TagFilter from './TagFilter.vue'
 import GraphViewModal from './GraphViewModal.vue'
 import type { Note } from '@/types/plan'
 import jsPDF from 'jspdf'
@@ -133,7 +130,7 @@ function closeEditor() {
 }
 function saveNote(note: Note) {
   if (note.id) store.updateNote(note)
-  else store.addNote({ ...note, taskId: selectedTaskId.value })
+  else store.addNote({ ...note, taskId: selectedTaskId.value || '' })
   closeEditor()
   toastRef.value?.show(t('notebook.toastSaved'), 'success')
 }
@@ -142,7 +139,7 @@ function deleteNote(id: string) {
   toastRef.value?.show(t('notebook.toastDeleted'), 'success')
 }
 function insertTemplate(tpl: Note) {
-  editingNote.value = { ...tpl, id: '', tags: [], taskId: selectedTaskId.value }
+  editingNote.value = { ...tpl, id: '', tags: [], taskId: selectedTaskId.value || '' }
   showEditor.value = true
   toastRef.value?.show(t('notebook.toastTemplate'), 'info')
 }
