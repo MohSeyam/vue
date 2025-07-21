@@ -1,100 +1,68 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-
-export interface Task {
-  id: number
-  title: string
-  due: string
-  completed: boolean
-  priority: 'low' | 'medium' | 'high'
-  description?: string
-}
-export interface CalendarEvent {
-  id: number
-  title: string
-  time: string
-  description?: string
-}
-export interface Phase {
-  name: string
-  description: string
-  progress: number // 0-100
-  start: string
-  end: string
-}
+import { usePlanStore } from './usePlanStore'
+import type { Task, Week } from '@/types/plan'
 
 export const useDashboardStore = defineStore('dashboard', () => {
-  // الوقت الحالي والمنطقة الزمنية
-  const timezone = ref<string>('Asia/Riyadh')
-  const time = ref<string>(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: timezone.value }))
+  // الوقت الحالي
+  const time = ref<string>(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))
   // تاريخ اليوم
   const today = ref<string>(new Date().toLocaleDateString())
-  // أحداث اليوم في التقويم
-  const events = ref<CalendarEvent[]>([
-    { id: 1, title: 'جلسة مذاكرة', time: '18:00', description: 'مراجعة الأمن السيبراني' }
-  ])
-  // قائمة المهام القادمة
-  const upcomingTasks = ref<Task[]>([
-    { id: 1, title: 'مراجعة الدرس 3', due: '2024-06-10', completed: false, priority: 'high', description: 'مراجعة مفاهيم الشبكات' },
-    { id: 2, title: 'حل اختبار قصير', due: '2024-06-12', completed: false, priority: 'medium' }
-  ])
-  // إحصائيات متعددة
-  const stats = ref({
-    weeks: 12,
-    completedTasks: 8,
-    notes: 15,
-    studyDays: 22
+
+  // ربط بيانات الخطة
+  const planStore = usePlanStore()
+
+  // عدد الأسابيع
+  const weeks = computed(() => planStore.weeks.length)
+
+  // المرحلة الحالية (أول أسبوع غير مكتمل أو الأخيرة)
+  const currentPhase = computed(() => {
+    const firstIncomplete = planStore.weeks.find(w => w.days.some(d => d.tasks.some(t => !t.done)))
+    if (firstIncomplete) return firstIncomplete.title
+    // إذا الكل مكتمل، أظهر آخر مرحلة
+    return planStore.weeks.length ? planStore.weeks[planStore.weeks.length-1].title : { en: 'N/A', ar: 'غير متوفر' }
   })
-  // تفاصيل المرحلة الحالية
-  const currentPhase = ref<Phase>({
-    name: 'الأساسيات',
-    description: 'تعلم أساسيات الأمن السيبراني.',
-    progress: 40,
-    start: '2024-05-01',
-    end: '2024-06-30'
+
+  // المهام القادمة (أقرب 3 مهام غير مكتملة)
+  const upcomingTasks = computed(() => {
+    const tasks: Array<{ id: string; title: string; due: string; week: number; day: string }> = []
+    for (const w of planStore.weeks) {
+      for (const d of w.days) {
+        for (const t of d.tasks) {
+          if (!t.done) {
+            tasks.push({
+              id: t.id || Math.random().toString(),
+              title: t.title?.en || t.description?.en || 'Task',
+              due: d.day?.en || '',
+              week: w.week || 0,
+              day: d.day?.en || ''
+            })
+          }
+        }
+      }
+    }
+    return tasks.slice(0, 3)
   })
+
+  // نسبة الإنجاز
+  const totalTasks = computed(() => planStore.weeks.reduce((acc, w) => acc + w.days.reduce((ad, d) => ad + d.tasks.length, 0), 0))
+  const completedTasks = computed(() => planStore.weeks.reduce((acc, w) => acc + w.days.reduce((ad, d) => ad + d.tasks.filter(t => t.done).length, 0), 0))
+  const progress = computed(() => totalTasks.value ? Math.round((completedTasks.value / totalTasks.value) * 100) : 0)
 
   // تحديث الوقت كل ثانية
   setInterval(() => {
-    time.value = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: timezone.value })
+    time.value = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     today.value = new Date().toLocaleDateString()
   }, 1000)
 
-  // Getters
-  const hasUpcomingTasks = computed(() => upcomingTasks.value.length > 0)
-  const todayEvents = computed(() => events.value)
-
-  // Actions
-  function addTask(title: string, due: string, priority: 'low'|'medium'|'high' = 'low', description?: string) {
-    upcomingTasks.value.push({ id: Date.now(), title, due, completed: false, priority, description })
-  }
-  function setWeeks(n: number) {
-    stats.value.weeks = n
-  }
-  function setCurrentPhase(phase: Phase) {
-    currentPhase.value = phase
-  }
-  function setTimezone(tz: string) {
-    timezone.value = tz
-  }
-  function addEvent(title: string, time: string, description?: string) {
-    events.value.push({ id: Date.now(), title, time, description })
-  }
-
   return {
     time,
-    timezone,
     today,
-    events,
-    todayEvents,
-    upcomingTasks,
-    stats,
+    weeks,
     currentPhase,
-    hasUpcomingTasks,
-    addTask,
-    setWeeks,
-    setCurrentPhase,
-    setTimezone,
-    addEvent
+    upcomingTasks,
+    totalTasks,
+    completedTasks,
+    progress
   }
 })
