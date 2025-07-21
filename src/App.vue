@@ -3,14 +3,14 @@
     <!-- App Bar (Header) -->
     <v-app-bar app color="background" elevation="1">
       <v-toolbar-title class="font-weight-bold text-primary" @click="setView({ page: 'dashboard' })" style="cursor: pointer;">
-        {{ t.planTitle }}
+        {{ t.value[lang.value as 'ar' | 'en'].planTitle }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <!-- Desktop Navigation Tabs -->
       <v-tabs v-model="view.page" color="primary" class="d-none d-md-block">
-        <v-tab value="dashboard" prepend-icon="mdi-home-variant">{{ t.home }}</v-tab>
-        <v-tab value="achievements" prepend-icon="mdi-trophy-variant">{{ t.achievements }}</v-tab>
-        <v-tab value="notebook" prepend-icon="mdi-notebook">{{ t.notebook }}</v-tab>
+        <v-tab value="dashboard" prepend-icon="mdi-home-variant">{{ t.value[lang.value as 'ar' | 'en'].home }}</v-tab>
+        <v-tab value="achievements" prepend-icon="mdi-trophy-variant">{{ t.value[lang.value as 'ar' | 'en'].achievements }}</v-tab>
+        <v-tab value="notebook" prepend-icon="mdi-notebook">{{ t.value[lang.value as 'ar' | 'en'].notebook }}</v-tab>
       </v-tabs>
       <v-spacer></v-spacer>
       <!-- Language and Theme Toggles -->
@@ -31,19 +31,19 @@
     <v-bottom-navigation v-model="view.page" color="primary" grow class="d-md-none" app>
       <v-btn value="dashboard">
         <v-icon>mdi-home-variant</v-icon>
-        <span>{{ t.home }}</span>
+        <span>{{ t.value[lang.value as 'ar' | 'en'].home }}</span>
       </v-btn>
       <v-btn value="sidebar">
         <v-icon>mdi-format-list-bulleted-square</v-icon>
-        <span>{{ t.planOverview }}</span>
+        <span>{{ t.value[lang.value as 'ar' | 'en'].planOverview }}</span>
       </v-btn>
       <v-btn value="achievements">
         <v-icon>mdi-trophy-variant</v-icon>
-        <span>{{ t.achievements }}</span>
+        <span>{{ t.value[lang.value as 'ar' | 'en'].achievements }}</span>
       </v-btn>
       <v-btn value="notebook">
         <v-icon>mdi-notebook</v-icon>
-        <span>{{ t.notebook }}</span>
+        <span>{{ t.value[lang.value as 'ar' | 'en'].notebook }}</span>
       </v-btn>
     </v-bottom-navigation>
     <!-- Note Editor Dialog (Modal) -->
