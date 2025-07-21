@@ -55,7 +55,7 @@ function goToWeek(id: number) { /* ربط مع التنقل */ }
 function goToPhase(id: number) { /* ربط مع التنقل */ }
 function goToDay(key: string) { /* ربط مع التنقل */ }
 const achievements = computed(() => [
-  { id: 'a1', title: t.value['firstNote'] || 'أول ملاحظة', date: '2024-05-01' },
-  { id: 'a2', title: t.value['weekComplete'] || 'إكمال أسبوع', date: '2024-05-07' },
+  { id: 'a1', title: t.value['firstNote' as 'ar' | 'en'] || 'أول ملاحظة', date: '2024-05-01' },
+  { id: 'a2', title: t.value['weekComplete' as 'ar' | 'en'] || 'إكمال أسبوع', date: '2024-05-07' },
 ]);
 </script>

@@ -12,7 +12,6 @@
   </v-card>
 </template>
 <script setup lang="ts">
-import { defineProps, inject } from 'vue';
-const props = defineProps<{ weekId: number, weekTitle: string, weekSubtitle: string, progress: number }>();
+import { inject } from 'vue';
 const { t } = inject('app') as any;
 </script>
