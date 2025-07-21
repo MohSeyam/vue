@@ -1,8 +1,8 @@
-// خدمة تصدير الملاحظات/اليوميات إلى PDF
-export function exportToPDF(data: any, options?: any) {
-  // TODO: استخدم مكتبة مثل jsPDF أو pdf-lib
-  // مثال مبدئي:
-  // const doc = new jsPDF();
-  // doc.text(JSON.stringify(data), 10, 10);
-  // doc.save('export.pdf');
+import jsPDF from 'jspdf';
+
+export function exportToPDF(data: any, options?: { filename?: string }) {
+  const doc = new jsPDF();
+  const content = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+  doc.text(content, 10, 10);
+  doc.save(options?.filename || 'export.pdf');
 }
