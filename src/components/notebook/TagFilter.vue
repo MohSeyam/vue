@@ -17,6 +17,6 @@
   </div>
 </template>
 <script setup lang="ts">
-const props = defineProps<{ tags: string[], selectedTag: string }>()
+defineProps<{ tags: string[], selectedTag: string }>()
 const emit = defineEmits(['update:selectedTag'])
 </script>
