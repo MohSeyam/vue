@@ -10,7 +10,7 @@
   </v-card>
 </template>
 <script setup lang="ts">
-import { defineProps, inject } from 'vue';
-const props = defineProps<{ achievements: { id: string, title: string, date: string }[] }>();
+import { inject } from 'vue';
 const { t } = inject('app') as any;
+// props غير مستخدم فعلياً
 </script>

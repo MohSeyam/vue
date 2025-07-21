@@ -8,7 +8,7 @@ export function useCyberPlan() {
   const theme = ref('dark');
   const view = reactive({ page: 'dashboard', params: {} });
   const appState = ref<any>(null);
-  const t = computed(() => translations[lang.value]);
+  const t = computed(() => translations[lang.value as 'ar' | 'en']);
   const plan = ref(planData);
   const phaseList = ref(phases);
   const translationData = ref(translations);
