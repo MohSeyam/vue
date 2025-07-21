@@ -101,7 +101,6 @@ const components: Record<string, any> = {
   phase: PhaseView,
   week: WeekView,
   day: DayView,
-  sidebar: SidebarMenu,
 };
 const currentViewComponent = computed(() => {
   return components[view.page] || components.dashboard
