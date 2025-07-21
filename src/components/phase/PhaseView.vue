@@ -1,49 +1,36 @@
 <template>
-  <div class="max-w-4xl mx-auto py-10 px-4">
-    <div v-if="phase">
-      <!-- Phase Header -->
-      <div class="mb-8 text-center">
-        <h1 class="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-2">{{ getText(phase.title) }}</h1>
-        <p class="text-lg text-gray-600 dark:text-gray-300">{{ phase.goal ? getText(phase.goal) : '' }}</p>
-      </div>
-      <!-- Weeks Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <WeekCard v-for="week in phase.weeks" :key="week.id" :week="week" :progress="getWeekProgress(week)" />
-      </div>
-    </div>
-    <div v-else class="text-center text-gray-400">لم يتم العثور على المرحلة المطلوبة.</div>
-  </div>
+  <v-container fluid class="py-8">
+    <v-row justify="center">
+      <v-col cols="12" md="8">
+        <v-card class="pa-6 mb-4" elevation="8">
+          <v-card-title class="font-weight-bold text-primary mb-2">{{ phase.title[$i18n.locale] || phase.title.en }}</v-card-title>
+          <v-card-subtitle class="mb-4">{{ phase.objective?.[$i18n.locale] || phase.objective?.en }}</v-card-subtitle>
+          <v-list dense>
+            <v-list-item v-for="w in phase.weeks" :key="w.week">
+              <v-list-item-title class="font-weight-bold">{{ $t('plan.week', 'الأسبوع') }} {{ w.week }}: {{ w.title[$i18n.locale] || w.title.en }}</v-list-item-title>
+              <v-list-item-subtitle>
+                <v-card class="pa-3 my-2" elevation="2">
+                  <v-list dense>
+                    <v-list-item v-for="d in w.days" :key="d.key">
+                      <v-list-item-title class="font-weight-bold">{{ d.day[$i18n.locale] || d.day.en }}: {{ d.topic?.[$i18n.locale] || d.topic?.en }}</v-list-item-title>
+                      <v-list-item-subtitle>
+                        <ul class="pl-4">
+                          <li v-for="t in d.tasks" :key="t.id">
+                            {{ t.description[$i18n.locale] || t.description.en }} ({{ t.type || '' }}, {{ t.duration }} min)
+                          </li>
+                        </ul>
+                      </v-list-item-subtitle>
+                    </v-list-item>
+                  </v-list>
+                </v-card>
+              </v-list-item-subtitle>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { usePlanStore } from '@/stores/usePlanStore'
-import type { Phase, Week, Task } from '@/types/plan'
-import { getText } from '@/utils/getText'
-import WeekCard from './WeekCard.vue'
-const route = useRoute()
-const planStore = usePlanStore()
-// استخرج المراحل من الأسابيع
-const phases = computed(() => {
-  const map = new Map<number, Phase>()
-  for (const w of planStore.weeks) {
-    const phaseId = w.phase || 1
-    if (!map.has(phaseId)) {
-      map.set(phaseId, {
-        id: String(phaseId),
-        title: w.title,
-        goal: w.objective,
-        weeks: []
-      })
-    }
-    map.get(phaseId)!.weeks.push(w)
-  }
-  return Array.from(map.values())
-})
-const phase = computed(() => phases.value.find((p: Phase) => p.id === route.params.id))
-function getWeekProgress(week: Week) {
-  const total = (week.days || []).reduce((acc: number, d) => acc + (d.tasks?.length || 0), 0)
-  const done = (week.days || []).reduce((acc: number, d) => acc + (d.tasks?.filter((t: Task) => t.done).length || 0), 0)
-  return total ? Math.round((done / total) * 100) : 0
-}
+const props = defineProps({ phase: Object })
 </script>
