@@ -175,7 +175,7 @@ async function exportNotes(type: 'pdf' | 'md') {
       const info = getTaskInfo(note.taskId || '')
       let header = ''
       if (info) {
-        header = `> ${getText(info.week.title, exportLang.value)} / ${getText(info.day.day, exportLang.value)} / ${getText(info.task.description, exportLang.value)}`
+        header = `> ${getText(info.week.title)} / ${getText(info.day.day)} / ${getText(info.task.description)}`
       }
       md += `${header}\n# ${getText(note.title)}\n\n${turndownService.turndown(getText(note.content))}\n`
       if (note.tags?.length) md += `\n**Tags:** ${note.tags.join(', ')}\n`

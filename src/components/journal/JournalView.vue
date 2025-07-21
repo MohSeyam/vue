@@ -33,7 +33,7 @@ import jsPDF from 'jspdf'
 const planStore = usePlanStore()
 const journalStore = useJournalStore()
 const showEditor = ref(false)
-const editingEntry = ref(null)
+const editingEntry = ref<any>(null)
 const showExport = ref(false)
 const search = ref('')
 const selectedTag = ref('')
@@ -90,7 +90,7 @@ function saveEntry(entry: any) {
   }
   closeEditor()
 }
-function deleteEntry(id: string) {
+function deleteEntry() {
   // حذف التدوينة (يمكنك إضافة منطق الحذف هنا)
   toastRef.value?.show('تم حذف التدوينة!', 'success')
 }
@@ -98,64 +98,5 @@ function getDayInfo(weekNum: number, dayKey: string) {
   const w = planStore.weeks.find(w => String(w.week) === String(weekNum))
   const d = w?.days.find(d => d.key === dayKey)
   return { week: w, day: d }
-}
-function exportEntries(type: 'pdf' | 'md' | 'html') {
-  showExport.value = false
-  const list = filteredEntries.value
-  if (!list.length) return toastRef.value?.show('لا توجد تدوينات للتصدير!', 'error')
-  if (type === 'pdf') {
-    const doc = new jsPDF()
-    list.forEach((entry, i) => {
-      const info = getDayInfo(Number(selectedWeek.value), selectedDayKey.value)
-      const dayLabel = info.day ? (info.day.day?.[exportLang.value] || info.day.day?.en) : selectedDayKey.value
-      const weekLabel = info.week ? (info.week.title?.[exportLang.value] || info.week.title?.en) : selectedWeek.value
-      doc.setFontSize(12)
-      doc.text(`${weekLabel} / ${dayLabel}`, 10, 16 + i * 50)
-      doc.setFontSize(14)
-      doc.text(entry.content, 10, 24 + i * 50)
-      if (entry.tags?.length) doc.text('Tags: ' + entry.tags.join(', '), 10, 32 + i * 50)
-      if (i < list.length - 1) doc.addPage()
-    })
-    doc.save('journal.pdf')
-    toastRef.value?.show('تم تصدير التدوينات كـ PDF!', 'success')
-  } else if (type === 'md') {
-    let md = ''
-    list.forEach(entry => {
-      const info = getDayInfo(Number(selectedWeek.value), selectedDayKey.value)
-      const dayLabel = info.day ? (info.day.day?.[exportLang.value] || info.day.day?.en) : selectedDayKey.value
-      const weekLabel = info.week ? (info.week.title?.[exportLang.value] || info.week.title?.en) : selectedWeek.value
-      md += `> ${weekLabel} / ${dayLabel}\n# تدوينة\n\n${entry.content}\n`
-      if (entry.tags?.length) md += `\n**Tags:** ${entry.tags.join(', ')}\n`
-      md += '\n---\n'
-    })
-    const blob = new Blob([md], { type: 'text/markdown' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'journal.md'
-    a.click()
-    URL.revokeObjectURL(url)
-    toastRef.value?.show('تم تصدير التدوينات كـ Markdown!', 'success')
-  } else if (type === 'html') {
-    let html = '<html><body>'
-    list.forEach(entry => {
-      const info = getDayInfo(Number(selectedWeek.value), selectedDayKey.value)
-      const dayLabel = info.day ? (info.day.day?.[exportLang.value] || info.day.day?.en) : selectedDayKey.value
-      const weekLabel = info.week ? (info.week.title?.[exportLang.value] || info.week.title?.en) : selectedWeek.value
-      html += `<h2>${weekLabel} / ${dayLabel}</h2>`
-      html += `<div>${entry.content}</div>`
-      if (entry.tags?.length) html += `<div><b>Tags:</b> ${entry.tags.join(', ')}</div>`
-      html += '<hr/>'
-    })
-    html += '</body></html>'
-    const blob = new Blob([html], { type: 'text/html' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'journal.html'
-    a.click()
-    URL.revokeObjectURL(url)
-    toastRef.value?.show('تم تصدير التدوينات كـ HTML!', 'success')
-  }
 }
 </script>

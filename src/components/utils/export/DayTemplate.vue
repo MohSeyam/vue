@@ -23,7 +23,7 @@ function exportDay() {
     y += 7
     doc.text(`${exportLang.value === 'ar' ? 'عدد المهام' : 'Tasks'}: ${day.tasks.length}`, 14, y)
     y += 7
-    day.tasks.forEach((t, i) => {
+    day.tasks.forEach(t => {
       doc.text(`- ${t.description[exportLang.value] || t.description.en} (${t.type || ''}, ${t.duration} min)`, 18, y)
       y += 6
       if (y > 270) { doc.addPage(); y = 20 }
