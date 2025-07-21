@@ -19,6 +19,9 @@
   </v-bottom-navigation>
 </template>
 <script setup lang="ts">
-// لا حاجة لتعريف props هنا إذا لم تُستخدم
+defineProps<{
+  modelValue: string;
+  t: any;
+}>();
 const emit = defineEmits(['update:modelValue']);
 </script>

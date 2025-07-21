@@ -69,7 +69,7 @@ const allJournals = computed(() => {
       });
     }
   });
-  return journalsList.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  return journalsList.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 });
 const allTags = computed(() => {
   const tags = new Set<string>();
@@ -83,7 +83,7 @@ function openJournal(journal: any) {
   activeJournal.value = { ...journal };
   journalDialogOpen.value = true;
 }
-function saveJournal(journal: any) { journalDialogOpen.value = false; }
+function saveJournal(_journal: any) { journalDialogOpen.value = false; }
 function deleteJournal() { journalDialogOpen.value = false; }
 function closeDialog() { journalDialogOpen.value = false; }
 function formatDate(date: string, lang: string) {
