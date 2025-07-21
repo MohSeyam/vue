@@ -57,6 +57,10 @@ export const usePlanStore = defineStore('plan', () => {
     return getText(task.description, locale.value)
   }
 
+  function getText(obj: LocalizedString) {
+    return obj[locale.value] || obj['en'] || Object.values(obj)[0] || ''
+  }
+
   return {
     weeks,
     planLoaded,
@@ -70,6 +74,7 @@ export const usePlanStore = defineStore('plan', () => {
     upcomingTasks,
     getWeekTitle,
     getDayTopic,
-    getTaskDesc
+    getTaskDesc,
+    getText
   }
 })
