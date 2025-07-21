@@ -27,7 +27,6 @@ import NoteCard from './NoteCard.vue'
 import TagFilter from './TagFilter.vue'
 import SearchBar from './SearchBar.vue'
 import type { Note } from '@/types/plan'
-import { getText } from '@/utils/getText'
 const props = defineProps<{ notes: Note[] }>()
 const emit = defineEmits(['edit', 'delete'])
 const search = ref('')

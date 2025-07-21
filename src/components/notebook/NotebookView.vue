@@ -155,7 +155,7 @@ async function exportNotes(type: 'pdf' | 'md') {
       const content = getText(note.content, exportLang.value)
       let header = ''
       if (info) {
-        header = `${getText(info.week.title, exportLang.value)} / ${getText(info.day.day, exportLang.value)} / ${getText(info.task.description, exportLang.value)}`
+        header = `${getText(info.week.title)} / ${getText(info.day.day)} / ${getText(info.task.description)}`
       }
       doc.setFontSize(12)
       doc.text(header, 10, 16 + i * 50)
