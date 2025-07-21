@@ -32,5 +32,5 @@
   </v-container>
 </template>
 <script setup lang="ts">
-const props = defineProps({ phase: Object })
+const props = defineProps<{ phase: any }>()
 </script>

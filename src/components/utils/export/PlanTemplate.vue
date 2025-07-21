@@ -2,6 +2,7 @@
 import { usePlanStore } from '@/stores/usePlanStore'
 import { computed, ref } from 'vue'
 import jsPDF from 'jspdf'
+const props = defineProps<{ plan: any }>()
 const plan = usePlanStore()
 const exportLang = ref('en')
 const exportType = ref('pdf')
@@ -63,9 +64,9 @@ function exportPlan() {
 </script>
 <template>
   <v-card class="pa-6 mb-4" elevation="8">
-    <v-card-title class="font-weight-bold text-primary mb-2">{{ plan.title[$i18n.locale] || plan.title.en }}</v-card-title>
+    <v-card-title class="font-weight-bold text-primary mb-2">{{ props.plan.title[$i18n.locale] || props.plan.title.en }}</v-card-title>
     <v-list dense>
-      <v-list-item v-for="phase in plan.phases" :key="phase.phase">
+      <v-list-item v-for="phase in props.plan.phases" :key="phase.phase">
         <v-list-item-title class="font-weight-bold">{{ $t('plan.phase', 'المرحلة') }} {{ phase.phase }}: {{ phase.title[$i18n.locale] || phase.title.en }}</v-list-item-title>
         <v-list-item-subtitle>
           <div v-for="w in phase.weeks" :key="w.week" class="mb-1">

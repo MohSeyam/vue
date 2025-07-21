@@ -12,7 +12,7 @@
   </v-card>
 </template>
 <script setup lang="ts">
-const props = defineProps({ month: Object })
+const props = defineProps<{ month: any }>()
 function exportMonth() {
   // منطق التصدير (PDF/Markdown)
   alert('سيتم تصدير الشهر قريبًا!')

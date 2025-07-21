@@ -3,6 +3,7 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { ar, en } from 'vuetify/locale'
+import { h } from 'vue'
 
 export default createVuetify({
   components,

@@ -6,6 +6,7 @@ const plan = usePlanStore()
 const exportLang = ref('en')
 const exportType = ref('pdf')
 const logoSvg = `<svg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'><circle cx='24' cy='24' r='22' fill='#06b6d4' stroke='#fff' stroke-width='4'/><path d='M16 32L24 16L32 32' stroke='#fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>`
+const props = defineProps<{ day: any }>()
 const day = plan.currentDay
 function exportDay() {
   if (!day) return
