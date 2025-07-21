@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <SidebarMenu />
     <AppBar
       :model-value="page"
       :lang="lang"
@@ -23,6 +24,7 @@
 <script setup lang="ts">
 import AppBar from '../components/navigation/AppBar.vue';
 import BottomNav from '../components/navigation/BottomNav.vue';
+import SidebarMenu from '../components/sidebar/SidebarMenu.vue';
 import { inject } from 'vue';
 const { lang, theme, t, view, setView, toggleLang, toggleTheme } = inject('app') as any;
 const page = view.page;

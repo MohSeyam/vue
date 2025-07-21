@@ -1,5 +1,13 @@
 <template>
   <v-container class="pa-4 pa-md-8 animate-fade-in">
+    <v-row class="mb-4">
+      <v-col cols="12" md="6">
+        <ProgressChart :value="progress" label="إجمالي التقدم" />
+      </v-col>
+      <v-col cols="12" md="6">
+        <ExportMenu :data="settingsData" filename="settings" />
+      </v-col>
+    </v-row>
     <v-card class="pa-6 mx-auto" max-width="500">
       <v-card-title class="font-weight-bold text-primary">{{ t.settings }}</v-card-title>
       <v-divider class="my-4" />
@@ -26,6 +34,8 @@
 </template>
 <script setup lang="ts">
 import { inject, computed } from 'vue';
+import ProgressChart from '../components/charts/ProgressChart.vue';
+import ExportMenu from '../components/export/ExportMenu.vue';
 const { lang, theme, t, toggleLang, toggleTheme } = inject('app') as any;
 const themeOptions = [
   { title: t.value.themeLight, value: 'light' },
@@ -35,4 +45,6 @@ const langOptions = [
   { title: 'العربية', value: 'ar' },
   { title: 'English', value: 'en' },
 ];
+const progress = 75; // مثال: نسبة التقدم الكلية
+const settingsData = { theme, lang };
 </script>
