@@ -4,10 +4,6 @@ import type { Week, Day, Task, LocalizedString } from '@/types/plan'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-function getText(obj: LocalizedString, locale: string) {
-  return obj[locale] || obj['en'] || Object.values(obj)[0] || ''
-}
-
 export const usePlanStore = defineStore('plan', () => {
   // الحالة
   const weeks = ref<Week[]>([])
@@ -48,13 +44,17 @@ export const usePlanStore = defineStore('plan', () => {
 
   // Getters نصية متعددة اللغات
   function getWeekTitle(week: Week) {
-    return getText(week.title, locale.value)
+    return getText(week.title)
   }
   function getDayTopic(day: Day) {
-    return day.topic ? getText(day.topic, locale.value) : ''
+    return day.topic ? getText(day.topic) : ''
   }
   function getTaskDesc(task: Task) {
-    return getText(task.description, locale.value)
+    return getText(task.description)
+  }
+
+  function getText(obj: LocalizedString) {
+    return obj[locale.value] || obj['en'] || Object.values(obj)[0] || ''
   }
 
   return {
@@ -70,6 +70,7 @@ export const usePlanStore = defineStore('plan', () => {
     upcomingTasks,
     getWeekTitle,
     getDayTopic,
-    getTaskDesc
+    getTaskDesc,
+    getText
   }
 })

@@ -92,7 +92,6 @@ const filteredNotes = computed(() => {
   }
   return notes
 })
-const exportLang = ref('en')
 function getTaskInfo(taskId: string) {
   for (const w of planStore.weeks) {
     for (const d of w.days) {
@@ -150,12 +149,12 @@ async function exportNotes(type: 'pdf' | 'md') {
   if (type === 'pdf') {
     const doc = new jsPDF()
     notes.forEach((note, i) => {
-      const info = getTaskInfo(note.taskId)
-      const title = getText(note.title, exportLang.value)
-      const content = getText(note.content, exportLang.value)
+      const info = getTaskInfo(note.taskId || '')
+      const title = getText(note.title)
+      const content = getText(note.content)
       let header = ''
       if (info) {
-        header = `${getText(info.week.title, exportLang.value)} / ${getText(info.day.day, exportLang.value)} / ${getText(info.task.description, exportLang.value)}`
+        header = `${getText(info.week.title)} / ${getText(info.day.day)} / ${getText(info.task.description)}`
       }
       doc.setFontSize(12)
       doc.text(header, 10, 16 + i * 50)
@@ -172,12 +171,12 @@ async function exportNotes(type: 'pdf' | 'md') {
     const turndownService = new TurndownService()
     let md = ''
     notes.forEach(note => {
-      const info = getTaskInfo(note.taskId)
+      const info = getTaskInfo(note.taskId || '')
       let header = ''
       if (info) {
-        header = `> ${getText(info.week.title, exportLang.value)} / ${getText(info.day.day, exportLang.value)} / ${getText(info.task.description, exportLang.value)}`
+        header = `> ${getText(info.week.title)} / ${getText(info.day.day)} / ${getText(info.task.description)}`
       }
-      md += `${header}\n# ${getText(note.title, exportLang.value)}\n\n${turndownService.turndown(getText(note.content, exportLang.value))}\n`
+      md += `${header}\n# ${getText(note.title)}\n\n${turndownService.turndown(getText(note.content))}\n`
       if (note.tags?.length) md += `\n**Tags:** ${note.tags.join(', ')}\n`
       md += '\n---\n'
     })

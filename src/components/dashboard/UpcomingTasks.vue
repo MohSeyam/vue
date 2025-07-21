@@ -5,9 +5,9 @@
       <ul class="text-sm text-gray-700 dark:text-gray-200 w-full">
         <li v-for="task in plan.upcomingTasks" :key="task.id" class="mb-1 flex flex-col border-b border-gray-100 dark:border-gray-700 pb-1">
           <div class="flex justify-between items-center">
-            <span class="font-bold">{{ task.title?.en || task.id }}</span>
+            <span class="font-bold">{{ plan.getTaskDesc(task) }}</span>
           </div>
-          <div class="text-xs text-gray-400 mt-0.5">{{ task.description?.en || '' }}</div>
+          <div class="text-xs text-gray-400 mt-0.5">{{ plan.getTaskDesc(task) }}</div>
         </li>
       </ul>
     </div>
