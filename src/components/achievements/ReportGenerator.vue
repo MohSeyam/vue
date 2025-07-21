@@ -29,8 +29,8 @@ const completedTasks = computed(() => planStore.weeks.reduce((acc, w) => acc + w
 const progress = computed(() => totalTasks.value ? Math.round((completedTasks.value / totalTasks.value) * 100) : 0)
 const notesCount = computed(() => notebookStore.notes.length)
 const journalCount = computed(() => journalStore.entries.length)
-function exportAchievements(type: 'pdf' | 'md') {
-  const labels = {
+const labels = computed(() => {
+  return {
     en: {
       title: 'Achievements Report',
       totalTasks: 'Total Tasks',
@@ -47,20 +47,29 @@ function exportAchievements(type: 'pdf' | 'md') {
       notes: 'الملاحظات',
       journals: 'تدوينات اليومية'
     }
-  }[exportLang.value]
+  }[exportLang.value] || {
+    title: 'Achievements Report',
+    totalTasks: 'Total Tasks',
+    completedTasks: 'Completed Tasks',
+    progress: 'Progress',
+    notes: 'Notes',
+    journals: 'Journal Entries'
+  }
+})
+function exportAchievements(type: 'pdf' | 'md') {
   if (type === 'pdf') {
     const doc = new jsPDF()
     doc.setFontSize(18)
-    doc.text(labels.title, 10, 20)
+    doc.text(labels.value.title, 10, 20)
     doc.setFontSize(13)
-    doc.text(`${labels.totalTasks}: ${totalTasks.value}`, 10, 40)
-    doc.text(`${labels.completedTasks}: ${completedTasks.value}`, 10, 50)
-    doc.text(`${labels.progress}: ${progress.value}%`, 10, 60)
-    doc.text(`${labels.notes}: ${notesCount.value}`, 10, 70)
-    doc.text(`${labels.journals}: ${journalCount.value}`, 10, 80)
+    doc.text(`${labels.value.totalTasks}: ${totalTasks.value}`, 10, 40)
+    doc.text(`${labels.value.completedTasks}: ${completedTasks.value}`, 10, 50)
+    doc.text(`${labels.value.progress}: ${progress.value}%`, 10, 60)
+    doc.text(`${labels.value.notes}: ${notesCount.value}`, 10, 70)
+    doc.text(`${labels.value.journals}: ${journalCount.value}`, 10, 80)
     doc.save('achievements.pdf')
   } else if (type === 'md') {
-    let md = `# ${labels.title}\n\n- ${labels.totalTasks}: ${totalTasks.value}\n- ${labels.completedTasks}: ${completedTasks.value}\n- ${labels.progress}: ${progress.value}%\n- ${labels.notes}: ${notesCount.value}\n- ${labels.journals}: ${journalCount.value}\n`
+    let md = `# ${labels.value.title}\n\n- ${labels.value.totalTasks}: ${totalTasks.value}\n- ${labels.value.completedTasks}: ${completedTasks.value}\n- ${labels.value.progress}: ${progress.value}%\n- ${labels.value.notes}: ${notesCount.value}\n- ${labels.value.journals}: ${journalCount.value}\n`
     const blob = new Blob([md], { type: 'text/markdown' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
