@@ -9,7 +9,7 @@
 </template>
 <script setup lang="ts">
 import { getText } from '@/utils/getText'
-import { Note } from '@/types/plan'
+import type { Note } from '@/types/plan'
 
 defineProps<{ note: Note }>()
 </script>

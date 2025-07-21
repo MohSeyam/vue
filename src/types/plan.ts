@@ -1,6 +1,7 @@
 export interface LocalizedString {
   en: string;
   ar: string;
+  [key: string]: string;
 }
 
 export interface Resource {
@@ -11,7 +12,8 @@ export interface Resource {
 
 export interface Task {
   id: string;
-  type: string;
+  title: LocalizedString;
+  done: boolean;
   duration: number;
   description: LocalizedString;
 }
@@ -22,10 +24,10 @@ export interface NotesPrompt {
 }
 
 export interface Note {
-  id: string
-  title: LocalizedString
-  content: LocalizedString
-  tags?: string[]
+  id: string;
+  title: LocalizedString;
+  content: LocalizedString;
+  tags?: string[];
 }
 
 export interface Day {
@@ -38,9 +40,13 @@ export interface Day {
 }
 
 export interface Week {
-  week: number;
-  phase: number;
+  id: string;
   title: LocalizedString;
-  objective: LocalizedString;
   days: Day[];
+}
+
+export interface Phase {
+  id: string;
+  title: LocalizedString;
+  weeks: Week[];
 }
