@@ -86,40 +86,26 @@ function exportDay() {
 }
 </script>
 <template>
-  <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex flex-col items-center">
-    <div class="flex gap-2 mb-2 w-full justify-between">
-      <div class="flex gap-2">
-        <select v-model="exportLang" class="rounded border px-2 py-1 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-xs">
-          <option value="en">English</option>
-          <option value="ar">العربية</option>
-        </select>
-        <select v-model="exportType" class="rounded border px-2 py-1 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-xs">
-          <option value="pdf">PDF</option>
-          <option value="md">Markdown</option>
-          <option value="html">HTML</option>
-        </select>
-      </div>
-      <button @click="exportDay" class="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-        {{ $t('plan.export') }}
-      </button>
+  <v-card class="pa-6 mb-4" elevation="8">
+    <v-card-title class="font-weight-bold text-primary mb-2">{{ day.day[$i18n.locale] || day.day.en }}</v-card-title>
+    <v-card-subtitle class="mb-4">{{ day.topic?.[$i18n.locale] || day.topic?.en }}</v-card-subtitle>
+    <v-list dense>
+      <v-list-item v-for="t in day.tasks" :key="t.id">
+        <v-list-item-icon><v-icon color="primary">mdi-checkbox-blank-circle-outline</v-icon></v-list-item-icon>
+        <v-list-item-title>{{ t.description[$i18n.locale] || t.description.en }} ({{ t.type || '' }}, {{ t.duration }} min)</v-list-item-title>
+      </v-list-item>
+    </v-list>
+    <div v-if="day.resources?.length" class="mt-4">
+      <div class="font-weight-bold mb-2">{{ $t('plan.sources', 'المصادر:') }}</div>
+      <v-list dense>
+        <v-list-item v-for="r in day.resources" :key="r.title">
+          <v-list-item-icon><v-icon color="secondary">mdi-link-variant</v-icon></v-list-item-icon>
+          <v-list-item-title>{{ r.title }} ({{ r.type }})</v-list-item-title>
+        </v-list-item>
+      </v-list>
     </div>
-    <div class="mb-4 mt-2">
-      <span v-html="logoSvg" class="block mx-auto" style="width:48px;height:48px;"></span>
-    </div>
-    <h3 class="text-lg font-bold mb-2">{{ $t('plan.today') }}</h3>
-    <div v-if="day">
-      <div class="font-bold">{{ day.day[$i18n.locale] || day.day.en }}</div>
-      <div class="text-xs text-gray-500 mb-1">{{ day.topic?.[$i18n.locale] || day.topic?.en }}</div>
-      <div class="text-xs mb-2">{{ $t('plan.tasks') }}: {{ day.tasks.length }}</div>
-      <ul class="mb-2">
-        <li v-for="t in day.tasks" :key="t.id" class="text-xs">- {{ t.description[$i18n.locale] || t.description.en }} ({{ t.type || '' }}, {{ t.duration }} min)</li>
-      </ul>
-      <div v-if="day.resources?.length" class="text-xs text-gray-500 mb-1">{{ $t('plan.sources') }}:</div>
-      <ul v-if="day.resources?.length">
-        <li v-for="r in day.resources" :key="r.title" class="text-xs">- {{ r.title }} ({{ r.type }})</li>
-      </ul>
-    </div>
-    <div v-else class="text-xs text-gray-400">{{ $t('plan.noDay') }}</div>
-  </div>
+    <v-card-actions class="justify-end mt-4">
+      <v-btn color="primary" prepend-icon="mdi-file-download" @click="exportDay">{{ $t('plan.export', 'تصدير اليوم') }}</v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
