@@ -1,10 +1,10 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600">
+  <v-dialog v-model="dialog" max-width="700">
     <v-card>
       <v-card-title class="font-weight-bold text-primary">{{ entry && entry.id ? $t('journal.editEntry') : $t('journal.addEntry') }}</v-card-title>
       <v-form @submit.prevent="save">
         <v-card-text>
-          <v-textarea v-model="content" :label="$t('journal.content')" rows="6" auto-grow required class="mb-4"/>
+          <TipTapEditor v-model="content" :rtl="isRTL" />
           <v-combobox v-model="tags" :items="allTags" :label="$t('journal.tags')" multiple chips clearable class="mb-2"/>
         </v-card-text>
         <v-card-actions class="justify-end">
@@ -18,12 +18,16 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
 import { useJournalStore } from '@/stores/useJournalStore'
+import TipTapEditor from '@/components/common/TipTapEditor.vue'
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n()
 const props = defineProps({ entry: Object })
 const emit = defineEmits(['save', 'close'])
 const store = useJournalStore()
 const dialog = ref(true)
 const content = ref('')
 const tags = ref([])
+const isRTL = computed(() => locale.value === 'ar')
 const allTags = computed(() => Array.from(new Set(store.entries.flatMap(e => e.tags || []))))
 watch(() => props.entry, (e) => {
   if (e) {
