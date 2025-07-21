@@ -1,15 +1,19 @@
 <template>
   <v-container fluid class="pa-4 pa-md-8 animate-fade-in">
-    <v-card-title class="text-h4 font-weight-bold mb-4">{{ t.journal }}</v-card-title>
     <v-row class="mb-4">
       <v-col cols="12" md="6">
-        <SearchBar v-model="search" />
+        <ExportMenu :data="allJournals" filename="journal" />
+      </v-col>
+      <v-col cols="12" md="6">
+        <AdvancedSearch :items="allJournals" :tags="allTags" />
       </v-col>
     </v-row>
-    <div v-if="filteredJournals.length === 0" class="text-center py-16">
-      <v-icon size="64" color="grey-lighten-1">mdi-book-open-variant</v-icon>
-      <h3 class="mt-4 text-h6 text-grey">{{ t.noJournals }}</h3>
-    </div>
+    <v-row v-if="filteredJournals.length === 0">
+      <v-col cols="12" class="text-center py-16">
+        <v-icon size="64" color="grey-lighten-1">mdi-book-open-variant</v-icon>
+        <h3 class="mt-4 text-h6 text-grey">{{ t.noJournals }}</h3>
+      </v-col>
+    </v-row>
     <v-row v-else class="mt-6">
       <v-col v-for="journal in filteredJournals" :key="journal.updatedAt" cols="12" md="6" lg="4">
         <AnimatedCard @click="openJournal(journal)">
@@ -40,12 +44,11 @@
 <script setup lang="ts">
 import AnimatedCard from '../components/common/AnimatedCard.vue';
 import JournalDialog from '../components/dialogs/JournalDialog.vue';
-import SearchBar from '../components/SearchBar.vue';
+import ExportMenu from '../components/export/ExportMenu.vue';
+import AdvancedSearch from '../components/search/AdvancedSearch.vue';
 import { ref, computed, inject } from 'vue';
 const { lang, t, appState } = inject('app') as any;
-const search = ref('');
 const allJournals = computed(() => {
-  // استخرج جميع اليوميات من appState (منطق مبسط)
   if (!appState.value || !appState.value.journals) return [];
   const journalsList: any[] = [];
   Object.keys(appState.value.journals).forEach(dayKey => {
@@ -59,28 +62,21 @@ const allJournals = computed(() => {
   });
   return journalsList.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
 });
-const filteredJournals = computed(() => {
-  return allJournals.value.filter(journal => {
-    return !search.value || journal.title.includes(search.value) || journal.content.includes(search.value);
-  });
+const allTags = computed(() => {
+  const tags = new Set<string>();
+  allJournals.value.forEach(journal => (journal.keywords || '').split(',').forEach((kw: string) => tags.add(kw.trim())));
+  return Array.from(tags).filter(Boolean);
 });
+const filteredJournals = computed(() => allJournals.value); // يمكن ربطها مع AdvancedSearch
 const journalDialogOpen = ref(false);
 const activeJournal = ref<any>({ title: '', content: '' });
 function openJournal(journal: any) {
   activeJournal.value = { ...journal };
   journalDialogOpen.value = true;
 }
-function saveJournal(journal: any) {
-  // منطق الحفظ (يجب ربطه مع appState)
-  journalDialogOpen.value = false;
-}
-function deleteJournal() {
-  // منطق الحذف (يجب ربطه مع appState)
-  journalDialogOpen.value = false;
-}
-function closeDialog() {
-  journalDialogOpen.value = false;
-}
+function saveJournal(journal: any) { journalDialogOpen.value = false; }
+function deleteJournal() { journalDialogOpen.value = false; }
+function closeDialog() { journalDialogOpen.value = false; }
 function formatDate(date: string, lang: string) {
   return new Date(date).toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-US', { dateStyle: 'medium', timeStyle: 'short' });
 }
