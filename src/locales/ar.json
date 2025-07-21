@@ -15,5 +15,9 @@
   "settings": {
     "title": "الإعدادات",
     "language": "اللغة"
+  },
+  "resources": {
+    "noResources": "لا توجد موارد لهذا اليوم.",
+    "open": "فتح الرابط"
   }
 }
