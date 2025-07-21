@@ -43,7 +43,13 @@
     "graphTitle": "Notes Graph Relationships",
     "graphDesc": "Graph visualization of note relationships coming soon.",
     "allTags": "All",
-    "export": "Export"
+    "export": "Export",
+    "toastSaved": "Note saved successfully!",
+    "toastDeleted": "Note deleted!",
+    "toastExportedPDF": "Notes exported as PDF!",
+    "toastExportedMD": "Notes exported as Markdown!",
+    "toastNoNotes": "No notes to export!",
+    "toastTemplate": "Template inserted!"
   },
   "sidebar": {
     "dashboard": "Dashboard",
@@ -76,6 +82,7 @@
     "tasks": "Tasks",
     "completed": "Completed",
     "exportPDF": "Export PDF",
-    "exportMD": "Export Markdown"
+    "exportMD": "Export Markdown",
+    "notesCount": "Notes count: {count}"
   }
 }

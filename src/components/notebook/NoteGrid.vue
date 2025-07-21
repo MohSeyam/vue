@@ -8,16 +8,17 @@
         <SearchBar v-model="search" />
       </div>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <transition-group name="fade" tag="div" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <NoteCard
-        v-for="note in filteredNotes"
+        v-for="note in notes"
         :key="note.id"
         :note="note"
+        :search="search"
         @edit="$emit('edit', note)"
         @delete="$emit('delete', note.id)"
       />
-    </div>
-    <div v-if="!filteredNotes.length" class="text-center text-gray-400 mt-8 text-lg font-bold">{{ $t('notebook.noNotes') }}</div>
+    </transition-group>
+    <div v-if="!notes.length" class="text-center text-gray-400 mt-8 text-lg font-bold">{{ $t('notebook.noNotes') }}</div>
   </div>
 </template>
 <script setup lang="ts">
@@ -42,3 +43,7 @@ const filteredNotes = computed(() => {
   return notes
 })
 </script>
+<style scoped>
+.fade-enter-active, .fade-leave-active { transition: opacity 0.3s; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+</style>
