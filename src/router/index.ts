@@ -1,18 +1,19 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
+import DashboardView from '../pages/DashboardView.vue';
+import PhaseView from '../components/phase/PhaseView.vue';
+import WeekView from '../components/week/WeekView.vue';
+import DayView from '../pages/DayView.vue';
 
-// تعريف المسارات الرئيسية للتطبيق
 const routes = [
-  { path: '/', redirect: '/dashboard' },
-  { path: '/dashboard', component: () => import('@/components/dashboard/DashboardView.vue') },
-  { path: '/phase/:id', component: () => import('@/components/phase/PhaseView.vue') },
-  { path: '/week/:id', component: () => import('@/components/week/WeekView.vue') },
-  { path: '/notebook', component: () => import('@/components/notebook/NotebookView.vue') },
-  { path: '/journal', component: () => import('@/components/journal/JournalView.vue') },
-  { path: '/achievements', component: () => import('@/components/achievements/AchievementsView.vue') },
-  { path: '/settings', component: () => import('@/components/settings/SettingsView.vue') }
-]
+  { path: '/', name: 'dashboard', component: DashboardView },
+  { path: '/plan', name: 'plan', component: PhaseView },
+  { path: '/plan/:phaseId', name: 'weeks', component: WeekView, props: true },
+  { path: '/plan/:phaseId/week/:weekId', name: 'days', component: DayView, props: true },
+];
 
-export const router = createRouter({
+const router = createRouter({
   history: createWebHistory(),
-  routes
-})
+  routes,
+});
+
+export default router;
