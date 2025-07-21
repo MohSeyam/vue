@@ -69,16 +69,29 @@
       </div>
     </div>
 
+    <!-- Quick Search -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+      <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">البحث السريع</h2>
+      <div class="relative">
+        <input
+          type="text"
+          placeholder="البحث في المهام، الملاحظات، المهارات..."
+          class="w-full px-4 py-3 pl-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+        />
+        <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">🔍</span>
+      </div>
+    </div>
+
     <!-- Quick Actions -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-      <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Quick Actions</h2>
+      <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">الإجراءات السريعة</h2>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <router-link 
           to="/day" 
           class="flex flex-col items-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
         >
           <span class="text-2xl mb-2">📅</span>
-          <span class="text-sm font-medium text-blue-700 dark:text-blue-300">Daily Tasks</span>
+          <span class="text-sm font-medium text-blue-700 dark:text-blue-300">المهام اليومية</span>
         </router-link>
         
         <router-link 
@@ -86,7 +99,7 @@
           class="flex flex-col items-center p-4 rounded-lg bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
         >
           <span class="text-2xl mb-2">📝</span>
-          <span class="text-sm font-medium text-green-700 dark:text-green-300">Add Note</span>
+          <span class="text-sm font-medium text-green-700 dark:text-green-300">إضافة ملاحظة</span>
         </router-link>
         
         <router-link 
@@ -94,15 +107,15 @@
           class="flex flex-col items-center p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
         >
           <span class="text-2xl mb-2">🏆</span>
-          <span class="text-sm font-medium text-purple-700 dark:text-purple-300">Achievements</span>
+          <span class="text-sm font-medium text-purple-700 dark:text-purple-300">الإنجازات</span>
         </router-link>
         
         <router-link 
-          to="/skills" 
+          to="/analytics" 
           class="flex flex-col items-center p-4 rounded-lg bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors"
         >
-          <span class="text-2xl mb-2">🎯</span>
-          <span class="text-sm font-medium text-orange-700 dark:text-orange-300">Skills</span>
+          <span class="text-2xl mb-2">📊</span>
+          <span class="text-sm font-medium text-orange-700 dark:text-orange-300">التحليلات</span>
         </router-link>
       </div>
     </div>

@@ -32,6 +32,9 @@
 
           <!-- Right Side Controls -->
           <div class="flex items-center space-x-3">
+            <!-- Notification Center -->
+            <NotificationCenter />
+
             <!-- Dark Mode Toggle -->
             <button 
               @click="toggleDarkMode" 
@@ -67,12 +70,15 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <router-view />
     </main>
+
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
+import NotificationCenter from '@/components/Notifications/NotificationCenter.vue';
 
 const isDark = ref(false);
 
@@ -81,8 +87,10 @@ const navItems = [
   { name: 'Daily Tasks', path: '/day', icon: '📅' },
   { name: 'Notebook', path: '/notebook', icon: '📝' },
   { name: 'Achievements', path: '/achievements', icon: '🏆' },
-  { name: 'Calendar', path: '/calendar', icon: '📊' },
-  { name: 'Skills', path: '/skills', icon: '🎯' }
+  { name: 'Analytics', path: '/analytics', icon: '📊' },
+  { name: 'Search', path: '/search', icon: '🔍' },
+  { name: 'Profile', path: '/profile', icon: '👤' },
+  { name: 'Settings', path: '/settings', icon: '⚙️' }
 ];
 
 function toggleDarkMode() {
