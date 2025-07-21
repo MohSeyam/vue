@@ -54,12 +54,6 @@
 import { ref, reactive, computed, provide, onMounted, watch } from 'vue'
 import translations from '@/data/translations.json'
 import phases from '@/data/phases.json'
-import DashboardView from './pages/DashboardView.vue';
-import NotebookView from './pages/NotebookView.vue';
-import AchievementsView from './components/achievements/AchievementsView.vue';
-import PhaseView from './components/phase/PhaseView.vue';
-import WeekView from './components/week/WeekView.vue';
-import DayView from './pages/DayView.vue';
 
 const lang = ref('ar')
 const theme = ref('dark')
