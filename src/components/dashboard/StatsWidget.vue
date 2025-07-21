@@ -28,12 +28,21 @@
         <v-list-item-action><span class="font-weight-bold">{{ stats.days }}</span></v-list-item-action>
       </v-list-item>
     </v-list>
+    <v-row class="mt-4">
+      <v-col cols="12">
+        <DoughnutChart :chart-data="doughnutData" :chart-options="doughnutOptions" style="max-width:220px;margin:auto;"/>
+      </v-col>
+    </v-row>
     <v-progress-linear :model-value="progress" color="primary" height="8" rounded class="mt-2" />
   </v-card>
 </template>
 <script setup lang="ts">
 import { usePlanStore } from '@/stores/usePlanStore'
 import { computed } from 'vue'
+import { Doughnut } from 'vue-chartjs'
+import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
+Chart.register(ArcElement, Tooltip, Legend)
+const DoughnutChart = Doughnut
 const plan = usePlanStore()
 const stats = computed(() => ({
   weeks: plan.weeks.length,
@@ -46,6 +55,33 @@ const progress = computed(() => {
   const done = plan.allTasks.filter(t => t.done).length
   return total ? Math.round((done / total) * 100) : 0
 })
+const doughnutData = computed(() => ({
+  labels: ['Quizzes', 'Projects', 'Reviews', 'Other'],
+  datasets: [
+    {
+      label: 'Tasks',
+      data: [
+        plan.allTasks.filter(t => t.type === 'quiz').length,
+        plan.allTasks.filter(t => t.type === 'project').length,
+        plan.allTasks.filter(t => t.type === 'review').length,
+        plan.allTasks.filter(t => !['quiz','project','review'].includes(t.type)).length
+      ],
+      backgroundColor: [
+        '#22d3ee', // quiz
+        '#0d9488', // project
+        '#c084fc', // review
+        '#64748b'  // other
+      ],
+      borderWidth: 2
+    }
+  ]
+}))
+const doughnutOptions = {
+  responsive: true,
+  plugins: {
+    legend: { display: true, position: 'bottom', labels: { color: '#fff', font: { size: 13 } } }
+  }
+}
 </script>
 <style scoped>
 .stats-widget {
