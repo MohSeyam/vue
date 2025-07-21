@@ -93,14 +93,6 @@ watch(appState, (newState) => {
   }
 }, { deep: true })
 provide('app', { lang, theme, view, setView, appState, t, phases })
-const components: Record<string, any> = {
-  dashboard: DashboardView,
-  achievements: AchievementsView,
-  notebook: NotebookView,
-  phase: PhaseView,
-  week: WeekView,
-  day: DayView,
-};
 </script>
 <style scoped>
 body {
