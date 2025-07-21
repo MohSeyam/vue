@@ -54,6 +54,13 @@
 import { ref, reactive, computed, provide, onMounted, watch, markRaw } from 'vue'
 import translations from '@/data/translations.json'
 import phases from '@/data/phases.json'
+import DashboardView from './pages/DashboardView.vue';
+import NotebookView from './pages/NotebookView.vue';
+import AchievementsView from './components/achievements/AchievementsView.vue';
+import PhaseView from './components/phase/PhaseView.vue';
+import WeekView from './components/week/WeekView.vue';
+import DayView from './pages/DayView.vue';
+import SidebarMenu from './components/sidebar/SidebarMenu.vue';
 
 const lang = ref('ar')
 const theme = ref('dark')
@@ -88,14 +95,14 @@ watch(appState, (newState) => {
 }, { deep: true })
 provide('app', { lang, theme, view, setView, appState, t, phases })
 const components: Record<string, any> = {
-  dashboard: markRaw({}),
-  achievements: markRaw({}),
-  notebook: markRaw({}),
-  phase: markRaw({}),
-  week: markRaw({}),
-  day: markRaw({}),
-  sidebar: markRaw({}),
-}
+  dashboard: DashboardView,
+  achievements: AchievementsView,
+  notebook: NotebookView,
+  phase: PhaseView,
+  week: WeekView,
+  day: DayView,
+  sidebar: SidebarMenu,
+};
 const currentViewComponent = computed(() => {
   return components[view.page] || components.dashboard
 })
