@@ -58,6 +58,19 @@
     "progress": "Progress",
     "completedTasks": "Completed Tasks",
     "totalTasks": "Total Tasks",
-    "details": "Achievement Details"
+    "details": "Achievement Details",
+    "phaseProgress": "Phase Progress",
+    "skills": "Skills",
+    "skill_network": "Networking",
+    "skill_linux": "Linux",
+    "skill_web": "Web Apps",
+    "skill_crypto": "Cryptography",
+    "stats": "Statistics",
+    "weeks": "Weeks",
+    "days": "Days",
+    "tasks": "Tasks",
+    "completed": "Completed",
+    "exportPDF": "Export PDF",
+    "exportMD": "Export Markdown"
   }
 }
