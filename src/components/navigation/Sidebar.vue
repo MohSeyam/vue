@@ -6,25 +6,54 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 3.25c-2.956 1.31-5.91 2.09-8.25 2.25v5.25c0 7.25 6.25 10.25 8.25 10.25s8.25-3 8.25-10.25V5.5c-2.34-.16-5.294-.94-8.25-2.25z" />
           <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 12.75l1.5 1.5 3-3" />
         </svg>
-        <span class="font-bold text-lg text-cyan-700 dark:text-cyan-200 hidden sm:block">CyberPlan</span>
+        <span class="font-bold text-lg text-cyan-700 dark:text-cyan-200 hidden sm:block tracking-tight">CyberPlan</span>
       </router-link>
     </div>
     <div class="flex items-center gap-2 md:gap-6">
       <router-link v-for="item in navItems" :key="item.path" :to="item.path"
-        class="group flex flex-col items-center justify-center px-2 md:px-3 py-1 md:py-2 rounded-lg transition relative"
+        class="group flex flex-col items-center justify-center px-2 md:px-3 py-1 md:py-2 rounded-lg transition relative hover:scale-105 hover:shadow-lg"
         :class="$route.path.startsWith(item.path) ? 'bg-cyan-100/60 dark:bg-cyan-900/40 shadow text-cyan-700 dark:text-cyan-200' : 'text-gray-500 dark:text-gray-300 hover:text-cyan-500'">
         <span>
           <component :is="item.icon" class="w-7 h-7" />
         </span>
-        <span class="text-xs mt-1 hidden md:block">{{ item.label }}</span>
+        <span class="text-xs mt-1 hidden md:block font-medium">{{ item.label }}</span>
       </router-link>
+    </div>
+    <div class="flex items-center gap-2 md:gap-4">
+      <!-- زر تبديل اللغة -->
+      <button @click="toggleLocale" class="rounded-full p-2 bg-gray-100 dark:bg-gray-800 hover:bg-cyan-100 dark:hover:bg-cyan-900 transition shadow flex items-center justify-center" :title="$t('sidebar.langSwitch')">
+        <svg v-if="locale === 'ar'" class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+        <svg v-else class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+        <span class="sr-only">{{ $t('sidebar.langSwitch') }}</span>
+      </button>
+      <!-- زر تبديل الثيم -->
+      <button @click="toggleTheme" class="rounded-full p-2 bg-gray-100 dark:bg-gray-800 hover:bg-yellow-100 dark:hover:bg-gray-700 transition shadow flex items-center justify-center" :title="$t('sidebar.themeSwitch')">
+        <svg v-if="theme === 'dark'" class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+        <svg v-else class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2m11-11h-2M3 12H1m16.95 7.07l-1.41-1.41M6.34 6.34L4.93 4.93m12.02 0l-1.41 1.41M6.34 17.66l-1.41 1.41"/></svg>
+        <span class="sr-only">{{ $t('sidebar.themeSwitch') }}</span>
+      </button>
     </div>
   </nav>
   <div class="h-16"></div> <!-- Spacer for fixed navbar -->
 </template>
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { shallowRef } from 'vue'
+import { shallowRef, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useSettingsStore } from '@/stores/useSettingsStore'
+
+const { locale, t } = useI18n()
+const $route = useRoute()
+const settings = useSettingsStore()
+const theme = computed(() => settings.theme)
+
+function toggleLocale() {
+  locale.value = locale.value === 'ar' ? 'en' : 'ar'
+  document.dir = locale.value === 'ar' ? 'rtl' : 'ltr'
+}
+function toggleTheme() {
+  settings.theme = settings.theme === 'dark' ? 'light' : 'dark'
+}
 // Heroicons SVG as components
 const HomeIcon = {
   template: `<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.125c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75' /></svg>`
@@ -42,14 +71,14 @@ const SettingsIcon = {
   template: `<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M10.5 6.75h3m-1.5 0v10.5m0 0h-3m3 0h3' /></svg>`
 }
 const navItems = [
-  { path: '/dashboard', icon: shallowRef(HomeIcon), label: $t('sidebar.dashboard') },
-  { path: '/notebook', icon: shallowRef(NotebookIcon), label: $t('sidebar.notebook') },
-  { path: '/achievements', icon: shallowRef(TrophyIcon), label: $t('sidebar.achievements') },
-  { path: '/journal', icon: shallowRef(ChartBarIcon), label: $t('sidebar.journal') },
-  { path: '/settings', icon: shallowRef(SettingsIcon), label: $t('sidebar.settings') }
+  { path: '/dashboard', icon: shallowRef(HomeIcon), label: t('sidebar.dashboard') },
+  { path: '/notebook', icon: shallowRef(NotebookIcon), label: t('sidebar.notebook') },
+  { path: '/achievements', icon: shallowRef(TrophyIcon), label: t('sidebar.achievements') },
+  { path: '/journal', icon: shallowRef(ChartBarIcon), label: t('sidebar.journal') },
+  { path: '/settings', icon: shallowRef(SettingsIcon), label: t('sidebar.settings') }
 ]
-const $route = useRoute()
 </script>
 <style scoped>
 nav { font-family: inherit; }
+button:focus { outline: 2px solid #06b6d4; outline-offset: 2px; }
 </style>

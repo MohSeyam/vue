@@ -1,7 +1,8 @@
 <template>
   <div class="relative">
     <input
-      v-model="modelValue"
+      :value="modelValue"
+      @input="emit('update:modelValue', ($event.target as HTMLInputElement)?.value)"
       :placeholder="$t('notebook.search')"
       class="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-primary-600"
       type="text"
@@ -10,7 +11,7 @@
   </div>
 </template>
 <script setup lang="ts">
-const props = defineProps<{ modelValue: string }>()
+defineProps<{ modelValue: string }>()
 const emit = defineEmits(['update:modelValue'])
 </script>
 <script lang="ts">

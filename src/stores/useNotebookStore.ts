@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
-import Dexie, { Table } from 'dexie'
+import Dexie from 'dexie'
+import type { Table } from 'dexie'
 import { ref } from 'vue'
-import { Note } from '@/types/plan'
+import type { Note } from '@/types/plan'
 
 class NotebookDB extends Dexie {
   notes!: Table<Note, string>
