@@ -5,9 +5,6 @@
       <v-list-item v-for="ach in achievements" :key="ach.id">
         <v-list-item-title>{{ ach.title }}</v-list-item-title>
         <v-list-item-subtitle>{{ ach.date }}</v-list-item-subtitle>
-        <template #append>
-          <v-icon color="success">mdi-check-circle</v-icon>
-        </template>
       </v-list-item>
     </v-list>
   </v-card>
