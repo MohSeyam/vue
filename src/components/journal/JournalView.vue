@@ -1,13 +1,20 @@
 <template>
   <div class="max-w-4xl mx-auto py-10 px-4">
     <Toast ref="toastRef" />
-    <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
-      <h1 class="text-2xl font-bold">{{ $t('journal.title') }}</h1>
+    <div class="mb-4 flex flex-wrap gap-2 items-center justify-between">
+      <div class="flex gap-2 flex-wrap items-center">
+        <div class="flex gap-1">
+          <button v-for="w in allWeeks" :key="w.value" @click="selectedWeek = w.value" :class="[selectedWeek === w.value ? 'bg-cyan-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200', 'px-3 py-1 rounded-full text-xs font-bold transition hover:bg-cyan-400']">
+            {{ w.label }}
+          </button>
+        </div>
+        <div class="flex gap-1">
+          <button v-for="d in weekDays" :key="d.value" @click="selectedDayKey = d.value" :class="[selectedDayKey === d.value ? 'bg-purple-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200', 'px-3 py-1 rounded-full text-xs font-bold transition hover:bg-purple-400']">
+            {{ d.label }}
+          </button>
+        </div>
+      </div>
       <div class="flex gap-2 flex-wrap">
-        <select v-model="selectedDay" class="rounded border px-2 py-1 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
-          <option value="">{{ $t('journal.allDays') }}</option>
-          <option v-for="d in allDays" :key="d.value" :value="d.value">{{ d.label }}</option>
-        </select>
         <button @click="showExport = !showExport" :disabled="!filteredEntries.length" class="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200 px-3 py-2 rounded-lg shadow hover:bg-green-200 dark:hover:bg-green-800 transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
           {{ $t('journal.export') }}
@@ -43,7 +50,6 @@ import jsPDF from 'jspdf'
 import TurndownService from 'turndown'
 const planStore = usePlanStore()
 const entries = ref([
-  // كل تدوينة مرتبطة بـ week و dayKey
   { id: '1', title: { en: 'First Journal', ar: 'أول تدوينة' }, content: { en: 'Today I learned...', ar: 'اليوم تعلمت...' }, week: 1, dayKey: 'sat', tags: ['reflection'] },
   { id: '2', title: { en: 'Cybersecurity Note', ar: 'ملاحظة أمنية' }, content: { en: 'Cybersecurity is important...', ar: 'الأمن السيبراني مهم...' }, week: 1, dayKey: 'sun', tags: ['cyber', 'reflection'] }
 ])
@@ -53,27 +59,18 @@ const showExport = ref(false)
 const search = ref('')
 const selectedTag = ref('')
 const toastRef = ref()
-const selectedDay = ref('')
+const selectedWeek = ref('')
+const selectedDayKey = ref('')
 const allTags = computed(() => Array.from(new Set(entries.value.flatMap(e => e.tags || []))))
-const allDays = computed(() => {
-  const days: { label: string, value: string, week: number, dayKey: string }[] = []
-  planStore.weeks.forEach(w => {
-    w.days.forEach(d => {
-      days.push({
-        label: `${w.week} - ${d.day.en} (${d.key})`,
-        value: `${w.week}|${d.key}`,
-        week: w.week ?? 0,
-        dayKey: d.key
-      })
-    })
-  })
-  return days
+const allWeeks = computed(() => planStore.weeks.map(w => ({ label: w.title.en, value: String(w.week) })))
+const weekDays = computed(() => {
+  const week = planStore.weeks.find(w => String(w.week) === selectedWeek.value)
+  return week ? week.days.map(d => ({ label: d.day.en, value: d.key })) : []
 })
 const filteredEntries = computed(() => {
   let list = entries.value
-  if (selectedDay.value) {
-    const [week, dayKey] = selectedDay.value.split('|')
-    list = list.filter(e => String(e.week) === week && e.dayKey === dayKey)
+  if (selectedWeek.value && selectedDayKey.value) {
+    list = list.filter(e => String(e.week) === selectedWeek.value && e.dayKey === selectedDayKey.value)
   }
   if (selectedTag.value) list = list.filter(e => e.tags?.includes(selectedTag.value))
   if (search.value) {
@@ -84,6 +81,28 @@ const filteredEntries = computed(() => {
 })
 onMounted(() => {
   if (!planStore.planLoaded) planStore.loadPlan()
+  setTimeout(() => {
+    // تحديد الأسبوع واليوم الحالي تلقائيًا
+    const today = new Date()
+    const jsDay = today.getDay() // 0:Sun ... 6:Sat
+    const dayMap = ['sun','mon','tue','wed','thu','fri','sat']
+    let found = false
+    for (const w of planStore.weeks) {
+      for (const d of w.days) {
+        if (d.key === dayMap[jsDay]) {
+          selectedWeek.value = String(w.week)
+          selectedDayKey.value = d.key
+          found = true
+          break
+        }
+      }
+      if (found) break
+    }
+    if (!found && planStore.weeks.length) {
+      selectedWeek.value = String(planStore.weeks[0].week)
+      selectedDayKey.value = planStore.weeks[0].days[0].key
+    }
+  }, 300)
 })
 function openEditor() {
   editingEntry.value = null
@@ -98,14 +117,13 @@ function closeEditor() {
   editingEntry.value = null
 }
 function saveEntry(entry) {
-  if (!selectedDay.value && !entry.id) {
-    toastRef.value?.show('اختر اليوم أولاً!', 'error')
+  if (!selectedWeek.value || !selectedDayKey.value) {
+    toastRef.value?.show('اختر الأسبوع واليوم أولاً!', 'error')
     return
   }
   if (!entry.id) {
-    const [week, dayKey] = selectedDay.value.split('|')
-    entry.week = Number(week)
-    entry.dayKey = dayKey
+    entry.week = Number(selectedWeek.value)
+    entry.dayKey = selectedDayKey.value
     entry.id = Date.now().toString()
     entries.value.unshift(entry)
     toastRef.value?.show('تم إضافة التدوينة!', 'success')
