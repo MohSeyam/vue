@@ -1,7 +1,7 @@
 <template>
   <v-tabs v-model="activeDayIndex" color="primary" grow>
-    <v-tab v-for="(day, i) in days" :key="day.id" :value="i">
-      {{ day.label || day.id }}
+    <v-tab v-for="(day, i) in days" :key="(day as any).id" :value="i">
+      {{ (day as any).label || (day as any).id }}
     </v-tab>
   </v-tabs>
 </template>

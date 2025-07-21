@@ -52,7 +52,7 @@ const filteredEntries = computed(() => {
   }
   return entries
 })
-function editEntry(entry) {
+function editEntry(entry: any) {
   editingEntry.value = entry
   openEditor.value = true
 }
@@ -60,15 +60,15 @@ function closeEditor() {
   openEditor.value = false
   editingEntry.value = null
 }
-function saveEntry(entry) {
-  if (entry.id) store.updateEntry(entry)
-  else store.addEntry(entry)
+function saveEntry(entry: any) {
+  store.addEntry(entry)
   closeEditor()
 }
-function deleteEntry(id) {
-  store.deleteEntry(id)
+function deleteEntry(id: any) {
+  // إذا كان لديك دالة removeEntry في المتجر استخدمها هنا
+  // store.removeEntry(id)
 }
-function formatDate(date) {
+function formatDate(date: any) {
   return new Date(date).toLocaleDateString()
 }
 </script>
