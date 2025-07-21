@@ -3,73 +3,58 @@
     <div v-if="week">
       <!-- Week Header -->
       <div class="mb-8 text-center">
-        <h1 class="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-2">{{ week.title }}</h1>
+        <h1 class="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-2">{{ getText(week.title) }}</h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300">{{ getText(week.objective) }}</p>
       </div>
       <!-- Day Tabs -->
-      <DayTabs :days="week.days" v-model:activeDayIndex="activeDayIndex" />
+      <DayTabs :days="week.days.map(d => ({ id: d.key, date: d.key }))" v-model:activeDayIndex="activeDayIndex" />
       <div v-if="activeDay">
-        <!-- Main Content Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-          <!-- Tasks & Pomodoro -->
-          <div class="space-y-6">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
-              <h2 class="text-lg font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-cyan-400"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3.75h10.5a.75.75 0 01.75.75v2.25a6.75 6.75 0 01-13.5 0V4.5a.75.75 0 01.75-.75z" /></svg>
-                مهام اليوم
-              </h2>
-              <TaskList :tasks="activeDay.tasks" />
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
-              <h2 class="text-lg font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-purple-400"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>
-                مؤقت بومودورو
-              </h2>
-              <PomodoroTimer />
-            </div>
-          </div>
-          <!-- Resources & Journal -->
-          <div class="space-y-6">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
-              <h2 class="text-lg font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-400"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m9-9H3" /></svg>
-                الموارد
-              </h2>
-              <ResourceList :resources="activeDay.resources || []" />
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
-              <h2 class="text-lg font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-pink-400"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>
-                تدوين المساء
-              </h2>
-              <JournalEditor :dayId="activeDay.id" />
-            </div>
-          </div>
+        <div class="mb-6">
+          <h2 class="text-xl font-bold text-cyan-700 dark:text-cyan-300 mb-2">{{ getText(activeDay.day) }} - {{ getText(activeDay.topic) }}</h2>
+        </div>
+        <!-- Tasks -->
+        <div class="mb-6">
+          <h3 class="text-lg font-bold mb-2 text-gray-900 dark:text-white">{{ $t('tasks.title') }}</h3>
+          <ul class="space-y-3">
+            <li v-for="task in activeDay.tasks" :key="task.id" class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-gray-700 shadow-sm">
+              <span class="font-bold text-cyan-500">{{ task.type }}</span>
+              <span class="text-xs text-gray-400">{{ task.duration }} {{ $t('tasks.min') }}</span>
+              <span class="flex-1">{{ getText(task.description) }}</span>
+            </li>
+          </ul>
+        </div>
+        <!-- Resources -->
+        <div v-if="activeDay.resources && activeDay.resources.length" class="mb-6">
+          <h3 class="text-lg font-bold mb-2 text-gray-900 dark:text-white">{{ $t('resources.title') }}</h3>
+          <ul class="space-y-2">
+            <li v-for="res in activeDay.resources" :key="res.url">
+              <a :href="res.url" target="_blank" class="text-cyan-600 dark:text-cyan-300 hover:underline font-bold">{{ res.title }}</a>
+              <span class="text-xs text-gray-400 ml-2">({{ res.type }})</span>
+            </li>
+          </ul>
+        </div>
+        <!-- Notes Prompt -->
+        <div v-if="activeDay.notes_prompt">
+          <h3 class="text-lg font-bold mb-2 text-gray-900 dark:text-white">{{ getText(activeDay.notes_prompt.title) }}</h3>
+          <ul class="list-disc pl-6 space-y-1">
+            <li v-for="point in activeDay.notes_prompt.points" :key="point.ar">{{ getText(point) }}</li>
+          </ul>
         </div>
       </div>
-      <div v-else class="text-center text-gray-400 mt-8">لا يوجد بيانات لهذا اليوم.</div>
+      <div v-else class="text-center text-gray-400 mt-8">{{ $t('week.noDayData') }}</div>
     </div>
-    <div v-else class="text-center text-gray-400">لم يتم العثور على الأسبوع المطلوب.</div>
+    <div v-else class="text-center text-gray-400">{{ $t('week.notFound') }}</div>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { usePlanStore } from '@/stores/usePlanStore'
-import type { Week } from '@/types/plan'
+import { getText } from '@/utils/getText'
 import DayTabs from './DayTabs.vue'
-import TaskList from './TaskList.vue'
-import PomodoroTimer from './PomodoroTimer.vue'
-import ResourceList from './ResourceList.vue'
-import JournalEditor from './JournalEditor.vue'
 const route = useRoute()
 const planStore = usePlanStore()
-const week = computed(() => {
-  for (const phase of planStore.phases) {
-    const found = phase.weeks.find(w => w.id === route.params.id)
-    if (found) return found as Week
-  }
-  return undefined
-})
+const week = computed(() => planStore.weeks.find(w => w.week === Number(route.params.id)))
 const activeDayIndex = ref(0)
 const activeDay = computed(() => week.value?.days[activeDayIndex.value])
 onMounted(() => {
