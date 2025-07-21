@@ -1,67 +1,79 @@
 <template>
-  <div class="max-w-4xl mx-auto py-10 px-4">
-    <h1 class="text-2xl font-bold mb-8 text-center">{{ $t('achievements.title') }}</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-      <div class="bg-gradient-to-tr from-cyan-700 to-blue-800 rounded-2xl shadow-xl p-8 text-white flex flex-col items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 mb-2 text-cyan-200">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37A5.5 5.5 0 1112 6.5" />
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.5v6l4 2" />
-        </svg>
-        <div class="text-3xl font-bold">{{ progress }}%</div>
-        <div class="text-lg mt-2">{{ $t('achievements.progress') }}</div>
-        <div class="w-full bg-white/20 rounded-full h-3 mt-4">
-          <div class="bg-gradient-to-r from-cyan-400 to-purple-500 h-3 rounded-full transition-all duration-700" :style="{ width: progress + '%' }"></div>
-        </div>
-      </div>
-      <div class="bg-gradient-to-tr from-purple-700 to-cyan-700 rounded-2xl shadow-xl p-8 text-white flex flex-col items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 mb-2 text-purple-200">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" />
-        </svg>
-        <div class="text-3xl font-bold">{{ completedTasks }}</div>
-        <div class="text-lg mt-2">{{ $t('achievements.completedTasks') }}</div>
-      </div>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-      <PhaseProgressChart />
-      <SkillsChart />
-    </div>
-    <div class="mb-10">
-      <StatsSummary />
-    </div>
-    <ReportGenerator />
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mt-8">
-      <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">{{ $t('achievements.details') }}</h2>
-      <ul class="list-disc pl-6 space-y-2">
-        <li v-for="item in details" :key="item.label" class="text-gray-700 dark:text-gray-200 flex items-center gap-2">
-          <span class="font-bold text-cyan-600 dark:text-cyan-300">{{ item.value }}</span>
-          <span>{{ $t(item.label) }}</span>
-        </li>
-      </ul>
-    </div>
-  </div>
+  <v-container fluid class="py-8">
+    <v-row class="mb-6" justify="center">
+      <v-col cols="12" md="8" class="text-center">
+        <v-icon size="56" color="secondary" class="mb-2">mdi-trophy</v-icon>
+        <h1 class="text-h4 font-weight-bold mb-2">{{ $t('achievements.title', 'إنجازاتك وتقدمك') }}</h1>
+        <p class="text-subtitle-1">{{ $t('achievements.desc', 'تابع تقدمك في خطة الأمن السيبراني واحتفل بإنجازاتك!') }}</p>
+      </v-col>
+    </v-row>
+    <v-row class="gap-4">
+      <v-col cols="12" md="6">
+        <v-card class="pa-4 mb-4" elevation="8">
+          <v-card-title class="font-weight-bold text-secondary">{{ $t('achievements.progress') }}</v-card-title>
+          <v-card-text>
+            <v-progress-linear :model-value="progress" color="primary" height="20" rounded>
+              <template #default>
+                <strong>{{ Math.round(progress) }}%</strong>
+              </template>
+            </v-progress-linear>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-card class="pa-4 mb-4" elevation="8">
+          <v-card-title class="font-weight-bold text-secondary">{{ $t('achievements.skills') }}</v-card-title>
+          <v-list>
+            <v-list-item v-for="skill in skills" :key="skill.name">
+              <v-list-item-content>
+                <v-list-item-title>{{ skill.name }}</v-list-item-title>
+                <v-progress-linear :model-value="skill.level" color="primary" height="8" rounded class="mt-1"/>
+              </v-list-item-content>
+              <v-list-item-action><span class="text-caption">{{ skill.level }}%</span></v-list-item-action>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-card class="pa-4 mb-4" elevation="8">
+          <v-card-title class="font-weight-bold text-secondary">{{ $t('achievements.stats') }}</v-card-title>
+          <v-list>
+            <v-list-item v-for="stat in stats" :key="stat.label">
+              <v-list-item-icon><v-icon color="primary">{{ stat.icon }}</v-icon></v-list-item-icon>
+              <v-list-item-title>{{ stat.label }}</v-list-item-title>
+              <v-list-item-action><span class="font-weight-bold">{{ stat.value }}</span></v-list-item-action>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-card class="pa-4 mb-4" elevation="8">
+          <v-card-title class="font-weight-bold text-secondary">{{ $t('achievements.report') }}</v-card-title>
+          <v-card-text>
+            <v-btn color="primary" prepend-icon="mdi-file-download" @click="downloadReport">{{ $t('achievements.downloadReport', 'تحميل تقرير الإنجازات') }}</v-btn>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 <script setup lang="ts">
-import { computed } from 'vue'
-import { usePlanStore } from '@/stores/usePlanStore'
-import { useNotebookStore } from '@/stores/useNotebookStore'
-import { useJournalStore } from '@/stores/useJournalStore'
-import PhaseProgressChart from './PhaseProgressChart.vue'
-import SkillsChart from './SkillsChart.vue'
-import StatsSummary from './StatsSummary.vue'
-import ReportGenerator from './ReportGenerator.vue'
-const planStore = usePlanStore()
-const notebookStore = useNotebookStore()
-const journalStore = useJournalStore()
-const totalTasks = computed(() => planStore.weeks.reduce((acc, w) => acc + w.days.reduce((dacc, d) => dacc + (d.tasks?.length || 0), 0), 0))
-const completedTasks = computed(() => planStore.weeks.reduce((acc, w) => acc + w.days.reduce((dacc, d) => dacc + (d.tasks?.filter(t => t.done).length || 0), 0), 0))
-const progress = computed(() => totalTasks.value ? Math.round((completedTasks.value / totalTasks.value) * 100) : 0)
-const notesCount = computed(() => notebookStore.notes.length)
-const journalCount = computed(() => journalStore.entries.length)
-const details = computed(() => [
-  { label: 'achievements.totalTasks', value: totalTasks.value },
-  { label: 'achievements.completedTasks', value: completedTasks.value },
-  { label: 'achievements.progress', value: progress.value + '%' },
-  { label: 'achievements.notesCount', value: notesCount.value },
-  { label: 'achievements.journalCount', value: journalCount.value }
+import { ref } from 'vue'
+const progress = ref(68)
+const skills = ref([
+  { name: 'الشبكات', level: 80 },
+  { name: 'البرمجة', level: 60 },
+  { name: 'التحليل', level: 70 },
+  { name: 'الكتابة', level: 90 }
 ])
+const stats = ref([
+  { label: 'عدد الأسابيع', value: 12, icon: 'mdi-calendar-week' },
+  { label: 'عدد المهام', value: 120, icon: 'mdi-format-list-checkbox' },
+  { label: 'عدد الأيام', value: 60, icon: 'mdi-calendar-today' },
+  { label: 'عدد التدوينات', value: 24, icon: 'mdi-book-open-variant' }
+])
+function downloadReport() {
+  // منطق التصدير (PDF/CSV)
+  alert('سيتم تحميل تقرير الإنجازات قريبًا!')
+}
 </script>
