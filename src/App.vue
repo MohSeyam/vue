@@ -24,7 +24,7 @@
     <!-- Main Content Area -->
     <v-main>
       <v-container fluid class="pa-4 pa-md-8">
-        <component :is="currentViewComponent" class="animate-fade-in"></component>
+        <router-view class="animate-fade-in" />
       </v-container>
     </v-main>
     <!-- Mobile Bottom Navigation -->
