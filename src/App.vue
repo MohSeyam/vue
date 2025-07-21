@@ -101,9 +101,6 @@ const components: Record<string, any> = {
   week: WeekView,
   day: DayView,
 };
-const currentViewComponent = computed(() => {
-  return components[view.page] || components.dashboard
-})
 </script>
 <style scoped>
 body {
