@@ -26,5 +26,22 @@
   "week": {
     "noDayData": "No data for this day.",
     "notFound": "Week not found."
+  },
+  "notebook": {
+    "title": "Notebook",
+    "addNote": "Add Note",
+    "editNote": "Edit Note",
+    "noNotes": "No notes yet.",
+    "titleEn": "Title (English)",
+    "titleAr": "Title (Arabic)",
+    "contentEn": "Content (English)",
+    "contentAr": "Content (Arabic)",
+    "tags": "Tags",
+    "tagsHint": "e.g. basics, security, networks",
+    "search": "Search notes..."
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel"
   }
 }
