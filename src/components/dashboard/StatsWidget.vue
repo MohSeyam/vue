@@ -30,7 +30,7 @@
     </v-list>
     <v-row class="mt-4">
       <v-col cols="12">
-        <DoughnutChart :chart-data="doughnutData" :chart-options="doughnutOptions" style="max-width:220px;margin:auto;"/>
+        <DoughnutChart :data="doughnutData" :options="doughnutOptions" style="max-width:220px;margin:auto;"/>
       </v-col>
     </v-row>
     <v-progress-linear :model-value="progress" color="primary" height="8" rounded class="mt-2" />
