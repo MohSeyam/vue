@@ -24,8 +24,6 @@ import Breadcrumbs from '../common/Breadcrumbs.vue';
 import { inject, computed } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
-import { useRoute } from 'vue-router';
-const route = useRoute();
 const { phaseList, t, lang } = inject('app') as any;
 const phases = computed(() => Object.entries(phaseList.value).map(([id, phase]: [string, any]) => ({
   id,
@@ -34,8 +32,5 @@ const phases = computed(() => Object.entries(phaseList.value).map(([id, phase]: 
 })));
 function goToPhase(phaseId: string | number) {
   router.push({ name: 'weeks', params: { phaseId } });
-}
-function goBack() {
-  router.back();
 }
 </script>

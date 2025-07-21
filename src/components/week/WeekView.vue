@@ -27,7 +27,7 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 const { plan, phaseList, lang } = inject('app') as any;
-const phaseId = computed(() => route.params.phaseId);
+const phaseId = computed(() => Array.isArray(route.params.phaseId) ? route.params.phaseId[0] : route.params.phaseId);
 const weeks = computed(() => plan.value.filter((w: any) => w.phase == phaseId.value));
 const phaseTitle = computed(() => phaseList.value[phaseId.value]?.title?.[lang] || 'Phase');
 function goToWeek(weekId: number) {
