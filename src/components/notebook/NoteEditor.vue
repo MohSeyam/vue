@@ -62,5 +62,5 @@ function submit() {
 }
 </script>
 <style scoped>
-.input { @apply w-full rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 mb-1 focus:outline-none focus:ring-2 focus:ring-primary-600; }
+.input { @apply w-full rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 mb-1 focus:outline-none focus:ring-2 focus:ring-cyan-500; }
 </style>
