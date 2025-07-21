@@ -97,6 +97,11 @@ function deleteEntry(id) {
   // حذف التدوينة (يمكنك إضافة منطق الحذف هنا)
   toastRef.value?.show('تم حذف التدوينة!', 'success')
 }
+function getDayInfo(weekNum, dayKey) {
+  const w = planStore.weeks.find(w => String(w.week) === String(weekNum))
+  const d = w?.days.find(d => d.key === dayKey)
+  return { week: w, day: d }
+}
 function exportEntries(type) {
   showExport.value = false
   const list = filteredEntries.value
@@ -104,26 +109,25 @@ function exportEntries(type) {
   if (type === 'pdf') {
     const doc = new jsPDF()
     list.forEach((entry, i) => {
-      const day = getDayLabel(entry.week, entry.dayKey)
-      const date = getDayDate(entry.week, entry.dayKey)
+      const info = getDayInfo(selectedWeek.value, selectedDayKey.value)
+      const dayLabel = info.day ? (info.day.day?.[exportLang.value] || info.day.day?.en) : selectedDayKey.value
+      const weekLabel = info.week ? (info.week.title?.[exportLang.value] || info.week.title?.en) : selectedWeek.value
+      doc.setFontSize(12)
+      doc.text(`${weekLabel} / ${dayLabel}`, 10, 16 + i * 50)
       doc.setFontSize(14)
-      doc.text((entry.title[exportLang.value] || entry.title.en) + ' [' + day + (date ? ' - ' + date : '') + ']', 10, 20)
-      doc.setFontSize(11)
-      doc.text((entry.content[exportLang.value] || entry.content.en), 10, 28)
-      if (entry.tags?.length) doc.text('Tags: ' + entry.tags.join(', '), 10, 36)
+      doc.text(entry.content, 10, 24 + i * 50)
+      if (entry.tags?.length) doc.text('Tags: ' + entry.tags.join(', '), 10, 32 + i * 50)
       if (i < list.length - 1) doc.addPage()
     })
     doc.save('journal.pdf')
     toastRef.value?.show('تم تصدير التدوينات كـ PDF!', 'success')
   } else if (type === 'md') {
-    const turndownService = new TurndownService()
     let md = ''
     list.forEach(entry => {
-      const day = getDayLabel(entry.week, entry.dayKey)
-      const date = getDayDate(entry.week, entry.dayKey)
-      md += `# ${(entry.title[exportLang.value] || entry.title.en)}\n`;
-      md += `**Day:** ${day}${date ? ' - ' + date : ''}\n`;
-      md += `\n${turndownService.turndown(entry.content[exportLang.value] || entry.content.en)}\n`
+      const info = getDayInfo(selectedWeek.value, selectedDayKey.value)
+      const dayLabel = info.day ? (info.day.day?.[exportLang.value] || info.day.day?.en) : selectedDayKey.value
+      const weekLabel = info.week ? (info.week.title?.[exportLang.value] || info.week.title?.en) : selectedWeek.value
+      md += `> ${weekLabel} / ${dayLabel}\n# تدوينة\n\n${entry.content}\n`
       if (entry.tags?.length) md += `\n**Tags:** ${entry.tags.join(', ')}\n`
       md += '\n---\n'
     })
@@ -138,10 +142,11 @@ function exportEntries(type) {
   } else if (type === 'html') {
     let html = '<html><body>'
     list.forEach(entry => {
-      const day = getDayLabel(entry.week, entry.dayKey)
-      const date = getDayDate(entry.week, entry.dayKey)
-      html += `<h2>${entry.title[exportLang.value] || entry.title.en} [${day}${date ? ' - ' + date : ''}]</h2>`
-      html += `<div>${entry.content[exportLang.value] || entry.content.en}</div>`
+      const info = getDayInfo(selectedWeek.value, selectedDayKey.value)
+      const dayLabel = info.day ? (info.day.day?.[exportLang.value] || info.day.day?.en) : selectedDayKey.value
+      const weekLabel = info.week ? (info.week.title?.[exportLang.value] || info.week.title?.en) : selectedWeek.value
+      html += `<h2>${weekLabel} / ${dayLabel}</h2>`
+      html += `<div>${entry.content}</div>`
       if (entry.tags?.length) html += `<div><b>Tags:</b> ${entry.tags.join(', ')}</div>`
       html += '<hr/>'
     })
@@ -155,15 +160,5 @@ function exportEntries(type) {
     URL.revokeObjectURL(url)
     toastRef.value?.show('تم تصدير التدوينات كـ HTML!', 'success')
   }
-}
-function getDayLabel(week, dayKey) {
-  const w = planStore.weeks.find(w => String(w.week) === String(week))
-  const d = w?.days.find(d => d.key === dayKey)
-  return d ? d.day.en : dayKey
-}
-function getDayDate(week, dayKey) {
-  const w = planStore.weeks.find(w => String(w.week) === String(week))
-  const d = w?.days.find(d => d.key === dayKey)
-  return d?.date
 }
 </script>
