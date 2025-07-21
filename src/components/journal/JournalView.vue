@@ -1,94 +1,74 @@
 <template>
-  <div class="max-w-4xl mx-auto py-10 px-4">
-    <Toast ref="toastRef" />
-    <div class="mb-4 flex flex-wrap gap-2 items-center justify-between">
-      <div class="flex gap-2 flex-wrap items-center">
-        <select v-model="selectedWeek" class="rounded border px-2 py-1 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-xs">
-          <option v-for="w in weekOptions" :key="w.value" :value="w.value">{{ w.label }}</option>
-        </select>
-        <select v-model="selectedDayKey" class="rounded border px-2 py-1 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-xs">
-          <option v-for="d in dayOptions" :key="d.value" :value="d.value">{{ d.label }}</option>
-        </select>
-      </div>
-      <div class="flex gap-2 flex-wrap">
-        <button @click="openEditor()" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-          إضافة تدوينة
-        </button>
-      </div>
-    </div>
-    <div class="mb-2 text-sm text-gray-500 dark:text-gray-300">عدد التدوينات: {{ filteredEntries.length }}</div>
-    <JournalEntriesList :entries="filteredEntries" :search="search" @edit="editEntry" @delete="deleteEntry" />
-    <JournalEntry v-if="showEditor" :entry="editingEntry" @save="saveEntry" @close="closeEditor" />
-  </div>
+  <v-container fluid class="py-8">
+    <v-row class="mb-4" align="center">
+      <v-col cols="12" md="6">
+        <v-text-field v-model="search" :label="$t('journal.search')" prepend-inner-icon="mdi-magnify" clearable></v-text-field>
+      </v-col>
+      <v-col cols="12" md="6" class="text-end">
+        <v-btn color="primary" prepend-icon="mdi-plus" @click="openEditor = true">{{ $t('journal.addEntry') }}</v-btn>
+      </v-col>
+    </v-row>
+    <v-row class="mb-4">
+      <v-col cols="12">
+        <v-chip-group v-model="selectedTag" row>
+          <v-chip v-for="tag in allTags" :key="tag" :value="tag" filter>{{ tag }}</v-chip>
+        </v-chip-group>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col v-for="entry in filteredEntries" :key="entry.id" cols="12" sm="6" md="4">
+        <v-card class="pa-4 mb-4" elevation="6">
+          <v-card-title class="font-weight-bold text-primary">{{ formatDate(entry.createdAt) }}</v-card-title>
+          <v-card-text class="mb-2">{{ entry.content.slice(0, 120) }}...</v-card-text>
+          <div class="d-flex flex-wrap gap-1 mb-2">
+            <v-chip v-for="tag in entry.tags" :key="tag" size="x-small" color="secondary" class="me-1">{{ tag }}</v-chip>
+          </div>
+          <v-btn color="primary" icon="mdi-pencil" @click="editEntry(entry)" size="small" class="me-2"/><v-btn color="error" icon="mdi-delete" @click="deleteEntry(entry.id)" size="small"/>
+        </v-card>
+      </v-col>
+      <v-col v-if="filteredEntries.length === 0" cols="12">
+        <v-alert type="info" color="primary">{{ $t('journal.noEntries') }}</v-alert>
+      </v-col>
+    </v-row>
+    <JournalEntry v-if="openEditor" :entry="editingEntry" @save="saveEntry" @close="closeEditor" />
+  </v-container>
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { usePlanStore } from '@/stores/usePlanStore'
+import { ref, computed } from 'vue'
 import { useJournalStore } from '@/stores/useJournalStore'
-import Toast from '@/components/common/Toast.vue'
-import JournalEntriesList from './JournalEntriesList.vue'
 import JournalEntry from './JournalEntry.vue'
-const planStore = usePlanStore()
-const journalStore = useJournalStore()
-const showEditor = ref(false)
-const editingEntry = ref<any>(null)
+const store = useJournalStore()
+const openEditor = ref(false)
+const editingEntry = ref(null)
 const search = ref('')
 const selectedTag = ref('')
-const toastRef = ref()
-const selectedWeek = ref('')
-const selectedDayKey = ref('')
-const weekOptions = computed(() => planStore.weeks.map(w => ({ label: w.title.en, value: String(w.week) })))
-const dayOptions = computed(() => {
-  const week = planStore.weeks.find(w => String(w.week) === selectedWeek.value)
-  return week ? week.days.map(d => ({ label: d.day.en, value: d.key })) : []
-})
+const allTags = computed(() => Array.from(new Set(store.entries.flatMap(e => e.tags || []))))
 const filteredEntries = computed(() => {
-  let list = journalStore.getJournalsByDayKey(selectedDayKey.value)
-  if (selectedTag.value) list = list.filter(e => e.tags?.includes(selectedTag.value))
+  let entries = store.entries
+  if (selectedTag.value) entries = entries.filter(e => e.tags?.includes(selectedTag.value))
   if (search.value) {
     const q = search.value.toLowerCase()
-    list = list.filter(e => e.content.toLowerCase().includes(q))
+    entries = entries.filter(e => e.content.toLowerCase().includes(q))
   }
-  return list
+  return entries
 })
-onMounted(() => {
-  if (!planStore.planLoaded) planStore.loadPlan()
-  setTimeout(() => {
-    if (planStore.weeks.length) {
-      selectedWeek.value = String(planStore.weeks[0].week)
-      selectedDayKey.value = planStore.weeks[0].days[0].key
-    }
-  }, 300)
-})
-function openEditor() {
-  editingEntry.value = { id: '', dayKey: selectedDayKey.value, content: '', createdAt: new Date().toISOString(), tags: [] }
-  showEditor.value = true
-}
-function editEntry(entry: any) {
+function editEntry(entry) {
   editingEntry.value = entry
-  showEditor.value = true
+  openEditor.value = true
 }
 function closeEditor() {
-  showEditor.value = false
+  openEditor.value = false
   editingEntry.value = null
 }
-function saveEntry(entry: any) {
-  if (!selectedWeek.value || !selectedDayKey.value) {
-    toastRef.value?.show('اختر الأسبوع واليوم أولاً!', 'error')
-    return
-  }
-  if (!entry.id) {
-    journalStore.addEntry({ ...entry, dayKey: selectedDayKey.value })
-    toastRef.value?.show('تمت إضافة التدوينة!', 'success')
-  } else {
-    // تحديث التدوينة (يمكنك إضافة منطق التحديث هنا)
-    toastRef.value?.show('تم تحديث التدوينة!', 'success')
-  }
+function saveEntry(entry) {
+  if (entry.id) store.updateEntry(entry)
+  else store.addEntry(entry)
   closeEditor()
 }
-function deleteEntry() {
-  // حذف التدوينة (يمكنك إضافة منطق الحذف هنا)
-  toastRef.value?.show('تم حذف التدوينة!', 'success')
+function deleteEntry(id) {
+  store.deleteEntry(id)
+}
+function formatDate(date) {
+  return new Date(date).toLocaleDateString()
 }
 </script>
