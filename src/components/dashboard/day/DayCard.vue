@@ -17,5 +17,11 @@
 </template>
 <script setup lang="ts">
 import { inject } from 'vue';
+defineProps<{
+  dayTitle: string;
+  dayTopic: string;
+  tasks: any[];
+  dayKey: string;
+}>();
 const { t } = inject('app') as any;
 </script>

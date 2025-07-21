@@ -14,7 +14,7 @@
     </v-row>
     <v-row class="mt-8">
       <v-col v-for="(phase, key) in phases" :key="key" cols="12" md="6">
-        <PhaseCard :phase-id="key" :phase-title="phase.title[lang]" :phase-range="phase.range[lang]" :progress="getPhaseProgress(key)" @view-phase="goToPhase" />
+        <PhaseCard :phase-id="String(key)" :phase-title="phase.title[lang]" :phase-range="phase.range[lang]" :progress="getPhaseProgress(String(key))" @view-phase="goToPhase" />
       </v-col>
     </v-row>
     <v-row class="mt-8">
@@ -51,9 +51,9 @@ function getPhaseProgress(phaseKey: string) {
   const total = phaseWeeks.reduce((acc: number, w: any) => acc + w.days.reduce((a: number, d: any) => a + d.tasks.length, 0), 0);
   return total > 0 ? Math.round((phaseWeeks.reduce((acc: number, w: any) => acc + w.days.reduce((a: number, d: any) => a + d.tasks.filter((t: any) => t.completed).length, 0), 0) / total) * 100) : 0;
 }
-function goToWeek(id: number) { /* ربط مع التنقل */ }
-function goToPhase(id: number) { /* ربط مع التنقل */ }
-function goToDay(key: string) { /* ربط مع التنقل */ }
+function goToWeek(_id: number) { /* ربط مع التنقل */ }
+function goToPhase(_id: string | number) { /* ربط مع التنقل */ }
+function goToDay(_key: string) { /* ربط مع التنقل */ }
 const achievements = computed(() => [
   { id: 'a1', title: t.value['firstNote' as 'ar' | 'en'] || 'أول ملاحظة', date: '2024-05-01' },
   { id: 'a2', title: t.value['weekComplete' as 'ar' | 'en'] || 'إكمال أسبوع', date: '2024-05-07' },

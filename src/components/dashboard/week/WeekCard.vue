@@ -13,5 +13,11 @@
 </template>
 <script setup lang="ts">
 import { inject } from 'vue';
+defineProps<{
+  weekTitle: string;
+  weekSubtitle: string;
+  progress: number;
+  weekId: number;
+}>();
 const { t } = inject('app') as any;
 </script>

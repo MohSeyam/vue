@@ -13,5 +13,11 @@
 </template>
 <script setup lang="ts">
 import { inject } from 'vue';
+defineProps<{
+  phaseTitle: string;
+  phaseRange: string;
+  progress: number;
+  phaseId: string | number;
+}>();
 const { t } = inject('app') as any;
 </script>
