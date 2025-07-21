@@ -33,7 +33,7 @@ import { getText } from '@/utils/getText'
 import NoteCard from './NoteCard.vue'
 import NoteEditor from './NoteEditor.vue'
 import SearchBar from './SearchBar.vue'
-import { LocalizedString, Note } from '@/types/plan'
+import type { Note } from '@/types/plan'
 
 const store = useNotebookStore()
 const search = ref('')

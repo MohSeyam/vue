@@ -45,7 +45,9 @@
     "notebook": "Notebook",
     "achievements": "Achievements",
     "journal": "Journal",
-    "settings": "Settings"
+    "settings": "Settings",
+    "langSwitch": "Switch Language",
+    "themeSwitch": "Toggle Dark/Light Mode"
   },
   "common": {
     "save": "Save",

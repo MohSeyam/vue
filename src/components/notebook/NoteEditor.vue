@@ -33,8 +33,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
-import { Note } from '@/types/plan'
+import { ref, watch } from 'vue'
+import type { Note } from '@/types/plan'
 const props = defineProps<{ note?: Note|null }>()
 const emit = defineEmits(['save', 'close'])
 
@@ -62,5 +62,5 @@ function submit() {
 }
 </script>
 <style scoped>
-.input { @apply w-full rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 mb-1 focus:outline-none focus:ring-2 focus:ring-primary-600; }
+.input { @apply w-full rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 mb-1 focus:outline-none focus:ring-2 focus:ring-cyan-500; }
 </style>
