@@ -11,6 +11,7 @@
 </template>
 <script setup lang="ts">
 import { inject } from 'vue';
+defineProps<{ achievements: any[] }>();
 const { t } = inject('app') as any;
 // props غير مستخدم فعلياً
 </script>

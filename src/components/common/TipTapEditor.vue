@@ -10,7 +10,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 const props = defineProps<{ modelValue: string, rtl?: boolean }>();
 const emit = defineEmits(['update:modelValue']);
-const editor = ref<Editor | null>(null);
+const editor = ref<Editor>();
 onMounted(() => {
   editor.value = new Editor({
     content: props.modelValue,
@@ -30,7 +30,7 @@ onMounted(() => {
   });
 });
 watch(() => props.modelValue, v => {
-  if (editor.value && editor.value.getHTML() !== v) editor.value.commands.setContent(v || '', false);
+  if (editor.value && editor.value.getHTML() !== v) editor.value.commands.setContent(v || '', {});
 });
 onBeforeUnmount(() => {
   editor.value?.destroy();

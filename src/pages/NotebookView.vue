@@ -71,7 +71,7 @@ const allNotes = computed(() => {
       });
     });
   });
-  return notesList.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  return notesList.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 });
 const allTags = computed(() => {
   const tags = new Set<string>();
@@ -85,7 +85,7 @@ function openNote(note: any) {
   activeNote.value = { ...note };
   noteDialogOpen.value = true;
 }
-function saveNote(note: any) { noteDialogOpen.value = false; }
+function saveNote(_note: any) { noteDialogOpen.value = false; }
 function deleteNote() { noteDialogOpen.value = false; }
 function closeDialog() { noteDialogOpen.value = false; }
 function formatDate(date: string, lang: string) {
