@@ -4,7 +4,7 @@
     <div class="flex gap-2 mb-2">
       <span v-for="(label, key) in statLabels" :key="key" class="px-2 py-0.5 rounded text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300">{{ label }}</span>
     </div>
-    <div class="text-2xl font-bold">{{ stats.value.weeks }} / {{ stats.value.tasks }} / {{ stats.value.days }}</div>
+    <div class="text-2xl font-bold">{{ stats.weeks }} / {{ stats.tasks }} / {{ stats.days }}</div>
     <div class="text-xs text-gray-400 mt-1">إحصائيات الخطة</div>
   </div>
 </template>
