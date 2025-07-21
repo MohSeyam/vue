@@ -40,6 +40,13 @@
     "tagsHint": "e.g. basics, security, networks",
     "search": "Search notes..."
   },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "notebook": "Notebook",
+    "achievements": "Achievements",
+    "journal": "Journal",
+    "settings": "Settings"
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel"

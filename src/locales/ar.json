@@ -40,6 +40,13 @@
     "tagsHint": "مثال: أساسيات, أمن, شبكات",
     "search": "بحث في الملاحظات..."
   },
+  "sidebar": {
+    "dashboard": "الرئيسية",
+    "notebook": "الملاحظات",
+    "achievements": "الإنجازات",
+    "journal": "التدوين",
+    "settings": "الإعدادات"
+  },
   "common": {
     "save": "حفظ",
     "cancel": "إلغاء"
