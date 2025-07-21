@@ -84,5 +84,8 @@
     "exportPDF": "تصدير PDF",
     "exportMD": "تصدير Markdown",
     "notesCount": "عدد الملاحظات: {count}"
+  },
+  "journal": {
+    "copy": "نسخ المحتوى"
   }
 }
