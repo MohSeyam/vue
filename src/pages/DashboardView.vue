@@ -36,7 +36,7 @@ import PhaseCard from '../components/dashboard/phase/PhaseCard.vue';
 import DayCard from '../components/dashboard/day/DayCard.vue';
 import AchievementsList from '../components/dashboard/achievements/AchievementsList.vue';
 import ProgressChart from '../components/charts/ProgressChart.vue';
-const { plan, phaseList, lang, t } = inject('app') as any;
+const { plan, phaseList, lang, t, setView } = inject('app') as any;
 const weeks = computed(() => plan.value);
 const phases = computed(() => phaseList.value);
 const currentWeek = computed(() => weeks.value[0]); // يمكن تحسينه لاحقًا
@@ -51,8 +51,12 @@ function getPhaseProgress(phaseKey: string) {
   const total = phaseWeeks.reduce((acc: number, w: any) => acc + w.days.reduce((a: number, d: any) => a + d.tasks.length, 0), 0);
   return total > 0 ? Math.round((phaseWeeks.reduce((acc: number, w: any) => acc + w.days.reduce((a: number, d: any) => a + d.tasks.filter((t: any) => t.completed).length, 0), 0) / total) * 100) : 0;
 }
-function goToWeek(_id: number) { /* ربط مع التنقل */ }
-function goToPhase(_id: string | number) { /* ربط مع التنقل */ }
+function goToPhase(phaseId: string | number) {
+  setView({ page: 'week', params: { phaseId } });
+}
+function goToWeek(weekId: number) {
+  setView({ page: 'day', params: { weekId } });
+}
 function goToDay(_key: string) { /* ربط مع التنقل */ }
 const achievements = computed(() => [
   { id: 'a1', title: t.value['firstNote' as 'ar' | 'en'] || 'أول ملاحظة', date: '2024-05-01' },
