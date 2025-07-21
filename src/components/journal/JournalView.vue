@@ -4,6 +4,10 @@
     <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
       <h1 class="text-2xl font-bold">{{ $t('journal.title') }}</h1>
       <div class="flex gap-2 flex-wrap">
+        <select v-model="selectedDay" class="rounded border px-2 py-1 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
+          <option value="">{{ $t('journal.allDays') }}</option>
+          <option v-for="d in allDays" :key="d.value" :value="d.value">{{ d.label }}</option>
+        </select>
         <button @click="showExport = !showExport" :disabled="!filteredEntries.length" class="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200 px-3 py-2 rounded-lg shadow hover:bg-green-200 dark:hover:bg-green-800 transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
           {{ $t('journal.export') }}
@@ -28,7 +32,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { usePlanStore } from '@/stores/usePlanStore'
 import Toast from '@/components/common/Toast.vue'
 import TagFilter from './TagFilter.vue'
 import SearchBar from './SearchBar.vue'
@@ -36,9 +41,11 @@ import JournalEntriesList from './JournalEntriesList.vue'
 import JournalEntry from './JournalEntry.vue'
 import jsPDF from 'jspdf'
 import TurndownService from 'turndown'
+const planStore = usePlanStore()
 const entries = ref([
-  { id: '1', title: { en: 'First Journal', ar: 'أول تدوينة' }, content: { en: 'Today I learned...', ar: 'اليوم تعلمت...' }, date: '2024-06-01', tags: ['reflection'] },
-  { id: '2', title: { en: 'Cybersecurity Note', ar: 'ملاحظة أمنية' }, content: { en: 'Cybersecurity is important...', ar: 'الأمن السيبراني مهم...' }, date: '2024-06-02', tags: ['cyber', 'reflection'] }
+  // كل تدوينة مرتبطة بـ week و dayKey
+  { id: '1', title: { en: 'First Journal', ar: 'أول تدوينة' }, content: { en: 'Today I learned...', ar: 'اليوم تعلمت...' }, week: 1, dayKey: 'sat', tags: ['reflection'] },
+  { id: '2', title: { en: 'Cybersecurity Note', ar: 'ملاحظة أمنية' }, content: { en: 'Cybersecurity is important...', ar: 'الأمن السيبراني مهم...' }, week: 1, dayKey: 'sun', tags: ['cyber', 'reflection'] }
 ])
 const showEditor = ref(false)
 const editingEntry = ref(null)
@@ -46,15 +53,37 @@ const showExport = ref(false)
 const search = ref('')
 const selectedTag = ref('')
 const toastRef = ref()
+const selectedDay = ref('')
 const allTags = computed(() => Array.from(new Set(entries.value.flatMap(e => e.tags || []))))
+const allDays = computed(() => {
+  const days: { label: string, value: string, week: number, dayKey: string }[] = []
+  planStore.weeks.forEach(w => {
+    w.days.forEach(d => {
+      days.push({
+        label: `${w.week} - ${d.day.en} (${d.key})`,
+        value: `${w.week}|${d.key}`,
+        week: w.week ?? 0,
+        dayKey: d.key
+      })
+    })
+  })
+  return days
+})
 const filteredEntries = computed(() => {
   let list = entries.value
+  if (selectedDay.value) {
+    const [week, dayKey] = selectedDay.value.split('|')
+    list = list.filter(e => String(e.week) === week && e.dayKey === dayKey)
+  }
   if (selectedTag.value) list = list.filter(e => e.tags?.includes(selectedTag.value))
   if (search.value) {
     const q = search.value.toLowerCase()
     list = list.filter(e => e.title.en.toLowerCase().includes(q) || e.content.en.toLowerCase().includes(q) || e.title.ar.toLowerCase().includes(q) || e.content.ar.toLowerCase().includes(q))
   }
   return list
+})
+onMounted(() => {
+  if (!planStore.planLoaded) planStore.loadPlan()
 })
 function openEditor() {
   editingEntry.value = null
@@ -69,14 +98,21 @@ function closeEditor() {
   editingEntry.value = null
 }
 function saveEntry(entry) {
-  if (entry.id) {
-    const idx = entries.value.findIndex(e => e.id === entry.id)
-    if (idx !== -1) entries.value[idx] = entry
-    toastRef.value?.show('تم تحديث التدوينة!', 'success')
-  } else {
+  if (!selectedDay.value && !entry.id) {
+    toastRef.value?.show('اختر اليوم أولاً!', 'error')
+    return
+  }
+  if (!entry.id) {
+    const [week, dayKey] = selectedDay.value.split('|')
+    entry.week = Number(week)
+    entry.dayKey = dayKey
     entry.id = Date.now().toString()
     entries.value.unshift(entry)
     toastRef.value?.show('تم إضافة التدوينة!', 'success')
+  } else {
+    const idx = entries.value.findIndex(e => e.id === entry.id)
+    if (idx !== -1) entries.value[idx] = entry
+    toastRef.value?.show('تم تحديث التدوينة!', 'success')
   }
   closeEditor()
 }
