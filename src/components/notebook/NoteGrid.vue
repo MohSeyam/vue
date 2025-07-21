@@ -1,24 +1,28 @@
 <template>
   <div>
-    <div class="mb-4 flex flex-wrap gap-2 items-center justify-between">
-      <div class="flex gap-2 flex-wrap">
+    <v-row class="mb-4" align="center" justify="space-between" no-gutters>
+      <v-col cols="12" sm="8">
         <TagFilter :tags="allTags" v-model:selectedTag="selectedTag" />
-      </div>
-      <div class="w-full md:w-64">
+      </v-col>
+      <v-col cols="12" sm="4">
         <SearchBar v-model="search" />
-      </div>
-    </div>
-    <transition-group name="fade" tag="div" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <NoteCard
-        v-for="note in notes"
-        :key="note.id"
-        :note="note"
-        :search="search"
-        @edit="$emit('edit', note)"
-        @delete="$emit('delete', note.id)"
-      />
-    </transition-group>
-    <div v-if="!notes.length" class="text-center text-gray-400 mt-8 text-lg font-bold">{{ $t('notebook.noNotes') }}</div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <transition-group name="fade" tag="div" class="w-100 d-flex flex-wrap gap-4">
+        <v-col v-for="note in notes" :key="note.id" cols="12" sm="6" md="4">
+          <NoteCard
+            :note="note"
+            :search="search"
+            @edit="$emit('edit', note)"
+            @delete="$emit('delete', note.id)"
+          />
+        </v-col>
+      </transition-group>
+    </v-row>
+    <v-alert v-if="!notes.length" type="info" class="mt-8 text-center" border="start" color="primary" variant="tonal">
+      {{ $t('notebook.noNotes') }}
+    </v-alert>
   </div>
 </template>
 <script setup lang="ts">
