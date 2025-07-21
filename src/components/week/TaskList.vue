@@ -13,6 +13,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import type { Task } from '@/types/plan'
-const props = defineProps<{ tasks: Task[] }>()
-const { t } = useI18n()
+defineProps<{ tasks: Task[] }>()
+useI18n()
 </script>
