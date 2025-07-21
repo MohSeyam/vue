@@ -1,10 +1,14 @@
 <template>
   <div>
-    <div class="mb-4 flex flex-wrap gap-2">
-      <TagFilter :tags="allTags" v-model:selectedTag="selectedTag" />
-      <SearchBar v-model="search" />
+    <div class="mb-4 flex flex-wrap gap-2 items-center justify-between">
+      <div class="flex gap-2 flex-wrap">
+        <TagFilter :tags="allTags" v-model:selectedTag="selectedTag" />
+      </div>
+      <div class="w-full md:w-64">
+        <SearchBar v-model="search" />
+      </div>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <NoteCard
         v-for="note in filteredNotes"
         :key="note.id"
@@ -13,7 +17,7 @@
         @delete="$emit('delete', note.id)"
       />
     </div>
-    <div v-if="!filteredNotes.length" class="text-center text-gray-400 mt-8">{{ $t('notebook.noNotes') }}</div>
+    <div v-if="!filteredNotes.length" class="text-center text-gray-400 mt-8 text-lg font-bold">{{ $t('notebook.noNotes') }}</div>
   </div>
 </template>
 <script setup lang="ts">

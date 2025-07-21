@@ -41,7 +41,8 @@
     "search": "Search notes...",
     "templates": "Templates",
     "graphTitle": "Notes Graph Relationships",
-    "graphDesc": "Graph visualization of note relationships coming soon."
+    "graphDesc": "Graph visualization of note relationships coming soon.",
+    "allTags": "All"
   },
   "sidebar": {
     "dashboard": "Dashboard",
