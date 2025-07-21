@@ -1,22 +1,39 @@
+export interface LocalizedString {
+  en: string;
+  ar: string;
+}
+
+export interface Resource {
+  type: string;
+  title: string;
+  url: string;
+}
+
 export interface Task {
   id: string;
-  title: string;
-  done: boolean;
+  type: string;
+  duration: number;
+  description: LocalizedString;
 }
+
+export interface NotesPrompt {
+  title: LocalizedString;
+  points: LocalizedString[];
+}
+
 export interface Day {
-  id: string;
-  date: string;
+  key: string;
+  day: LocalizedString;
+  topic: LocalizedString;
   tasks: Task[];
-  resources?: any[];
+  resources: Resource[];
+  notes_prompt: NotesPrompt;
 }
+
 export interface Week {
-  id: string;
-  title: string;
+  week: number;
+  phase: number;
+  title: LocalizedString;
+  objective: LocalizedString;
   days: Day[];
-}
-export interface Phase {
-  id: string;
-  title: string;
-  goal: string;
-  weeks: Week[];
 }
