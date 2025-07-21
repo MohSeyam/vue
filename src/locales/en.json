@@ -15,5 +15,9 @@
   "settings": {
     "title": "Settings",
     "language": "Language"
+  },
+  "resources": {
+    "noResources": "No resources for today.",
+    "open": "Open link"
   }
 }
