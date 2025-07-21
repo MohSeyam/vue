@@ -45,7 +45,9 @@
     "notebook": "الملاحظات",
     "achievements": "الإنجازات",
     "journal": "التدوين",
-    "settings": "الإعدادات"
+    "settings": "الإعدادات",
+    "langSwitch": "تبديل اللغة",
+    "themeSwitch": "تبديل الوضع الليلي/النهاري"
   },
   "common": {
     "save": "حفظ",
