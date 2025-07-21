@@ -29,7 +29,7 @@ export interface Note {
   title: LocalizedString;
   content: LocalizedString;
   tags?: string[];
-  taskId: string;
+  taskId?: string;
 }
 
 export interface Day {
