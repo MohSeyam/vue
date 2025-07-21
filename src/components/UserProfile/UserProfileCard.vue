@@ -84,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+// Removed: import { ref } from 'vue';
 
 interface Skill {
   name: string;
@@ -113,9 +113,9 @@ interface User {
   recentActivity: Activity[];
 }
 
-const props = defineProps<{
-  user: User;
-}>();
+// Removed: const props = defineProps<{ user: User }>();
+
+defineProps<{ user: User }>();
 
 function editProfile() {
   // TODO: Implement profile editing
