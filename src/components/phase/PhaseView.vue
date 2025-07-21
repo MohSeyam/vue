@@ -1,6 +1,9 @@
 <template>
   <v-container fluid class="py-8">
-    <v-btn v-if="route.fullPath !== '/'" @click="goBack" color="primary" class="mb-4">رجوع</v-btn>
+    <Breadcrumbs :items="[
+      { text: t.home, to: '/' },
+      { text: t.planOverview }
+    ]" />
     <v-row justify="center">
       <v-col cols="12" md="8">
         <v-card class="pa-6 mb-4" elevation="8">
@@ -22,6 +25,9 @@ const router = useRouter();
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute();
+import Breadcrumbs from '../common/Breadcrumbs.vue';
+import { inject } from 'vue';
+const { t } = inject('app') as any;
 // Dummy phases data for demonstration, replace with real data
 const phases = computed(() => [
   // ...
