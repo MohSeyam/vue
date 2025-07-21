@@ -1,18 +1,18 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router'
 
+// تعريف المسارات الرئيسية للتطبيق
 const routes = [
-  { path: '/', name: 'Home', component: () => import('../pages/Home.vue') },
-  { path: '/day', name: 'DayView', component: () => import('../pages/DayView.vue') },
-  { path: '/notebook', name: 'Notebook', component: () => import('../pages/Notebook.vue') },
-  { path: '/achievements', name: 'Achievements', component: () => import('../pages/Achievements.vue') },
-  { path: '/analytics', name: 'Analytics', component: () => import('../pages/Analytics.vue') },
-  { path: '/profile', name: 'Profile', component: () => import('../pages/Profile.vue') },
-  { path: '/settings', name: 'Settings', component: () => import('../pages/Settings.vue') },
-  { path: '/search', name: 'Search', component: () => import('../pages/Search.vue') },
-  { path: '/login', name: 'Login', component: () => import('../pages/Login.vue') },
-];
+  { path: '/', redirect: '/dashboard' },
+  { path: '/dashboard', component: () => import('@/components/dashboard/DashboardView.vue') },
+  { path: '/phase/:id', component: () => import('@/components/phase/PhaseView.vue') },
+  { path: '/week/:id', component: () => import('@/components/week/WeekView.vue') },
+  { path: '/notebook', component: () => import('@/components/notebook/NotebookView.vue') },
+  { path: '/journal', component: () => import('@/components/journal/JournalView.vue') },
+  { path: '/achievements', component: () => import('@/components/achievements/AchievementsView.vue') },
+  { path: '/settings', component: () => import('@/components/settings/SettingsView.vue') }
+]
 
 export const router = createRouter({
   history: createWebHistory(),
-  routes,
-});
+  routes
+})
