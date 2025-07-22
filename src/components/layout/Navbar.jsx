@@ -28,8 +28,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 shadow-sm">
-      <nav className={`flex items-center justify-between h-16 max-w-7xl mx-auto px-4 ${isRTL ? 'flex-row-reverse' : ''}`}
-        dir={isRTL ? "rtl" : "ltr"}
+      <nav className={`flex items-center justify-between h-16 max-w-7xl mx-auto px-4`}
       >
         {/* شعار وأيقونة */}
         <Link to="/" className="flex items-center gap-2 group" tabIndex={0}>
@@ -59,7 +58,7 @@ export default function Navbar() {
           {/* زر اللغة */}
           <button
             onClick={toggleLang}
-            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition group relative font-bold text-lg"
+            className={`w-9 h-9 flex items-center justify-center rounded-full font-extrabold text-lg shadow-sm transition border border-blue-200 dark:border-blue-800 ${lang === "ar" ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-white" : "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-white"}`}
             aria-label={t("changeLanguage", "تغيير اللغة")}
           >
             {lang === "ar" ? "ع" : "E"}

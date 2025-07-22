@@ -42,12 +42,16 @@ export default function WeekCard({ week, onClick, className = "", progress = 0, 
       role="button"
       aria-label={week.title?.[lang] || week.title?.ar || week.title?.en}
     >
+      {/* رقم الأسبوع في الأعلى */}
+      <div className="flex justify-center mb-2">
+        <span className={`inline-block rounded-full bg-${color}-100 text-${color}-700 dark:bg-${color}-900 dark:text-${color}-200 px-3 py-1 text-xs font-bold shadow-sm border border-white dark:border-zinc-800`}>
+          {t("week", "أسبوع")} {week.week}
+        </span>
+      </div>
+      {/* اسم الأسبوع */}
       <div className="flex items-center justify-between mb-1">
-        <span className="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+        <span className="font-bold text-slate-900 dark:text-white text-base">
           {week.title?.[lang] || week.title?.ar || week.title?.en}
-          <span className={`text-xs bg-${color}-100 text-${color}-700 dark:bg-${color}-900 dark:text-${color}-200 rounded-full px-2 py-0.5 font-bold shadow-sm`}>
-            {t("week", "أسبوع")} {week.week}
-          </span>
         </span>
       </div>
       <div className={`text-xs text-${color}-700 dark:text-${color}-300 mb-1`}>
