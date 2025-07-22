@@ -3,7 +3,7 @@ import { AppContext } from "../../context/AppContext";
 
 // NoteEditor component
 function NoteEditor({ note, taskDescription, onSave, onDelete }) {
-    const { lang, translations, setModal, ReactQuill } = useContext(AppContext);
+    const { lang, translations, setModal, ReactQuill, setAppState, appState } = useContext(AppContext);
     const t = translations[lang];
     const [title, setTitle] = useState(note.title || '');
     const [content, setContent] = useState(note.content || '');
@@ -17,6 +17,17 @@ function NoteEditor({ note, taskDescription, onSave, onDelete }) {
         ['link'],
         ['clean']
       ],
+    };
+
+    // حفظ الملاحظة فعليًا
+    const handleSave = () => {
+        onSave({ title, content, keywords });
+        setModal({ isOpen: false, content: null });
+    };
+    // حذف الملاحظة فعليًا
+    const handleDelete = () => {
+        onDelete();
+        setModal({ isOpen: false, content: null });
     };
 
     return (
@@ -57,10 +68,10 @@ function NoteEditor({ note, taskDescription, onSave, onDelete }) {
                 </div>
             </div>
             <div className="flex justify-between items-center p-4 bg-gray-100 dark:bg-gray-800/50 rounded-b-lg">
-                <button onClick={onDelete} className="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md">{t.deleteNote}</button>
+                <button onClick={handleDelete} className="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md">{t.deleteNote}</button>
                 <div className="flex gap-2">
                     <button onClick={() => setModal({isOpen: false, content: null})} className="px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">{t.cancel}</button>
-                    <button onClick={() => onSave({title, content, keywords})} className="px-4 py-2 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">{t.saveNote}</button>
+                    <button onClick={handleSave} className="px-4 py-2 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">{t.saveNote}</button>
                 </div>
             </div>
         </>
@@ -76,7 +87,7 @@ function ResourcesSection({ weekId, dayIndex }) {
     const openResourceModal = (resource, index) => {
         setModal({
             isOpen: true,
-            content: <div>ResourceEditor Placeholder</div> // ضع هنا ResourceEditor الحقيقي إذا كان متوفرًا
+            content: <ResourceEditorModal resource={resource} index={index} weekId={weekId} dayIndex={dayIndex} />
         });
     };
     return (
@@ -97,6 +108,68 @@ function ResourcesSection({ weekId, dayIndex }) {
                         </button>
                     </div>
                 ))}
+            </div>
+        </div>
+    );
+}
+
+// ResourceEditorModal component (placeholder for actual ResourceEditor UI)
+function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
+    const { lang, setAppState, appState, setModal, translations } = useContext(AppContext);
+    const t = translations[lang];
+    const [title, setTitle] = useState(resource?.title || '');
+    const [url, setUrl] = useState(resource?.url || '');
+    const [type, setType] = useState(resource?.type || 'link');
+    // حفظ أو تعديل مرجع
+    const handleSave = () => {
+        setAppState(prev => {
+            const newState = JSON.parse(JSON.stringify(prev));
+            const arr = newState.resources[weekId]?.days[dayIndex] || [];
+            if (index === null || index === undefined) {
+                arr.push({ title, url, type });
+            } else {
+                arr[index] = { title, url, type };
+            }
+            if (!newState.resources[weekId]) newState.resources[weekId] = { days: [] };
+            newState.resources[weekId].days[dayIndex] = arr;
+            return newState;
+        });
+        setModal({ isOpen: false, content: null });
+    };
+    // حذف مرجع
+    const handleDelete = () => {
+        setAppState(prev => {
+            const newState = JSON.parse(JSON.stringify(prev));
+            const arr = newState.resources[weekId]?.days[dayIndex] || [];
+            if (index !== null && index !== undefined) arr.splice(index, 1);
+            newState.resources[weekId].days[dayIndex] = arr;
+            return newState;
+        });
+        setModal({ isOpen: false, content: null });
+    };
+    return (
+        <div className="p-6 space-y-4">
+            <h3 className="text-lg font-semibold mb-2">{t.editResource}</h3>
+            <div>
+                <label className="block text-sm font-medium mb-1">{t.resourceTitle}</label>
+                <input className="w-full p-2 rounded border" value={title} onChange={e => setTitle(e.target.value)} />
+            </div>
+            <div>
+                <label className="block text-sm font-medium mb-1">{t.resourceUrl}</label>
+                <input className="w-full p-2 rounded border" value={url} onChange={e => setUrl(e.target.value)} />
+            </div>
+            <div>
+                <label className="block text-sm font-medium mb-1">{t.resourceType}</label>
+                <select className="w-full p-2 rounded border" value={type} onChange={e => setType(e.target.value)}>
+                    <option value="video">{t.video}</option>
+                    <option value="article">{t.article}</option>
+                    <option value="link">{t.link}</option>
+                </select>
+            </div>
+            <div className="flex gap-2 mt-4">
+                <button onClick={handleDelete} className="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md">{t.deleteResource}</button>
+                <button onClick={() => setModal({ isOpen: false, content: null })} className="px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">{t.cancel}</button>
+                <button onClick={handleSave} className="px-4 py-2 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">{t.saveResource}</button>
             </div>
         </div>
     );
@@ -130,10 +203,22 @@ export default function DayView({ weekId, dayKey }) {
                         note={note} 
                         taskDescription={taskDescription}
                         onSave={(newNoteData) => {
-                            // ... (code for saving a note)
+                            setAppState(prev => {
+                                const newState = JSON.parse(JSON.stringify(prev));
+                                if (!newState.notes[weekId]) newState.notes[weekId] = { days: [] };
+                                if (!newState.notes[weekId].days[dayIndex]) newState.notes[weekId].days[dayIndex] = {};
+                                newState.notes[weekId].days[dayIndex][taskId] = newNoteData;
+                                return newState;
+                            });
                         }}
                         onDelete={() => {
-                             // ... (code for deleting a note)
+                            setAppState(prev => {
+                                const newState = JSON.parse(JSON.stringify(prev));
+                                if (newState.notes[weekId]?.days[dayIndex]?.[taskId]) {
+                                    delete newState.notes[weekId].days[dayIndex][taskId];
+                                }
+                                return newState;
+                            });
                         }}
                     />
         });
