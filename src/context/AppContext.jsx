@@ -26,6 +26,8 @@ export function AppProvider({ children }) {
   );
 }
 
+export { AppContext };
+
 export function useApp() {
   return useContext(AppContext);
 }
