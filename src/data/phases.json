@@ -1,17 +1,1 @@
-{
-  "1": {
-    "title": { "en": "Foundation", "ar": "مرحلة التأسيس" },
-    "range": { "en": "Weeks 1-17", "ar": "الأسابيع 1-17" },
-    "vuetifyColor": "blue"
-  },
-  "2": {
-    "title": { "en": "Technical Skills", "ar": "مرحلة المهارات التقنية العميقة" },
-    "range": { "en": "Weeks 18-36", "ar": "الأسابيع 18-36" },
-    "vuetifyColor": "green"
-  },
-  "3": {
-    "title": { "en": "Professional Projects", "ar": "مرحلة المشاريع الاحترافية" },
-    "range": { "en": "Weeks 37-50", "ar": "الأسابيع 37-50" },
-    "vuetifyColor": "purple"
-  }
-}
+// بيانات المراحل الثابتة
