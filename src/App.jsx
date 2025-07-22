@@ -10,19 +10,22 @@ import Journal from "./pages/Journal";
 export default function App() {
   console.log("App.jsx loaded");
   return (
-    <ThemeProvider>
-      <AppProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route element={<MainLayout />}>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/plan" element={<CyberPlan />} />
-              <Route path="/journal" element={<Journal />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </AppProvider>
-    </ThemeProvider>
+    <>
+      <div className="bg-red-500 text-white p-8 text-2xl text-center">اختبار Tailwind</div>
+      <ThemeProvider>
+        <AppProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route element={<MainLayout />}>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/plan" element={<CyberPlan />} />
+                <Route path="/journal" element={<Journal />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </AppProvider>
+      </ThemeProvider>
+    </>
   );
 }
