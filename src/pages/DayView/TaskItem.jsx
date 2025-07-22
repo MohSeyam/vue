@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useApp } from "../../context/AppContext";
 import { useState, useEffect } from "react";
 import { addNote, updateNote, getNotes } from "../../services/dbService";
-import { Dialog } from "@/components/ui/dialog";
+import Dialog from "../../components/ui/Dialog";
 
 // Utility to join class names
 function cn(...args) {
