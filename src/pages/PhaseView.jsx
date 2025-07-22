@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useApp } from "../context/AppContext";
 import { getPlanData } from "../services/dataService";
 import WeekCard from "../components/plan/WeekCard";
+import { useCyberPlan } from "../hooks/useCyberPlan";
 
 function Breadcrumbs({ phaseTitle }) {
   const { t } = useTranslation();
@@ -26,6 +27,7 @@ export default function PhaseView() {
   const [phase, setPhase] = useState(null);
   const [weeks, setWeeks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { plan } = useCyberPlan();
 
   useEffect(() => {
     async function fetchPhase() {
@@ -64,14 +66,25 @@ export default function PhaseView() {
         )}
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {weeks.map(week => (
-          <WeekCard
-            key={week.week}
-            week={week}
-            lang={lang}
-            onClick={() => navigate(`/week/${week.week}`)}
-          />
-        ))}
+        {weeks.map(week => {
+          // حساب نسبة الإنجاز
+          const allTasks = (week.days || []).flatMap(day => day.tasks || []);
+          const doneMap = {};
+          plan.forEach(w => {
+            (w.tasks || []).forEach(t => { if (t.id && t.done) doneMap[t.id] = true; });
+          });
+          const doneCount = allTasks.filter(task => doneMap[task.id]).length;
+          const progress = allTasks.length ? Math.round((doneCount / allTasks.length) * 100) : 0;
+          return (
+            <WeekCard
+              key={week.week}
+              week={week}
+              lang={lang}
+              progress={progress}
+              onClick={() => navigate(`/week/${week.week}`)}
+            />
+          );
+        })}
       </div>
     </div>
   );
