@@ -7,6 +7,8 @@ import NotFound from "./pages/NotFound";
 import CyberPlan from "./pages/CyberPlan";
 import Journal from "./pages/Journal";
 import PhaseView from "./pages/PhaseView";
+import WeekView from "./pages/WeekView";
+import DayView from "./pages/DayView";
 import { useCyberPlan } from "./hooks/useCyberPlan";
 import { useEffect, useState } from "react";
 import { getPlanData } from "./services/dataService";
@@ -46,6 +48,8 @@ export default function App() {
                 <Route path="/plan" element={<CyberPlan />} />
                 <Route path="/journal" element={<Journal />} />
                 <Route path="/phase/:phaseId" element={<PhaseView />} />
+                <Route path="/week/:weekId" element={<WeekView />} />
+                <Route path="/day/:weekId/:dayKey" element={<DayView />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
