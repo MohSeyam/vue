@@ -8,7 +8,7 @@ import PhaseCard from "../components/plan/PhaseCard";
 import UpcomingTasks from "../components/dashboard/UpcomingTasks";
 import WeekProgress from "../components/dashboard/WeekProgress";
 import AchievementsSummary from "../components/dashboard/AchievementsSummary";
-import { getPlanPhases } from "../services/dataService";
+import { getPhases } from "../services/dataService";
 
 export default function Dashboard() {
   const { t } = useTranslation();
@@ -18,7 +18,7 @@ export default function Dashboard() {
   const isRTL = lang === "ar";
 
   useEffect(() => {
-    getPlanPhases().then(setPhases);
+    getPhases().then(setPhases);
   }, []);
 
   return (
