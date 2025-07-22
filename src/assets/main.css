@@ -1,2 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* أنماط عامة */
 /* هنا توضع ملفات CSS، الخطوط، والصور */
