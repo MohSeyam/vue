@@ -55,3 +55,48 @@ export function getResourcesByWeek(weekNumber) {
 export function getPlanData() {
   return planData;
 }
+
+// استخراج جميع الموارد في الخطة كاملة
+export function getAllResources() {
+  return planData.flatMap(week =>
+    (week.days || []).flatMap(day => day.resources || [])
+  );
+}
+
+// استخراج جميع الأهداف (objective) في الخطة كاملة
+export function getAllObjectives() {
+  return planData.map(week => week.objective);
+}
+
+// استخراج جميع الأيام في الخطة كاملة
+export function getAllDays() {
+  return planData.flatMap(week => week.days || []);
+}
+
+// استخراج جميع عناوين الأسابيع (حسب اللغة)
+export function getAllWeekTitles(lang = "ar") {
+  return planData.map(week => week.title?.[lang] || week.title?.ar || week.title?.en || "");
+}
+
+// استخراج جميع عناوين المراحل (حسب اللغة)
+export function getAllPhaseTitles(lang = "ar") {
+  const phases = getPhases();
+  return phases.map(phase => phase.name);
+}
+
+// استخراج عدد الأسابيع في كل مرحلة
+export function getWeeksCountByPhase(phaseId) {
+  return planData.filter(item => item.phase === phaseId).length;
+}
+
+// استخراج جميع الموارد حسب نوعها
+export function getResourcesByType(type) {
+  return getAllResources().filter(r => r.type === type);
+}
+
+// استخراج جميع المهام (tasks) في الخطة كاملة
+export function getAllTasks() {
+  return planData.flatMap(week =>
+    (week.days || []).flatMap(day => day.tasks || [])
+  );
+}
