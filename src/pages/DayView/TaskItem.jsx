@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useApp } from "../../context/AppContext";
 import { useState, useEffect } from "react";
 import { addNote, updateNote, getNotes } from "../../services/dbService";
-import Dialog from "../../components/ui/Dialog";
+import { Dialog, DialogContent, DialogTitle } from "../../components/ui/Dialog";
 
 // Utility to join class names
 function cn(...args) {
@@ -89,8 +89,8 @@ export default function TaskItem({ task, weekId, dayKey }) {
         <i className={hasNote ? "i-lucide-notebook-pen" : "i-lucide-notebook"} />
       </button>
       <Dialog open={noteOpen} onOpenChange={setNoteOpen}>
-        <Dialog.Content>
-          <Dialog.Title>{t("taskNote", "ملاحظة المهمة")}</Dialog.Title>
+        <DialogContent>
+          <DialogTitle>{t("taskNote", "ملاحظة المهمة")}</DialogTitle>
           <textarea
             className="w-full min-h-[100px] rounded border p-2 mt-2"
             value={note}
@@ -102,7 +102,7 @@ export default function TaskItem({ task, weekId, dayKey }) {
             <button className="px-4 py-1 rounded bg-slate-200 dark:bg-zinc-700" onClick={() => setNoteOpen(false)}>{t("cancel", "إلغاء")}</button>
             <button className="px-4 py-1 rounded bg-violet-600 text-white" onClick={handleSaveNote}>{t("save", "حفظ")}</button>
           </div>
-        </Dialog.Content>
+        </DialogContent>
       </Dialog>
     </div>
   );
