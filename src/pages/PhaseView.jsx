@@ -73,6 +73,7 @@ export default function PhaseView() {
   const [weeks, setWeeks] = useState([]);
   const [loading, setLoading] = useState(true);
   const { plan } = useCyberPlan();
+  const [expandedWeek, setExpandedWeek] = useState(null);
 
   useEffect(() => {
     async function fetchPhase() {
@@ -133,6 +134,8 @@ export default function PhaseView() {
               color={phaseColor}
               DaySummaryCard={DaySummaryCard}
               dayColor="stone"
+              expanded={expandedWeek === week.week}
+              onExpand={w => setExpandedWeek(w === expandedWeek ? null : w)}
             />
           );
         })}

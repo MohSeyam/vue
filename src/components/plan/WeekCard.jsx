@@ -10,12 +10,11 @@ const shadowMap = {
   amber: "shadow-[0_4px_32px_0_rgba(245,158,11,0.25)]", // amber-500
 };
 
-export default function WeekCard({ week, className = "", color = "blue", DaySummaryCard, dayColor }) {
+export default function WeekCard({ week, className = "", color = "blue", DaySummaryCard, dayColor, expanded, onExpand }) {
   const { t } = useTranslation();
   const { lang } = useApp();
-  const [expanded, setExpanded] = useState(false);
 
-  const handleClick = () => setExpanded((v) => !v);
+  const handleClick = () => onExpand?.(week.week);
 
   return (
     <div className={`group rounded-2xl p-6 bg-black/90 ${shadowMap[color] || shadowMap.blue} hover:-translate-y-1.5 hover:shadow-2xl transition-all duration-200 cursor-pointer backdrop-blur-md flex flex-col gap-2 min-h-[120px] border border-white/10 ${className}`}
@@ -45,7 +44,7 @@ export default function WeekCard({ week, className = "", color = "blue", DaySumm
               lang={lang}
               weekId={week.week}
               color={dayColor}
-              onDayClick={() => setExpanded(false)}
+              onDayClick={() => onExpand?.(null)}
             />
           ))}
         </div>
