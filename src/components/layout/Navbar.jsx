@@ -58,7 +58,7 @@ export default function Navbar() {
           {/* زر اللغة */}
           <button
             onClick={toggleLang}
-            className={`w-9 h-9 flex items-center justify-center rounded-full font-extrabold text-lg shadow-sm transition border border-blue-200 dark:border-blue-800 ${lang === "ar" ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-white" : "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-white"}`}
+            className="font-extrabold text-2xl px-2 transition hover:text-blue-700 dark:hover:text-blue-300"
             aria-label={t("changeLanguage", "تغيير اللغة")}
           >
             {lang === "ar" ? "ع" : "E"}
