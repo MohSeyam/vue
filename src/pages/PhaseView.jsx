@@ -22,14 +22,18 @@ function Breadcrumbs({ phaseTitle }) {
 function DaySummaryCard({ day, lang, weekId, navigate }) {
   return (
     <div
-      className="rounded-xl p-3 bg-white/70 dark:bg-zinc-800 border border-slate-200 dark:border-slate-800 shadow flex flex-col gap-1 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30 transition"
+      className="rounded-2xl p-4 bg-gradient-to-br from-blue-50 via-violet-50 to-emerald-50 dark:from-blue-900 dark:via-violet-900 dark:to-emerald-900 border border-slate-200 dark:border-slate-800 shadow-md flex flex-col justify-center items-center gap-1 cursor-pointer hover:scale-105 hover:shadow-xl hover:from-blue-100 hover:to-emerald-100 dark:hover:from-blue-800 dark:hover:to-emerald-800 transition text-center min-h-[80px]"
       onClick={() => navigate(`/day/${weekId}/${day.key}`)}
       tabIndex={0}
       role="button"
       aria-label={day.day?.[lang] || day.day?.ar || day.day?.en}
     >
-      <span className="font-bold text-slate-900 dark:text-white text-sm">{day.day?.[lang] || day.day?.ar || day.day?.en}</span>
-      <span className="text-xs text-slate-600 dark:text-slate-300">{day.topic?.[lang] || day.topic?.ar || day.topic?.en}</span>
+      <span className="font-bold text-lg bg-gradient-to-r from-blue-600 via-violet-600 to-emerald-600 bg-clip-text text-transparent drop-shadow-sm">
+        {day.day?.[lang] || day.day?.ar || day.day?.en}
+      </span>
+      <span className="text-sm bg-gradient-to-r from-violet-500 to-emerald-500 bg-clip-text text-transparent font-semibold opacity-90">
+        {day.topic?.[lang] || day.topic?.ar || day.topic?.en}
+      </span>
     </div>
   );
 }
