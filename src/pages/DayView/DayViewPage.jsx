@@ -189,6 +189,9 @@ export default function DayView({ weekId, dayKey }) {
     const t = translations[lang];
     const weekData = planData.find(w => String(w.week) === String(weekId));
     if (!weekData) return <div>Week not found: {weekId}</div>;
+    console.log('weekData.days:', weekData.days);
+    console.log('dayKey:', dayKey, typeof dayKey);
+    console.log('all day keys:', weekData.days?.map(d => d.key));
     const dayData = weekData.days?.find(d => String(d.key).toLowerCase() === String(dayKey).toLowerCase());
     const dayIndex = weekData.days?.findIndex(d => String(d.key).toLowerCase() === String(dayKey).toLowerCase());
     if (!dayData || dayIndex === -1) return <div>Day not found: {dayKey}</div>;
