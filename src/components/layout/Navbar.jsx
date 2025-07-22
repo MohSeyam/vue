@@ -58,10 +58,10 @@ export default function Navbar() {
           {/* زر اللغة */}
           <button
             onClick={toggleLang}
-            className="font-extrabold text-2xl px-2 transition hover:text-blue-700 dark:hover:text-blue-300"
+            className="px-2 transition hover:text-blue-700 dark:hover:text-blue-300"
             aria-label={t("changeLanguage", "تغيير اللغة")}
           >
-            {lang === "ar" ? "ع" : "E"}
+            <Languages className="w-6 h-6" />
             <Tooltip>{lang === "ar" ? "Change Language" : "تغيير اللغة"}</Tooltip>
           </button>
           {/* زر الثيم */}

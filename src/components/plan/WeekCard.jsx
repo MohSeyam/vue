@@ -22,10 +22,10 @@ function ProgressBar({ percent, color }) {
 }
 
 const colorMap = {
-  blue: "border-blue-200 dark:border-blue-800",
-  emerald: "border-emerald-200 dark:border-emerald-800",
-  violet: "border-violet-200 dark:border-violet-800",
-  amber: "border-amber-200 dark:border-amber-800"
+  blue: "border-blue-400",
+  emerald: "border-emerald-400",
+  violet: "border-violet-400",
+  amber: "border-amber-400"
 };
 
 export default function WeekCard({ week, onClick, className = "", progress = 0, color = "blue", DaySummaryCard, dayColor }) {
@@ -36,7 +36,7 @@ export default function WeekCard({ week, onClick, className = "", progress = 0, 
   const handleClick = () => setExpanded((v) => !v);
 
   return (
-    <div className={`rounded-2xl p-4 bg-white/80 dark:bg-zinc-900 border ${colorMap[color] || colorMap.blue} shadow hover:-translate-y-1 hover:shadow-xl transition cursor-pointer flex flex-col gap-2 min-h-[100px] ${className}`}
+    <div className={`rounded-2xl p-4 bg-white/80 dark:bg-zinc-900 border-2 ${colorMap[color] || colorMap.blue} shadow hover:-translate-y-1 hover:shadow-xl transition cursor-pointer flex flex-col gap-2 min-h-[100px] ${className}`}
       tabIndex={0}
       onClick={handleClick}
       role="button"
@@ -44,17 +44,17 @@ export default function WeekCard({ week, onClick, className = "", progress = 0, 
     >
       {/* رقم الأسبوع في الأعلى */}
       <div className="flex justify-center mb-2">
-        <span className={`inline-block rounded-full bg-${color}-100 text-${color}-700 dark:bg-${color}-900 dark:text-${color}-200 px-3 py-1 text-xs font-bold shadow-sm border border-white dark:border-zinc-800`}>
+        <span className="inline-block rounded-full bg-white dark:bg-zinc-900 px-3 py-1 text-xs font-bold shadow-sm border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-slate-200">
           {t("week", "أسبوع")} {week.week}
         </span>
       </div>
       {/* اسم الأسبوع */}
       <div className="flex items-center justify-between mb-1">
-        <span className="font-bold text-slate-900 dark:text-white text-base">
+        <span className={`font-bold text-base ${color === "blue" ? "text-blue-700 dark:text-blue-400" : color === "emerald" ? "text-emerald-700 dark:text-emerald-400" : color === "violet" ? "text-violet-700 dark:text-violet-400" : "text-slate-800 dark:text-slate-100"}`}>
           {week.title?.[lang] || week.title?.ar || week.title?.en}
         </span>
       </div>
-      <div className={`text-xs text-${color}-700 dark:text-${color}-300 mb-1`}>
+      <div className="text-xs text-slate-600 dark:text-slate-300 mb-1">
         {week.objective?.[lang] || week.objective?.ar || week.objective?.en}
       </div>
       <ProgressBar percent={progress} color={color} />
