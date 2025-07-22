@@ -10,10 +10,10 @@
       <v-tab to="/notebook" link prepend-icon="mdi-notebook" />
     </v-tabs>
     <v-spacer></v-spacer>
-    <v-btn @click="$emit('toggle-lang')" variant="text" class="font-weight-bold mx-1">
+    <v-btn @click="$emit('toggle-lang')" variant="text" class="font-weight-bold mx-1" aria-label="تبديل اللغة">
       {{ lang === 'ar' ? 'EN' : 'ع' }}
     </v-btn>
-    <v-btn @click="$emit('toggle-theme')" variant="text" icon>
+    <v-btn @click="$emit('toggle-theme')" variant="text" icon aria-label="تبديل الوضع الليلي/النهاري">
       <v-icon>{{ theme === 'dark' ? 'mdi-weather-night' : 'mdi-weather-sunny' }}</v-icon>
     </v-btn>
   </v-app-bar>
