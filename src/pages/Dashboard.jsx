@@ -35,6 +35,9 @@ export default function Dashboard() {
         </p>
       </div>
       {/* بطاقات المراحل */}
+      {phases.length === 0 ? (
+        <div className="text-center text-slate-400 py-12">لا توجد بيانات متاحة</div>
+      ) : (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         {phases.slice(0, 3).map((phase, idx) => {
           // حساب نسبة الإنجاز للمرحلة
@@ -55,6 +58,7 @@ export default function Dashboard() {
           );
         })}
       </div>
+      )}
       {/* شبكة بينتو */}
       <div className="grid md:grid-cols-3 gap-6">
         {/* ماذا بعد؟ */}
