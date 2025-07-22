@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { getPhases, getWeeksByPhase } from "../services/dataService";
 import PhaseCard from "../components/plan/PhaseCard";
@@ -8,9 +8,29 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function CyberPlan() {
   const { t, i18n } = useTranslation();
-  const phases = getPhases();
+  const [phases, setPhases] = useState([]);
+  const [weeks, setWeeks] = useState([]);
   const [selectedPhase, setSelectedPhase] = useState(null);
   const [selectedWeek, setSelectedWeek] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    getPhases().then(data => {
+      setPhases(data);
+      setLoading(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (selectedPhase) {
+      setLoading(true);
+      getWeeksByPhase(selectedPhase.id).then(data => {
+        setWeeks(data);
+        setLoading(false);
+      });
+    }
+  }, [selectedPhase]);
 
   // عند اختيار مرحلة
   const handlePhase = (phase) => {
@@ -25,9 +45,10 @@ export default function CyberPlan() {
   return (
     <div className="max-w-5xl mx-auto py-8" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <h1 className="text-2xl font-bold mb-6 text-center text-cyan-700">{t("cyberPlanTitle", "خطة الأمن السيبراني المطور")}</h1>
+      {loading && <div className="text-center text-gray-400">{t("loading", "جاري التحميل...")}</div>}
       {/* عرض المراحل */}
       <AnimatePresence mode="wait">
-        {!selectedPhase && (
+        {!selectedPhase && !loading && (
           <motion.div
             key="phases"
             initial={{ opacity: 0, y: 40 }}
@@ -52,7 +73,7 @@ export default function CyberPlan() {
       </AnimatePresence>
       {/* عرض الأسابيع */}
       <AnimatePresence mode="wait">
-        {selectedPhase && !selectedWeek && (
+        {selectedPhase && !selectedWeek && !loading && (
           <motion.div
             key="weeks"
             initial={{ opacity: 0, x: 40 }}
@@ -66,7 +87,7 @@ export default function CyberPlan() {
             >{t("backToPhases", "عودة للمراحل")}</button>
             <h2 className="text-xl font-semibold mb-4 text-violet-700">{t("weeksOfPhase", { phase: selectedPhase.name, defaultValue: `أسابيع ${selectedPhase.name}` })}</h2>
             <div className="grid md:grid-cols-2 gap-4">
-              {getWeeksByPhase(selectedPhase.id).map(week => (
+              {weeks.map(week => (
                 <motion.div
                   key={week.week}
                   whileHover={{ scale: 1.03 }}
