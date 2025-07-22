@@ -95,14 +95,20 @@ export default function PhaseView() {
           const doneCount = allTasks.filter(task => doneMap[task.id]).length;
           const progress = allTasks.length ? Math.round((doneCount / allTasks.length) * 100) : 0;
           return (
-            <WeekCard
-              key={week.week}
-              week={week}
-              lang={lang}
-              progress={progress}
-              showDays={true}
-              DaySummaryCard={({ day, lang }) => <DaySummaryCard day={day} lang={lang} weekId={week.week} navigate={navigate} />}
-            />
+            <div key={week.week}>
+              <WeekCard
+                week={week}
+                lang={lang}
+                progress={progress}
+                showDays={false}
+                onClick={() => {}}
+              />
+              <div className="mt-3 grid grid-cols-1 gap-3">
+                {(week.days || []).filter(day => day.key !== "fri").map((day) => (
+                  <DaySummaryCard key={day.key} day={day} lang={lang} weekId={week.week} navigate={navigate} />
+                ))}
+              </div>
+            </div>
           );
         })}
       </div>
