@@ -1,102 +1,91 @@
 // dataService.js
-// خدمة البيانات الثابتة: استخراج مراحل الخطة، الأسابيع، الأيام، الأهداف، الموارد من PlanData.json
-import planDataRaw from "../data/PlanData.json";
+// خدمة البيانات الثابتة: استخراج مراحل الخطة، الأسابيع، الأيام، الأهداف، الموارد من PlanData.json عبر fetch
 
-// معالجة البيانات: flatten إذا كان هناك nested arrays
-const planData = Array.isArray(planDataRaw[0])
-  ? planDataRaw.flat()
-  : planDataRaw;
+let planDataCache = null;
 
-// استخراج المراحل (phases) الفريدة
-export function getPhases() {
+export async function fetchPlanData() {
+  if (planDataCache) return planDataCache;
+  const res = await fetch('/data/PlanData.json');
+  const data = await res.json();
+  planDataCache = Array.isArray(data[0]) ? data.flat() : data;
+  return planDataCache;
+}
+
+export async function getPhases() {
+  const planData = await fetchPlanData();
   const phasesMap = {};
   planData.forEach(item => {
     if (!phasesMap[item.phase]) {
       phasesMap[item.phase] = {
         id: item.phase,
-        name: item.title.ar.split(":")[0] || `المرحلة ${item.phase}`,
-        // يمكن تحسين الوصف أو اللون حسب الحاجة
+        name: item.title?.ar?.split(":")[0] || `المرحلة ${item.phase}`,
       };
     }
   });
   return Object.values(phasesMap);
 }
 
-// استخراج الأسابيع حسب المرحلة
-export function getWeeksByPhase(phaseId) {
+export async function getWeeksByPhase(phaseId) {
+  const planData = await fetchPlanData();
   return planData.filter(item => item.phase === phaseId);
 }
 
-// استخراج كل الأسابيع
-export function getWeeks() {
-  return planData;
+export async function getWeeks() {
+  return await fetchPlanData();
 }
 
-// استخراج أيام الأسبوع لرقم أسبوع معين
-export function getDaysByWeek(weekNumber) {
+export async function getDaysByWeek(weekNumber) {
+  const planData = await fetchPlanData();
   const week = planData.find(item => item.week === weekNumber);
   return week ? week.days : [];
 }
 
-// استخراج الأهداف (objective) لكل أسبوع أو لكل مرحلة
-export function getObjectivesByPhase(phaseId) {
+export async function getObjectivesByPhase(phaseId) {
+  const planData = await fetchPlanData();
   return planData.filter(item => item.phase === phaseId).map(item => item.objective);
 }
 
-// استخراج الموارد لكل أسبوع أو مرحلة
-export function getResourcesByWeek(weekNumber) {
+export async function getResourcesByWeek(weekNumber) {
+  const planData = await fetchPlanData();
   const week = planData.find(item => item.week === weekNumber);
   if (!week) return [];
-  // جمع كل الموارد من الأيام
   return week.days.flatMap(day => day.resources || []);
 }
 
-// دوال عامة
-export function getPlanData() {
-  return planData;
+export async function getPlanData() {
+  return await fetchPlanData();
 }
 
-// استخراج جميع الموارد في الخطة كاملة
-export function getAllResources() {
-  return planData.flatMap(week =>
-    (week.days || []).flatMap(day => day.resources || [])
-  );
+// دوال استخراج متقدمة async (نفس المنطق السابق لكن async)
+export async function getAllResources() {
+  const planData = await fetchPlanData();
+  return planData.flatMap(week => (week.days || []).flatMap(day => day.resources || []));
 }
-
-// استخراج جميع الأهداف (objective) في الخطة كاملة
-export function getAllObjectives() {
+export async function getAllObjectives() {
+  const planData = await fetchPlanData();
   return planData.map(week => week.objective);
 }
-
-// استخراج جميع الأيام في الخطة كاملة
-export function getAllDays() {
+export async function getAllDays() {
+  const planData = await fetchPlanData();
   return planData.flatMap(week => week.days || []);
 }
-
-// استخراج جميع عناوين الأسابيع (حسب اللغة)
-export function getAllWeekTitles(lang = "ar") {
+export async function getAllWeekTitles(lang = "ar") {
+  const planData = await fetchPlanData();
   return planData.map(week => week.title?.[lang] || week.title?.ar || week.title?.en || "");
 }
-
-// استخراج جميع عناوين المراحل (حسب اللغة)
-export function getAllPhaseTitles(lang = "ar") {
-  const phases = getPhases();
+export async function getAllPhaseTitles(lang = "ar") {
+  const phases = await getPhases();
   return phases.map(phase => phase.name);
 }
-
-// استخراج عدد الأسابيع في كل مرحلة
-export function getWeeksCountByPhase(phaseId) {
+export async function getWeeksCountByPhase(phaseId) {
+  const planData = await fetchPlanData();
   return planData.filter(item => item.phase === phaseId).length;
 }
-
-// استخراج جميع الموارد حسب نوعها
-export function getResourcesByType(type) {
-  return getAllResources().filter(r => r.type === type);
+export async function getResourcesByType(type) {
+  const all = await getAllResources();
+  return all.filter(r => r.type === type);
 }
-
-// استخراج جميع المهام (tasks) في الخطة كاملة
-export function getAllTasks() {
-  return planData.flatMap(week =>
-    (week.days || []).flatMap(day => day.tasks || [])
-  );
+export async function getAllTasks() {
+  const planData = await fetchPlanData();
+  return planData.flatMap(week => (week.days || []).flatMap(day => day.tasks || []));
 }
