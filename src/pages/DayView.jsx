@@ -19,24 +19,20 @@ function Breadcrumbs({ weekId, dayTitle }) {
   );
 }
 
-function TaskListPlaceholder({ tasks, lang }) {
+function TaskList({ tasks, lang }) {
   return (
     <div className="flex flex-col gap-3">
       {tasks.map((task, idx) => (
         <div key={task.id || idx} className="flex items-center gap-3 p-3 rounded-xl bg-white/80 dark:bg-zinc-900 border border-slate-200 dark:border-slate-800 shadow hover:shadow-lg transition">
           <input type="checkbox" className="accent-blue-500 w-5 h-5" />
           <span className="flex-1 text-slate-800 dark:text-slate-100 font-medium">{task.description?.[lang] || task.description?.ar || task.description?.en}</span>
-          <div className="flex gap-2 opacity-70">
-            <button className="hover:text-blue-600" title="ملاحظات"><i className="i-lucide-notebook w-5 h-5" /></button>
-            <button className="hover:text-emerald-600" title="مؤقت بومودورو"><i className="i-lucide-timer w-5 h-5" /></button>
-          </div>
         </div>
       ))}
     </div>
   );
 }
 
-function ResourceListPlaceholder({ resources }) {
+function ResourceList({ resources }) {
   return (
     <div className="mt-6">
       <details className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-zinc-900 shadow">
@@ -54,7 +50,7 @@ function ResourceListPlaceholder({ resources }) {
   );
 }
 
-function PomodoroTimerPlaceholder() {
+function PomodoroTimer() {
   return (
     <div className="rounded-2xl bg-gradient-to-br from-emerald-100 to-blue-100 dark:from-zinc-800 dark:to-zinc-900 border border-slate-200 dark:border-slate-800 shadow p-4 mb-6 flex flex-col items-center">
       <span className="font-bold text-lg text-emerald-700 dark:text-emerald-400 mb-2">مؤقت بومودورو</span>
@@ -64,7 +60,7 @@ function PomodoroTimerPlaceholder() {
   );
 }
 
-function JournalEditorPlaceholder() {
+function JournalEditor() {
   return (
     <div className="rounded-2xl bg-white/80 dark:bg-zinc-900 border border-slate-200 dark:border-slate-800 shadow p-4 flex flex-col">
       <span className="font-bold text-lg text-violet-700 dark:text-violet-400 mb-2">التدوين المسائي</span>
@@ -110,13 +106,13 @@ export default function DayView() {
       <div className="grid md:grid-cols-3 gap-8">
         {/* العمود الرئيسي */}
         <div className="md:col-span-2">
-          <TaskListPlaceholder tasks={day.tasks || []} lang={lang} />
-          <ResourceListPlaceholder resources={day.resources || []} />
+          <TaskList tasks={day.tasks || []} lang={lang} />
+          <ResourceList resources={day.resources || []} />
         </div>
         {/* العمود الجانبي */}
         <div className="flex flex-col gap-6">
-          <PomodoroTimerPlaceholder />
-          <JournalEditorPlaceholder />
+          <PomodoroTimer />
+          <JournalEditor />
         </div>
       </div>
     </div>

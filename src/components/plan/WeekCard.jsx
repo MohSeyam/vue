@@ -50,7 +50,7 @@ export default function WeekCard({ week, onClick, className = "", progress = 0, 
       </div>
       {/* اسم الأسبوع */}
       <div className="flex items-center justify-between mb-1">
-        <span className={`font-bold text-base ${color === "blue" ? "text-blue-700 dark:text-blue-400" : color === "emerald" ? "text-emerald-700 dark:text-emerald-400" : color === "violet" ? "text-violet-700 dark:text-violet-400" : "text-slate-800 dark:text-slate-100"}`}>
+        <span className={`font-extrabold text-xl md:text-2xl ${color === "blue" ? "text-blue-700 dark:text-blue-400" : color === "emerald" ? "text-emerald-700 dark:text-emerald-400" : color === "violet" ? "text-violet-700 dark:text-violet-400" : "text-slate-800 dark:text-slate-100"}`}>
           {week.title?.[lang] || week.title?.ar || week.title?.en}
         </span>
       </div>

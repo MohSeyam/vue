@@ -17,47 +17,27 @@ function Breadcrumbs({ weekTitle }) {
   );
 }
 
-function ProgressCircle({ percent }) {
-  return (
-    <svg width="32" height="32" viewBox="0 0 32 32">
-      <circle cx="16" cy="16" r="14" fill="none" stroke="#e0e7ef" strokeWidth="4" />
-      <circle
-        cx="16" cy="16" r="14"
-        fill="none"
-        stroke="#38bdf8"
-        strokeWidth="4"
-        strokeDasharray={2 * Math.PI * 14}
-        strokeDashoffset={2 * Math.PI * 14 * (1 - percent / 100)}
-        strokeLinecap="round"
-        style={{ transition: 'stroke-dashoffset 0.5s' }}
-      />
-      <text x="16" y="21" textAnchor="middle" fontSize="0.8rem" fill="#2563eb" fontWeight="bold">{percent}%</text>
-    </svg>
-  );
-}
-
-function DaySummaryCard({ day, notesCount, resourcesCount, progress, onClick, lang }) {
+function DaySummaryCard({ day, lang, weekId, navigate, color = "stone" }) {
+  const colorMap = {
+    stone: {
+      border: "border-stone-200 dark:border-stone-700",
+      text: "text-stone-700 dark:text-stone-300"
+    }
+  };
   return (
     <div
-      className="rounded-2xl p-4 bg-white/80 dark:bg-zinc-900 shadow hover:-translate-y-1 hover:shadow-xl transition cursor-pointer border-t-4 border-violet-400 flex flex-col gap-2 min-h-[120px]"
-      onClick={onClick}
+      className={`rounded-xl p-4 bg-white/80 dark:bg-zinc-900 border ${colorMap[color]?.border} shadow flex flex-col justify-center items-center gap-1 cursor-pointer hover:-translate-y-1 hover:shadow-lg transition text-center min-h-[80px]`}
+      onClick={() => navigate(`/day/${weekId}/${day.key}`)}
       tabIndex={0}
       role="button"
       aria-label={day.day?.[lang] || day.day?.ar || day.day?.en}
     >
-      <div className="flex items-center justify-between gap-2 mb-1">
-        <span className="font-bold text-slate-900 dark:text-white text-base">
-          {day.day?.[lang] || day.day?.ar || day.day?.en}
-        </span>
-        <ProgressCircle percent={progress} />
-      </div>
-      <div className="text-xs text-slate-600 dark:text-slate-300 mb-1">
+      <span className="font-bold text-base text-slate-800 dark:text-slate-100 drop-shadow-sm">
+        {day.day?.[lang] || day.day?.ar || day.day?.en}
+      </span>
+      <span className={`text-sm font-semibold opacity-90 ${colorMap[color]?.text}` }>
         {day.topic?.[lang] || day.topic?.ar || day.topic?.en}
-      </div>
-      <div className="flex gap-3 mt-auto">
-        <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-xs"><i className="i-lucide-file-text w-4 h-4" />{notesCount}</span>
-        <span className="flex items-center gap-1 text-blue-600 dark:text-sky-400 text-xs"><i className="i-lucide-link w-4 h-4" />{resourcesCount}</span>
-      </div>
+      </span>
     </div>
   );
 }
@@ -88,7 +68,7 @@ export default function WeekView() {
     <div className="max-w-5xl mx-auto py-8 px-2">
       <Breadcrumbs weekTitle={week.title?.[lang] || week.title?.ar || week.title?.en} />
       <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-extrabold text-violet-700 dark:text-violet-400 mb-1">
+        <h1 className="text-2xl md:text-3xl font-extrabold text-blue-700 dark:text-sky-400 mb-1">
           {week.title?.[lang] || week.title?.ar || week.title?.en}
         </h1>
         <p className="text-base text-slate-700 dark:text-slate-200 opacity-90 font-medium">
@@ -96,16 +76,8 @@ export default function WeekView() {
         </p>
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {(week.days || []).map((day, idx) => (
-          <DaySummaryCard
-            key={day.key}
-            day={day}
-            notesCount={0} // TODO: اربط بعدد الملاحظات الفعلي
-            resourcesCount={(day.resources || []).length}
-            progress={0} // TODO: اربط بنسبة إنجاز مهام اليوم
-            lang={lang}
-            onClick={() => navigate(`/day/${week.week}/${day.key}`)}
-          />
+        {(week.days || []).filter(day => day.key !== "fri").map((day) => (
+          <DaySummaryCard key={day.key} day={day} lang={lang} weekId={week.week} color="stone" navigate={navigate} />
         ))}
       </div>
     </div>
