@@ -15,6 +15,7 @@ export function AppProvider({ children }) {
     notes: {},
     resources: {},
   });
+  const [modal, setModal] = useState({ isOpen: false, content: null });
 
   const Icons = {
     check: FaCheck,
@@ -96,8 +97,16 @@ export function AppProvider({ children }) {
   };
 
   return (
-    <AppContext.Provider value={{ user, setUser, lang, setLang, settings, setSettings, planData, setPlanData, appState, setAppState, Icons, translations }}>
+    <AppContext.Provider value={{ user, setUser, lang, setLang, settings, setSettings, planData, setPlanData, appState, setAppState, Icons, translations, modal, setModal }}>
       {children}
+      {modal.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-xl p-6 max-w-lg w-full relative">
+            <button className="absolute top-3 right-3 text-slate-400 hover:text-red-500 text-xl" onClick={() => setModal({ isOpen: false, content: null })}>&times;</button>
+            {modal.content}
+          </div>
+        </div>
+      )}
     </AppContext.Provider>
   );
 }
