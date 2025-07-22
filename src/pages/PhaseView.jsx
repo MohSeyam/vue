@@ -19,9 +19,15 @@ function Breadcrumbs({ phaseTitle }) {
   );
 }
 
-function DaySummaryCard({ day, lang }) {
+function DaySummaryCard({ day, lang, weekId, navigate }) {
   return (
-    <div className="rounded-xl p-3 bg-white/70 dark:bg-zinc-800 border border-slate-200 dark:border-slate-800 shadow flex flex-col gap-1">
+    <div
+      className="rounded-xl p-3 bg-white/70 dark:bg-zinc-800 border border-slate-200 dark:border-slate-800 shadow flex flex-col gap-1 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30 transition"
+      onClick={() => navigate(`/day/${weekId}/${day.key}`)}
+      tabIndex={0}
+      role="button"
+      aria-label={day.day?.[lang] || day.day?.ar || day.day?.en}
+    >
       <span className="font-bold text-slate-900 dark:text-white text-sm">{day.day?.[lang] || day.day?.ar || day.day?.en}</span>
       <span className="text-xs text-slate-600 dark:text-slate-300">{day.topic?.[lang] || day.topic?.ar || day.topic?.en}</span>
     </div>
@@ -91,7 +97,7 @@ export default function PhaseView() {
               lang={lang}
               progress={progress}
               showDays={true}
-              DaySummaryCard={DaySummaryCard}
+              DaySummaryCard={({ day, lang }) => <DaySummaryCard day={day} lang={lang} weekId={week.week} navigate={navigate} />}
             />
           );
         })}
