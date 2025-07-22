@@ -8,7 +8,18 @@ const colorMap = {
   violet: "border-t-4 border-violet-500",
 };
 
-export default function PhaseCard({ phase, color = "blue", onClick, className = "" }) {
+function ProgressBar({ percent }) {
+  return (
+    <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden mt-3">
+      <div
+        className="h-full bg-gradient-to-r from-blue-500 to-violet-500 dark:from-blue-700 dark:to-violet-600 transition-all"
+        style={{ width: `${percent}%` }}
+      />
+    </div>
+  );
+}
+
+export default function PhaseCard({ phase, color = "blue", onClick, className = "", progress = 0 }) {
   const { t } = useTranslation();
   const { lang } = useApp();
   return (
@@ -35,6 +46,7 @@ export default function PhaseCard({ phase, color = "blue", onClick, className = 
       <div className="text-sm text-gray-700 dark:text-gray-200 mb-2 opacity-90 min-h-[40px]">
         {phase.description?.[lang] || phase.description || ""}
       </div>
+      <ProgressBar percent={progress} />
     </div>
   );
 }
