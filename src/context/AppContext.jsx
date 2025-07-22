@@ -12,6 +12,7 @@ export function AppProvider({ children }) {
   const setLang = (lng) => {
     setLangState(lng);
     i18n.changeLanguage(lng);
+    document.documentElement.setAttribute("dir", lng === "ar" ? "rtl" : "ltr");
   };
 
   return (
