@@ -4,7 +4,7 @@
       <v-card-title class="font-weight-bold text-primary">{{ note && note.id ? $t('notebook.editNote') : $t('notebook.addNote') }}</v-card-title>
       <v-form @submit.prevent="save">
         <v-card-text>
-          <v-text-field v-model="title" :label="$t('notebook.title')" required class="mb-4"/>
+          <v-text-field v-model="title" :label="$t('notebook.title')" aria-label="عنوان الملاحظة" required class="mb-4"/>
           <div class="mb-4">
             <TipTapEditor v-model="content" :rtl="isRTL" />
           </div>

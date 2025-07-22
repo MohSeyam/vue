@@ -1,5 +1,5 @@
 <template>
-  <v-text-field
+  <v-text-field aria-label="بحث في الملاحظات"
     :model-value="modelValue"
     @update:model-value="val => emit('update:modelValue', val)"
     :placeholder="$t('notebook.search')"

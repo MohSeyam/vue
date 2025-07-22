@@ -1,7 +1,7 @@
 <template>
   <v-menu>
     <template #activator="{ props }">
-      <v-text-field
+      <v-text-field aria-label="تصفية بالتاريخ"
         v-bind="props"
         :label="$t('date')"
         v-model="date"

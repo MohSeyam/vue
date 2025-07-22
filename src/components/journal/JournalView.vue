@@ -2,7 +2,7 @@
   <v-container fluid class="py-8">
     <v-row class="mb-4" align="center">
       <v-col cols="12" md="6">
-        <v-text-field v-model="search" :label="$t('journal.search')" prepend-inner-icon="mdi-magnify" clearable></v-text-field>
+        <v-text-field v-model="search" :label="$t('journal.search')" aria-label="بحث في اليوميات" prepend-inner-icon="mdi-magnify" clearable></v-text-field>
       </v-col>
       <v-col cols="12" md="6" class="text-end">
         <v-btn color="primary" prepend-icon="mdi-plus" @click="openEditor = true">{{ $t('journal.addEntry') }}</v-btn>

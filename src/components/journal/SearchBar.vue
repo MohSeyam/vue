@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <input
+    <input aria-label="بحث في اليوميات"
       :value="modelValue"
       @input="emit('update:modelValue', ($event.target as HTMLInputElement)?.value)"
       :placeholder="$t('journal.search')"
