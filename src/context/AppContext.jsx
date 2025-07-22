@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import i18n from "../i18n/i18n";
 import { getPlanData } from "../services/dataService";
+import { FaCheck, FaEdit, FaClock } from "react-icons/fa";
 
 const AppContext = createContext();
 
@@ -14,6 +15,14 @@ export function AppProvider({ children }) {
     notes: {},
     resources: {},
   });
+
+  const Icons = {
+    check: FaCheck,
+    edit: FaEdit,
+    clock: FaClock,
+    task: (type) => <FaCheck />,
+    resource: (type) => <FaEdit />,
+  };
 
   // زامن i18n.language مع lang عند التحميل
   useEffect(() => {
@@ -36,7 +45,7 @@ export function AppProvider({ children }) {
   };
 
   return (
-    <AppContext.Provider value={{ user, setUser, lang, setLang, settings, setSettings, planData, setPlanData, appState, setAppState }}>
+    <AppContext.Provider value={{ user, setUser, lang, setLang, settings, setSettings, planData, setPlanData, appState, setAppState, Icons }}>
       {children}
     </AppContext.Provider>
   );
