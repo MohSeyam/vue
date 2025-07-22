@@ -9,6 +9,11 @@ export function AppProvider({ children }) {
   const [lang, setLangState] = useState("ar");
   const [settings, setSettings] = useState({});
   const [planData, setPlanData] = useState(null);
+  const [appState, setAppState] = useState({
+    progress: {},
+    notes: {},
+    resources: {},
+  });
 
   // زامن i18n.language مع lang عند التحميل
   useEffect(() => {
@@ -31,7 +36,7 @@ export function AppProvider({ children }) {
   };
 
   return (
-    <AppContext.Provider value={{ user, setUser, lang, setLang, settings, setSettings, planData, setPlanData }}>
+    <AppContext.Provider value={{ user, setUser, lang, setLang, settings, setSettings, planData, setPlanData, appState, setAppState }}>
       {children}
     </AppContext.Provider>
   );
