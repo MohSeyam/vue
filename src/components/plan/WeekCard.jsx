@@ -54,9 +54,6 @@ export default function WeekCard({ week, onClick, className = "", progress = 0, 
           {week.title?.[lang] || week.title?.ar || week.title?.en}
         </span>
       </div>
-      <div className="text-xs text-slate-600 dark:text-slate-300 mb-1">
-        {week.objective?.[lang] || week.objective?.ar || week.objective?.en}
-      </div>
       <ProgressBar percent={progress} color={color} />
       {expanded && DaySummaryCard && (
         <div className="mt-3 grid grid-cols-1 gap-3">
