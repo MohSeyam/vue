@@ -3,22 +3,14 @@ import { useTranslation } from "react-i18next";
 import { useApp } from "../../context/AppContext";
 import { useState } from "react";
 
-function ProgressCircle({ percent }) {
+function ProgressBar({ percent }) {
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32">
-      <circle cx="16" cy="16" r="14" fill="none" stroke="#e0e7ef" strokeWidth="4" />
-      <circle
-        cx="16" cy="16" r="14"
-        fill="none"
-        stroke="#38bdf8"
-        strokeWidth="4"
-        strokeDasharray={2 * Math.PI * 14}
-        strokeDashoffset={2 * Math.PI * 14 * (1 - percent / 100)}
-        strokeLinecap="round"
-        style={{ transition: 'stroke-dashoffset 0.5s' }}
+    <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden mt-3">
+      <div
+        className="h-full bg-gradient-to-r from-emerald-400 to-blue-500 dark:from-emerald-600 dark:to-sky-500 transition-all"
+        style={{ width: `${percent}%` }}
       />
-      <text x="16" y="21" textAnchor="middle" fontSize="0.8rem" fill="#2563eb" fontWeight="bold">{percent}%</text>
-    </svg>
+    </div>
   );
 }
 
@@ -50,11 +42,11 @@ export default function WeekCard({ week, onClick, className = "", progress = 0, 
             {t("week", "أسبوع")} {week.week}
           </span>
         </span>
-        <ProgressCircle percent={progress} />
       </div>
       <div className="text-xs text-slate-600 dark:text-slate-300 mb-1">
         {week.objective?.[lang] || week.objective?.ar || week.objective?.en}
       </div>
+      <ProgressBar percent={progress} />
       {showDays && DaySummaryCard && expanded && (
         <div className="mt-3 grid grid-cols-1 gap-3">
           {(week.days || []).map((day) => (
