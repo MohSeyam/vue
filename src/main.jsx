@@ -4,6 +4,8 @@ import App from "./App";
 import "./assets/main.css";
 import "./i18n/i18n";
 
+console.log("main.jsx loaded");
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />

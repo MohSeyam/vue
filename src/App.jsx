@@ -8,6 +8,7 @@ import CyberPlan from "./pages/CyberPlan";
 import Journal from "./pages/Journal";
 
 export default function App() {
+  console.log("App.jsx loaded");
   return (
     <ThemeProvider>
       <AppProvider>
