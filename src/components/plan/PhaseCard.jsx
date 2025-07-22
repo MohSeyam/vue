@@ -19,14 +19,19 @@ export default function PhaseCard({ phase, color = "blue", onClick, className = 
       role="button"
       aria-label={phase.name?.[lang] || phase.name || phase.title?.[lang] || phase.title?.ar || phase.title?.en}
     >
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-xl font-bold text-slate-900 dark:text-white drop-shadow-sm">
-          {phase.name?.[lang] || phase.name || phase.title?.[lang] || phase.title?.ar || phase.title?.en}
-        </span>
-        <span className="text-xs bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200 rounded px-2 py-0.5">
+      {/* شارة رقم المرحلة */}
+      <div className="flex justify-start mb-2">
+        <span className="text-xs bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200 rounded-full px-3 py-1 font-bold shadow-sm">
           {t("phase", "مرحلة")} {phase.id}
         </span>
       </div>
+      {/* اسم المرحلة */}
+      <div className="mb-3">
+        <span className="block text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white drop-shadow-sm">
+          {phase.name?.[lang] || phase.name || phase.title?.[lang] || phase.title?.ar || phase.title?.en}
+        </span>
+      </div>
+      {/* الوصف */}
       <div className="text-sm text-gray-700 dark:text-gray-200 mb-2 opacity-90 min-h-[40px]">
         {phase.description?.[lang] || phase.description || ""}
       </div>
