@@ -1,23 +1,23 @@
 <template>
   <v-text-field
-    v-model="search"
-    :label="$t('search')"
+    :model-value="modelValue"
+    @update:model-value="val => emit('update:modelValue', val)"
+    :placeholder="placeholder || $t('search')"
+    :label="label || ''"
+    density="compact"
+    variant="outlined"
+    color="primary"
+    hide-details
     prepend-inner-icon="mdi-magnify"
-    clearable
-    @input="$emit('update:modelValue', search)"
     class="search-bar"
   />
 </template>
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-const props = defineProps<{ modelValue: string }>();
-const emit = defineEmits(['update:modelValue']);
-const search = ref(props.modelValue);
-watch(() => props.modelValue, v => search.value = v);
-watch(search, v => emit('update:modelValue', v));
+defineProps<{ modelValue: string, placeholder?: string, label?: string }>()
+const emit = defineEmits(['update:modelValue'])
 </script>
 <style scoped>
 .search-bar {
-  min-width: 200px;
+  min-width: 180px;
 }
 </style>
