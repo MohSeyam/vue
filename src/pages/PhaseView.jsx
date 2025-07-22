@@ -19,6 +19,15 @@ function Breadcrumbs({ phaseTitle }) {
   );
 }
 
+function DaySummaryCard({ day, lang }) {
+  return (
+    <div className="rounded-xl p-3 bg-white/70 dark:bg-zinc-800 border border-slate-200 dark:border-slate-800 shadow flex flex-col gap-1">
+      <span className="font-bold text-slate-900 dark:text-white text-sm">{day.day?.[lang] || day.day?.ar || day.day?.en}</span>
+      <span className="text-xs text-slate-600 dark:text-slate-300">{day.topic?.[lang] || day.topic?.ar || day.topic?.en}</span>
+    </div>
+  );
+}
+
 export default function PhaseView() {
   const { t } = useTranslation();
   const { lang } = useApp();
@@ -81,7 +90,8 @@ export default function PhaseView() {
               week={week}
               lang={lang}
               progress={progress}
-              onClick={() => navigate(`/week/${week.week}`)}
+              showDays={true}
+              DaySummaryCard={DaySummaryCard}
             />
           );
         })}
