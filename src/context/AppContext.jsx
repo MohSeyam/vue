@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import i18n from "../i18n/i18n";
 
 const AppContext = createContext();
@@ -8,11 +8,15 @@ export function AppProvider({ children }) {
   const [lang, setLangState] = useState("ar");
   const [settings, setSettings] = useState({});
 
-  // عند تغيير اللغة، حدث i18n
+  // زامن i18n.language مع lang عند التحميل
+  useEffect(() => {
+    i18n.changeLanguage(lang);
+    document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+  }, [lang]);
+
+  // عند تغيير اللغة، حدث i18n دومًا
   const setLang = (lng) => {
     setLangState(lng);
-    i18n.changeLanguage(lng);
-    document.documentElement.setAttribute("dir", lng === "ar" ? "rtl" : "ltr");
   };
 
   return (
