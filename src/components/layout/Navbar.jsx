@@ -4,7 +4,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeProvider";
 import { useApp } from "../../context/AppContext";
-import { ShieldCheck, Languages, Sun, Moon, Settings } from "lucide-react";
+import { ShieldCheck, Languages, Sun, Moon, Settings, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const navLinks = [
@@ -61,7 +61,7 @@ export default function Navbar() {
             className="px-2 transition hover:text-blue-700 dark:hover:text-blue-300"
             aria-label={t("changeLanguage", "تغيير اللغة")}
           >
-            <Languages className="w-6 h-6" />
+            <Globe className="w-6 h-6" />
             <Tooltip>{lang === "ar" ? "Change Language" : "تغيير اللغة"}</Tooltip>
           </button>
           {/* زر الثيم */}

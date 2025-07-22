@@ -77,7 +77,7 @@ export default function WeekView() {
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {(week.days || []).filter(day => day.key !== "fri").map((day) => (
-          <DaySummaryCard key={day.key} day={day} lang={lang} weekId={week.week} color="stone" navigate={navigate} />
+          <DaySummaryCard key={day.key} day={day} lang={lang} weekId={week.week} color="stone" onDayClick={() => {}} />
         ))}
       </div>
     </div>

@@ -101,7 +101,7 @@ export default function PhaseView() {
     <div className="max-w-5xl mx-auto py-8 px-2">
       <Breadcrumbs phaseTitle={phase.name?.[lang] || phase.name?.ar || phase.name?.en || phase.name} />
       <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-extrabold text-emerald-700 dark:text-emerald-400 mb-1">
+        <h1 className="text-2xl md:text-3xl font-extrabold text-white mb-1">
           {phase.name?.[lang] || phase.name?.ar || phase.name?.en || phase.name}
         </h1>
         {phase.description && (

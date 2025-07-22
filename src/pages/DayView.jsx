@@ -70,6 +70,31 @@ function JournalEditor() {
   );
 }
 
+function DaySummaryCard({ day, lang, weekId, color = "stone", onDayClick }) {
+  const colorMap = {
+    stone: {
+      border: "border-stone-200 dark:border-stone-700",
+      text: "text-stone-700 dark:text-stone-300"
+    }
+  };
+  return (
+    <div
+      className={`rounded-xl p-4 bg-white/80 dark:bg-zinc-900 border ${colorMap[color]?.border} shadow flex flex-col justify-center items-center gap-1 cursor-pointer hover:-translate-y-1 hover:shadow-lg transition text-center min-h-[80px]`}
+      onClick={onDayClick}
+      tabIndex={0}
+      role="button"
+      aria-label={day.day?.[lang] || day.day?.ar || day.day?.en}
+    >
+      <span className="font-bold text-base text-slate-800 dark:text-slate-100 drop-shadow-sm">
+        {day.day?.[lang] || day.day?.ar || day.day?.en}
+      </span>
+      <span className={`text-sm font-semibold opacity-90 ${colorMap[color]?.text}` }>
+        {day.topic?.[lang] || day.topic?.ar || day.topic?.en}
+      </span>
+    </div>
+  );
+}
+
 export default function DayView() {
   const { t } = useTranslation();
   const { lang } = useApp();
