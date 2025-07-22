@@ -1,14 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import DashboardView from '../pages/DashboardView.vue';
 import PhaseView from '../components/phase/PhaseView.vue';
-import WeekView from '../components/week/WeekView.vue';
-import DayView from '../pages/DayView.vue';
+import AchievementsView from '../components/achievements/AchievementsView.vue';
+import NotebookView from '../pages/NotebookView.vue';
 
 const routes = [
   { path: '/', name: 'dashboard', component: DashboardView },
   { path: '/plan', name: 'plan', component: PhaseView },
-  { path: '/plan/:phaseId', name: 'weeks', component: WeekView, props: true },
-  { path: '/plan/:phaseId/week/:weekId', name: 'days', component: DayView, props: true },
+  { path: '/achievements', name: 'achievements', component: AchievementsView },
+  { path: '/notebook', name: 'notebook', component: NotebookView },
+  // يمكنك إضافة باقي المسارات هنا
 ];
 
 const router = createRouter({
