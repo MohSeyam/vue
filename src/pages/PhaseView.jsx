@@ -11,7 +11,7 @@ function Breadcrumbs({ phaseTitle }) {
   return (
     <nav className="mb-4 text-sm" aria-label="breadcrumb">
       <ol className="flex gap-2 text-slate-500 dark:text-slate-400">
-        <li><Link to="/dashboard" className="hover:underline">{t("dashboardTitle", "لوحة التحكم")}</Link></li>
+        <li><Link to="/" className="hover:underline">{t("dashboardTitle", "لوحة التحكم")}</Link></li>
         <li>/</li>
         <li className="font-semibold text-blue-700 dark:text-sky-400">{phaseTitle}</li>
       </ol>

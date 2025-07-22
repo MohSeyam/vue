@@ -9,7 +9,7 @@ function Breadcrumbs({ weekId, dayTitle }) {
   return (
     <nav className="mb-4 text-sm" aria-label="breadcrumb">
       <ol className="flex gap-2 text-slate-500 dark:text-slate-400">
-        <li><Link to="/dashboard" className="hover:underline">{t("dashboardTitle", "لوحة التحكم")}</Link></li>
+        <li><Link to="/" className="hover:underline">{t("dashboardTitle", "لوحة التحكم")}</Link></li>
         <li>/</li>
         <li><Link to={`/week/${weekId}`} className="hover:underline">{t("week", "الأسبوع")} {weekId}</Link></li>
         <li>/</li>
