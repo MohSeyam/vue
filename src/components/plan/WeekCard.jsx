@@ -29,7 +29,7 @@ export default function WeekCard({ week, onClick, className = "", progress = 0, 
 
   return (
     <div
-      className={`rounded-2xl p-4 bg-white/80 dark:bg-zinc-900 shadow hover:-translate-y-1 hover:shadow-xl transition cursor-pointer border-t-4 border-emerald-400 flex flex-col gap-2 min-h-[100px] ${className}`}
+      className={`rounded-2xl p-4 bg-white/80 dark:bg-zinc-900 border border-emerald-100 dark:border-emerald-900 shadow hover:-translate-y-1 hover:shadow-xl transition cursor-pointer flex flex-col gap-2 min-h-[100px] ${className}`}
       tabIndex={0}
       onClick={handleClick}
       role="button"
@@ -43,14 +43,14 @@ export default function WeekCard({ week, onClick, className = "", progress = 0, 
           </span>
         </span>
       </div>
-      <div className="text-xs text-slate-600 dark:text-slate-300 mb-1">
+      <div className="text-xs text-emerald-700 dark:text-emerald-300 mb-1">
         {week.objective?.[lang] || week.objective?.ar || week.objective?.en}
       </div>
       <ProgressBar percent={progress} />
       {showDays && DaySummaryCard && expanded && (
         <div className="mt-3 grid grid-cols-1 gap-3">
-          {(week.days || []).map((day) => (
-            <DaySummaryCard key={day.key} day={day} lang={lang} />
+          {(week.days || []).filter(day => day.key !== "fri").map((day) => (
+            <DaySummaryCard key={day.key} day={day} lang={lang} weekId={week.week} navigate={onClick} />
           ))}
         </div>
       )}

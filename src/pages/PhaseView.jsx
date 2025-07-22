@@ -31,7 +31,7 @@ function DaySummaryCard({ day, lang, weekId, navigate }) {
       <span className="font-bold text-base text-slate-800 dark:text-slate-100 drop-shadow-sm">
         {day.day?.[lang] || day.day?.ar || day.day?.en}
       </span>
-      <span className="text-sm text-blue-700 dark:text-emerald-300 font-semibold opacity-90">
+      <span className="text-sm text-emerald-700 dark:text-emerald-300 font-semibold opacity-90">
         {day.topic?.[lang] || day.topic?.ar || day.topic?.en}
       </span>
     </div>
