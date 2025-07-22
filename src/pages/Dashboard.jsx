@@ -9,6 +9,7 @@ import UpcomingTasks from "../components/dashboard/UpcomingTasks";
 import WeekProgress from "../components/dashboard/WeekProgress";
 import AchievementsSummary from "../components/dashboard/AchievementsSummary";
 import { getPhases } from "../services/dataService";
+import { useCyberPlan } from "../hooks/useCyberPlan";
 
 export default function Dashboard() {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ export default function Dashboard() {
   const [phases, setPhases] = useState([]);
   const navigate = useNavigate();
   const isRTL = lang === "ar";
+  const { plan } = useCyberPlan();
 
   useEffect(() => {
     getPhases().then(setPhases);
@@ -34,15 +36,24 @@ export default function Dashboard() {
       </div>
       {/* بطاقات المراحل */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        {phases.slice(0, 3).map((phase, idx) => (
-          <PhaseCard
-            key={phase.id}
-            phase={phase}
-            color={idx === 0 ? "blue" : idx === 1 ? "emerald" : "violet"}
-            onClick={() => navigate(`/phase/${phase.id}`)}
-            className="cursor-pointer"
-          />
-        ))}
+        {phases.slice(0, 3).map((phase, idx) => {
+          // حساب نسبة الإنجاز للمرحلة
+          const allTasks = plan
+            .filter(w => String(w.phase) === String(phase.id))
+            .flatMap(w => (w.tasks || []));
+          const doneCount = allTasks.filter(t => t.done).length;
+          const progress = allTasks.length ? Math.round((doneCount / allTasks.length) * 100) : 0;
+          return (
+            <PhaseCard
+              key={phase.id}
+              phase={phase}
+              color={idx === 0 ? "blue" : idx === 1 ? "emerald" : "violet"}
+              progress={progress}
+              onClick={() => navigate(`/phase/${phase.id}`)}
+              className="cursor-pointer"
+            />
+          );
+        })}
       </div>
       {/* شبكة بينتو */}
       <div className="grid md:grid-cols-3 gap-6">
