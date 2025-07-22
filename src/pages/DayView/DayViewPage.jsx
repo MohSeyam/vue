@@ -1,4 +1,9 @@
-import { DayHeader, TaskList, ResourceList, PomodoroTimer, TiptapJournalEditor, NotesPrompt } from ".";
+import DayHeader from "./DayHeader";
+import TaskList from "./TaskList";
+import ResourceList from "./ResourceList";
+import PomodoroTimer from "./PomodoroTimer";
+import TiptapJournalEditor from "./TiptapJournalEditor";
+import NotesPrompt from "./NotesPrompt";
 
 export default function DayViewPage({ day, weekId, phaseId }) {
   // day: { day, topic, tasks, resources, notes_prompt, key }
