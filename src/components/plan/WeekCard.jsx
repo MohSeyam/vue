@@ -10,7 +10,7 @@ const shadowMap = {
   amber: "shadow-[0_4px_32px_0_rgba(245,158,11,0.25)]", // amber-500
 };
 
-export default function WeekCard({ week, className = "", color = "blue", DaySummaryCard, dayColor, expanded, onExpand }) {
+export default function WeekCard({ week, className = "", color = "blue", DaySummaryCard, dayColor, expanded, onExpand, navigate }) {
   const { t } = useTranslation();
   const { lang } = useApp();
 
@@ -44,7 +44,11 @@ export default function WeekCard({ week, className = "", color = "blue", DaySumm
               lang={lang}
               weekId={week.week}
               color={dayColor}
-              onDayClick={() => onExpand?.(null)}
+              navigate={navigate}
+              onDayClick={() => {
+                onExpand?.(null);
+                navigate(`/day/${week.week}/${day.key}`);
+              }}
             />
           ))}
         </div>

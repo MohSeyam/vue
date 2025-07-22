@@ -19,7 +19,7 @@ function Breadcrumbs({ phaseTitle }) {
   );
 }
 
-function DaySummaryCard({ day, lang, weekId, navigate, color = "amber" }) {
+function DaySummaryCard({ day, lang, weekId, onDayClick, color = "amber" }) {
   const colorMap = {
     amber: {
       border: "border-amber-200 dark:border-amber-800",
@@ -49,7 +49,7 @@ function DaySummaryCard({ day, lang, weekId, navigate, color = "amber" }) {
   return (
     <div
       className={`rounded-xl p-4 bg-white/80 dark:bg-zinc-900 border ${colorMap[color]?.border || colorMap.amber.border} shadow flex flex-col justify-center items-center gap-1 cursor-pointer hover:-translate-y-1 hover:shadow-lg transition text-center min-h-[80px]`}
-      onClick={() => navigate(`/day/${weekId}/${day.key}`)}
+      onClick={onDayClick}
       tabIndex={0}
       role="button"
       aria-label={day.day?.[lang] || day.day?.ar || day.day?.en}
@@ -136,6 +136,7 @@ export default function PhaseView() {
               dayColor="stone"
               expanded={expandedWeek === week.week}
               onExpand={w => setExpandedWeek(w === expandedWeek ? null : w)}
+              navigate={navigate}
             />
           );
         })}
