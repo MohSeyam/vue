@@ -17,7 +17,7 @@ function Breadcrumbs({ weekTitle }) {
   );
 }
 
-function DaySummaryCard({ day, lang, weekId, navigate, color = "stone" }) {
+function DaySummaryCard({ day, lang, weekId, color = "stone", onDayClick }) {
   const colorMap = {
     stone: {
       border: "border-stone-200 dark:border-stone-700",
@@ -27,7 +27,7 @@ function DaySummaryCard({ day, lang, weekId, navigate, color = "stone" }) {
   return (
     <div
       className={`rounded-xl p-4 bg-white/80 dark:bg-zinc-900 border ${colorMap[color]?.border} shadow flex flex-col justify-center items-center gap-1 cursor-pointer hover:-translate-y-1 hover:shadow-lg transition text-center min-h-[80px]`}
-      onClick={() => navigate(`/day/${weekId}/${day.key}`)}
+      onClick={onDayClick}
       tabIndex={0}
       role="button"
       aria-label={day.day?.[lang] || day.day?.ar || day.day?.en}
@@ -77,7 +77,14 @@ export default function WeekView() {
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {(week.days || []).filter(day => day.key !== "fri").map((day) => (
-          <DaySummaryCard key={day.key} day={day} lang={lang} weekId={week.week} color="stone" onDayClick={() => {}} />
+          <DaySummaryCard
+            key={day.key}
+            day={day}
+            lang={lang}
+            weekId={week.week}
+            color="stone"
+            onDayClick={() => navigate(`/day/${week.week}/${day.key}`)}
+          />
         ))}
       </div>
     </div>
