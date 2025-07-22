@@ -22,16 +22,16 @@ function Breadcrumbs({ phaseTitle }) {
 function DaySummaryCard({ day, lang, weekId, navigate }) {
   return (
     <div
-      className="rounded-2xl p-4 bg-gradient-to-br from-blue-50 via-violet-50 to-emerald-50 dark:from-blue-900 dark:via-violet-900 dark:to-emerald-900 border border-slate-200 dark:border-slate-800 shadow-md flex flex-col justify-center items-center gap-1 cursor-pointer hover:scale-105 hover:shadow-xl hover:from-blue-100 hover:to-emerald-100 dark:hover:from-blue-800 dark:hover:to-emerald-800 transition text-center min-h-[80px]"
+      className="rounded-xl p-4 bg-white/80 dark:bg-zinc-900 border border-emerald-100 dark:border-emerald-900 shadow flex flex-col justify-center items-center gap-1 cursor-pointer hover:-translate-y-1 hover:shadow-lg transition text-center min-h-[80px]"
       onClick={() => navigate(`/day/${weekId}/${day.key}`)}
       tabIndex={0}
       role="button"
       aria-label={day.day?.[lang] || day.day?.ar || day.day?.en}
     >
-      <span className="font-bold text-lg bg-gradient-to-r from-blue-600 via-violet-600 to-emerald-600 bg-clip-text text-transparent drop-shadow-sm">
+      <span className="font-bold text-base text-slate-800 dark:text-slate-100 drop-shadow-sm">
         {day.day?.[lang] || day.day?.ar || day.day?.en}
       </span>
-      <span className="text-sm bg-gradient-to-r from-violet-500 to-emerald-500 bg-clip-text text-transparent font-semibold opacity-90">
+      <span className="text-sm text-blue-700 dark:text-emerald-300 font-semibold opacity-90">
         {day.topic?.[lang] || day.topic?.ar || day.topic?.en}
       </span>
     </div>
