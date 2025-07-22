@@ -187,7 +187,7 @@ export default function DayView({ weekId, dayKey }) {
     if (!setModal) return <div>setModal not loaded</div>;
     if (!setAppState) return <div>setAppState not loaded</div>;
     const t = translations[lang];
-    const weekData = planData.find(w => w.week === weekId);
+    const weekData = planData.find(w => String(w.week) === String(weekId));
     if (!weekData) return <div>Week not found: {weekId}</div>;
     const dayData = weekData.days?.find(d => d.key === dayKey);
     const dayIndex = weekData.days?.findIndex(d => d.key === dayKey);
