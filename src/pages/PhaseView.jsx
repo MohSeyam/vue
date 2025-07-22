@@ -36,6 +36,10 @@ function DaySummaryCard({ day, lang, weekId, navigate, color = "amber" }) {
     violet: {
       border: "border-violet-200 dark:border-violet-800",
       text: "text-violet-700 dark:text-violet-300"
+    },
+    pink: {
+      border: "border-pink-200 dark:border-pink-800",
+      text: "text-pink-700 dark:text-pink-300"
     }
   };
   return (
@@ -112,18 +116,19 @@ export default function PhaseView() {
           });
           const doneCount = allTasks.filter(task => doneMap[task.id]).length;
           const progress = allTasks.length ? Math.round((doneCount / allTasks.length) * 100) : 0;
-          // لون الأسبوع حسب المرحلة
-          const phaseColors = ["blue", "emerald", "violet"];
-          const weekColor = phaseColors[idx % phaseColors.length];
+          // لون المرحلة والأسابيع
+          let phaseColor = "emerald";
+          if (phase.id === 2) phaseColor = "blue";
+          if (phase.id === 3) phaseColor = "violet";
           return (
             <WeekCard
               key={week.week}
               week={week}
               lang={lang}
               progress={progress}
-              color={weekColor}
+              color={phaseColor}
               DaySummaryCard={DaySummaryCard}
-              dayColor="amber"
+              dayColor="pink"
             />
           );
         })}
