@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../context/AppContext";
+import { useParams } from "react-router-dom";
 
 // NoteEditor component
 function NoteEditor({ note, taskDescription, onSave, onDelete }) {
@@ -176,7 +177,10 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
 }
 
 // DayView main component
-export default function DayView({ weekId, dayKey }) {
+export default function DayView(props) {
+    const params = useParams();
+    const weekId = props.weekId || params.weekId;
+    const dayKey = props.dayKey || params.dayKey;
     const ctx = useContext(AppContext);
     if (!ctx) return <div>AppContext not ready</div>;
     const { lang, appState, setAppState, planData, translations, Icons, setModal } = ctx;
