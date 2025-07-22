@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import CyberPlan from "./pages/CyberPlan";
 import Journal from "./pages/Journal";
+import PhaseView from "./pages/PhaseView";
 
 export default function App() {
   console.log("App.jsx loaded");
@@ -20,6 +21,7 @@ export default function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/plan" element={<CyberPlan />} />
                 <Route path="/journal" element={<Journal />} />
+                <Route path="/phase/:phaseId" element={<PhaseView />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
