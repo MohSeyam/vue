@@ -1,3 +1,4 @@
+import React from "react";
 import ResourceItem from "./ResourceItem";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
