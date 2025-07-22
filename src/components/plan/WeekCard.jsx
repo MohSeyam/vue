@@ -3,11 +3,11 @@ import { useTranslation } from "react-i18next";
 import { useApp } from "../../context/AppContext";
 import { useState } from "react";
 
-const bgMap = {
-  blue: "bg-blue-600",
-  emerald: "bg-emerald-600",
-  violet: "bg-violet-600",
-  amber: "bg-amber-600"
+const shadowMap = {
+  blue: "shadow-[0_4px_32px_0_rgba(59,130,246,0.25)]", // blue-500
+  emerald: "shadow-[0_4px_32px_0_rgba(16,185,129,0.25)]", // emerald-500
+  violet: "shadow-[0_4px_32px_0_rgba(139,92,246,0.25)]", // violet-500
+  amber: "shadow-[0_4px_32px_0_rgba(245,158,11,0.25)]", // amber-500
 };
 
 export default function WeekCard({ week, className = "", color = "blue", DaySummaryCard, dayColor }) {
@@ -18,7 +18,7 @@ export default function WeekCard({ week, className = "", color = "blue", DaySumm
   const handleClick = () => setExpanded((v) => !v);
 
   return (
-    <div className={`group rounded-2xl p-6 ${bgMap[color] || bgMap.blue} shadow-xl hover:-translate-y-1.5 hover:shadow-2xl transition-all duration-200 cursor-pointer backdrop-blur-md flex flex-col gap-2 min-h-[120px] ${className}`}
+    <div className={`group rounded-2xl p-6 bg-black/90 ${shadowMap[color] || shadowMap.blue} hover:-translate-y-1.5 hover:shadow-2xl transition-all duration-200 cursor-pointer backdrop-blur-md flex flex-col gap-2 min-h-[120px] border border-white/10 ${className}`}
       tabIndex={0}
       onClick={handleClick}
       role="button"
