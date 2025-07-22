@@ -24,6 +24,57 @@ export function AppProvider({ children }) {
     resource: (type) => <FaEdit />,
   };
 
+  const translations = {
+    ar: {
+      activeTasks: "المهام النشطة",
+      suggestedResources: "المراجع المقترحة",
+      addResource: "إضافة مرجع",
+      eveningJournaling: "مهمة التدوين المسائية",
+      minutes: "دقيقة",
+      editNote: "تعديل الملاحظة",
+      noteOnTask: "ملاحظة على المهمة",
+      noteTitle: "عنوان الملاحظة",
+      keywords: "الكلمات المفتاحية",
+      noteContent: "محتوى الملاحظة",
+      deleteNote: "حذف الملاحظة",
+      cancel: "إلغاء",
+      saveNote: "حفظ الملاحظة",
+      editResource: "تعديل المرجع",
+      resourceTitle: "عنوان المرجع",
+      resourceUrl: "رابط المرجع",
+      resourceType: "نوع المرجع",
+      video: "فيديو",
+      article: "مقالة",
+      link: "رابط",
+      deleteResource: "حذف المرجع",
+      saveResource: "حفظ المرجع",
+    },
+    en: {
+      activeTasks: "Active Tasks",
+      suggestedResources: "Suggested Resources",
+      addResource: "Add Resource",
+      eveningJournaling: "Evening Journaling",
+      minutes: "min",
+      editNote: "Edit Note",
+      noteOnTask: "Note on task",
+      noteTitle: "Note Title",
+      keywords: "Keywords",
+      noteContent: "Note Content",
+      deleteNote: "Delete Note",
+      cancel: "Cancel",
+      saveNote: "Save Note",
+      editResource: "Edit Resource",
+      resourceTitle: "Resource Title",
+      resourceUrl: "Resource URL",
+      resourceType: "Resource Type",
+      video: "Video",
+      article: "Article",
+      link: "Link",
+      deleteResource: "Delete Resource",
+      saveResource: "Save Resource",
+    }
+  };
+
   // زامن i18n.language مع lang عند التحميل
   useEffect(() => {
     i18n.changeLanguage(lang);
@@ -45,7 +96,7 @@ export function AppProvider({ children }) {
   };
 
   return (
-    <AppContext.Provider value={{ user, setUser, lang, setLang, settings, setSettings, planData, setPlanData, appState, setAppState, Icons }}>
+    <AppContext.Provider value={{ user, setUser, lang, setLang, settings, setSettings, planData, setPlanData, appState, setAppState, Icons, translations }}>
       {children}
     </AppContext.Provider>
   );
