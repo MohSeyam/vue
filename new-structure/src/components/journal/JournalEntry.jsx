@@ -1,0 +1,2 @@
+// JournalEntry.jsx
+// عنصر يومية

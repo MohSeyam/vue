@@ -1,0 +1,2 @@
+// JournalEditor.jsx
+// محرر اليوميات
