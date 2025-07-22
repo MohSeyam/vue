@@ -1,9 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { useApp } from "../../context/AppContext";
-import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { addNote, updateNote, getNotes } from "../../services/dbService";
 import { Dialog } from "@/components/ui/dialog";
+
+// Utility to join class names
+function cn(...args) {
+  return args.filter(Boolean).join(" ");
+}
 
 const typeColors = {
   "Blue Team": "border-blue-400 bg-blue-50 dark:bg-blue-900/40",
