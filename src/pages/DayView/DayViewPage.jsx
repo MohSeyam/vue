@@ -177,19 +177,27 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
 
 // DayView main component
 export default function DayView({ weekId, dayKey }) {
-    const { lang, appState, setAppState, planData, translations, Icons, setModal } = useContext(AppContext);
+    const ctx = useContext(AppContext);
+    if (!ctx) return <div>AppContext not ready</div>;
+    const { lang, appState, setAppState, planData, translations, Icons, setModal } = ctx;
+    if (!planData) return <div>planData not loaded</div>;
+    if (!appState) return <div>appState not loaded</div>;
+    if (!Icons) return <div>Icons not loaded</div>;
+    if (!translations) return <div>translations not loaded</div>;
+    if (!setModal) return <div>setModal not loaded</div>;
+    if (!setAppState) return <div>setAppState not loaded</div>;
     const t = translations[lang];
     const weekData = planData.find(w => w.week === weekId);
-    const dayData = weekData?.days.find(d => d.key === dayKey);
-    const dayIndex = weekData ? weekData.days.findIndex(d => d.key === dayKey) : -1;
-
-    if (!dayData || dayIndex === -1) return <div>Day not found.</div>;
+    if (!weekData) return <div>Week not found: {weekId}</div>;
+    const dayData = weekData.days?.find(d => d.key === dayKey);
+    const dayIndex = weekData.days?.findIndex(d => d.key === dayKey);
+    if (!dayData || dayIndex === -1) return <div>Day not found: {dayKey}</div>;
 
     // دالة لتغيير حالة المهمة بين مكتملة وغير مكتملة
     const handleTaskToggle = (taskIndex) => {
         setAppState(prevState => {
             const newState = JSON.parse(JSON.stringify(prevState));
-            const currentStatus = newState.progress[weekId].days[dayIndex].tasks[taskIndex];
+            const currentStatus = newState.progress[weekId]?.days[dayIndex].tasks[taskIndex];
             newState.progress[weekId].days[dayIndex].tasks[taskIndex] = currentStatus === 'completed' ? 'pending' : 'completed';
             return newState;
         });
