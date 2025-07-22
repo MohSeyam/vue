@@ -1,23 +1,18 @@
 <template>
   <v-container fluid class="py-8">
+    <Breadcrumbs :items="[
+      { title: 'الرئيسية', to: '/' },
+      { title: 'نظرة على الخطة', to: '/plan' },
+      { title: phaseTitle }
+    ]" />
     <v-row justify="center">
       <v-col cols="12" md="8">
         <v-card class="pa-6 mb-4" elevation="8">
-          <v-card-title class="font-weight-bold text-primary mb-2">{{ props.week.title[$i18n.locale] || props.week.title.en }}</v-card-title>
-          <v-card-subtitle class="mb-4">{{ props.week.objective?.[$i18n.locale] || props.week.objective?.en }}</v-card-subtitle>
+          <v-card-title class="font-weight-bold text-primary mb-2">{{ phaseTitle }}</v-card-title>
           <v-list dense>
-            <v-list-item v-for="d in props.week.days" :key="d.key">
-              <v-list-item-title class="font-weight-bold">{{ d.day[$i18n.locale] || d.day.en }}: {{ d.topic?.[$i18n.locale] || d.topic?.en }}</v-list-item-title>
-              <v-list-item-subtitle>
-                <v-card class="pa-3 my-2" elevation="2">
-                  <v-list dense>
-                    <v-list-item v-for="t in d.tasks" :key="t.id">
-                      <v-list-item-icon><v-icon color="primary">mdi-checkbox-blank-circle-outline</v-icon></v-list-item-icon>
-                      <v-list-item-title>{{ t.description[$i18n.locale] || t.description.en }} ({{ t.type || '' }}, {{ t.duration }} min)</v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-card>
-              </v-list-item-subtitle>
+            <v-list-item v-for="w in weeks" :key="w.week" @click="goToWeek(w.week)" class="v-card--link">
+              <v-list-item-title class="font-weight-bold">{{ w.title[lang] }}</v-list-item-title>
+              <v-list-item-subtitle>{{ w.objective[lang] }}</v-list-item-subtitle>
             </v-list-item>
           </v-list>
         </v-card>
@@ -26,5 +21,16 @@
   </v-container>
 </template>
 <script setup lang="ts">
-const props = defineProps<{ week: any }>()
+import Breadcrumbs from '../common/Breadcrumbs.vue';
+import { inject, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+const route = useRoute();
+const router = useRouter();
+const { plan, phaseList, lang } = inject('app') as any;
+const phaseId = computed(() => Array.isArray(route.params.phaseId) ? route.params.phaseId[0] : route.params.phaseId);
+const weeks = computed(() => plan.value.filter((w: any) => w.phase == phaseId.value));
+const phaseTitle = computed(() => phaseList.value[phaseId.value]?.title?.[lang] || 'Phase');
+function goToWeek(weekId: number) {
+  router.push({ name: 'days', params: { phaseId: phaseId.value, weekId } });
+}
 </script>
