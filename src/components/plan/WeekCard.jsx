@@ -18,21 +18,21 @@ export default function WeekCard({ week, className = "", color = "blue", DaySumm
   const handleClick = () => setExpanded((v) => !v);
 
   return (
-    <div className={`rounded-2xl p-6 ${bgMap[color] || bgMap.blue} shadow-xl hover:-translate-y-1.5 hover:shadow-2xl transition-all duration-200 cursor-pointer flex flex-col gap-2 min-h-[100px] ${className}`}
+    <div className={`group rounded-2xl p-6 ${bgMap[color] || bgMap.blue} shadow-xl hover:-translate-y-1.5 hover:shadow-2xl transition-all duration-200 cursor-pointer backdrop-blur-md flex flex-col gap-2 min-h-[120px] ${className}`}
       tabIndex={0}
       onClick={handleClick}
       role="button"
       aria-label={week.title?.[lang] || week.title?.ar || week.title?.en}
     >
-      {/* رقم الأسبوع في الأعلى */}
-      <div className="flex justify-center mb-2">
-        <span className="inline-block rounded-full bg-white text-slate-700 px-3 py-1 text-xs font-bold shadow-sm border border-white">
+      {/* شارة رقم الأسبوع */}
+      <div className="flex justify-start mb-2">
+        <span className="text-xs bg-white text-slate-700 rounded-full px-3 py-1 font-bold shadow-sm">
           {t("week", "أسبوع")} {week.week}
         </span>
       </div>
       {/* اسم الأسبوع */}
-      <div className="flex items-center justify-center mb-1">
-        <span className="font-extrabold text-xl md:text-2xl text-white">
+      <div className="mb-3">
+        <span className="block text-xl md:text-2xl font-extrabold text-white drop-shadow-sm">
           {week.title?.[lang] || week.title?.ar || week.title?.en}
         </span>
       </div>
