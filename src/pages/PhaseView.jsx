@@ -19,10 +19,28 @@ function Breadcrumbs({ phaseTitle }) {
   );
 }
 
-function DaySummaryCard({ day, lang, weekId, navigate }) {
+function DaySummaryCard({ day, lang, weekId, navigate, color = "amber" }) {
+  const colorMap = {
+    amber: {
+      border: "border-amber-200 dark:border-amber-800",
+      text: "text-amber-700 dark:text-amber-300"
+    },
+    blue: {
+      border: "border-blue-200 dark:border-blue-800",
+      text: "text-blue-700 dark:text-blue-300"
+    },
+    emerald: {
+      border: "border-emerald-200 dark:border-emerald-800",
+      text: "text-emerald-700 dark:text-emerald-300"
+    },
+    violet: {
+      border: "border-violet-200 dark:border-violet-800",
+      text: "text-violet-700 dark:text-violet-300"
+    }
+  };
   return (
     <div
-      className="rounded-xl p-4 bg-white/80 dark:bg-zinc-900 border border-emerald-100 dark:border-emerald-900 shadow flex flex-col justify-center items-center gap-1 cursor-pointer hover:-translate-y-1 hover:shadow-lg transition text-center min-h-[80px]"
+      className={`rounded-xl p-4 bg-white/80 dark:bg-zinc-900 border ${colorMap[color]?.border || colorMap.amber.border} shadow flex flex-col justify-center items-center gap-1 cursor-pointer hover:-translate-y-1 hover:shadow-lg transition text-center min-h-[80px]`}
       onClick={() => navigate(`/day/${weekId}/${day.key}`)}
       tabIndex={0}
       role="button"
@@ -31,7 +49,7 @@ function DaySummaryCard({ day, lang, weekId, navigate }) {
       <span className="font-bold text-base text-slate-800 dark:text-slate-100 drop-shadow-sm">
         {day.day?.[lang] || day.day?.ar || day.day?.en}
       </span>
-      <span className="text-sm text-emerald-700 dark:text-emerald-300 font-semibold opacity-90">
+      <span className={`text-sm font-semibold opacity-90 ${colorMap[color]?.text || colorMap.amber.text}` }>
         {day.topic?.[lang] || day.topic?.ar || day.topic?.en}
       </span>
     </div>
@@ -85,7 +103,7 @@ export default function PhaseView() {
         )}
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {weeks.map(week => {
+        {weeks.map((week, idx) => {
           // حساب نسبة الإنجاز
           const allTasks = (week.days || []).flatMap(day => day.tasks || []);
           const doneMap = {};
@@ -94,21 +112,19 @@ export default function PhaseView() {
           });
           const doneCount = allTasks.filter(task => doneMap[task.id]).length;
           const progress = allTasks.length ? Math.round((doneCount / allTasks.length) * 100) : 0;
+          // لون الأسبوع حسب المرحلة
+          const phaseColors = ["blue", "emerald", "violet"];
+          const weekColor = phaseColors[idx % phaseColors.length];
           return (
-            <div key={week.week}>
-              <WeekCard
-                week={week}
-                lang={lang}
-                progress={progress}
-                showDays={false}
-                onClick={() => {}}
-              />
-              <div className="mt-3 grid grid-cols-1 gap-3">
-                {(week.days || []).filter(day => day.key !== "fri").map((day) => (
-                  <DaySummaryCard key={day.key} day={day} lang={lang} weekId={week.week} navigate={navigate} />
-                ))}
-              </div>
-            </div>
+            <WeekCard
+              key={week.week}
+              week={week}
+              lang={lang}
+              progress={progress}
+              color={weekColor}
+              DaySummaryCard={DaySummaryCard}
+              dayColor="amber"
+            />
           );
         })}
       </div>
