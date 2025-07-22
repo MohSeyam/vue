@@ -52,10 +52,19 @@ export default function Dashboard() {
 }
 
 function StatBox({ label, value, color }) {
+  // color: cyan, violet, amber, emerald
+  const colorMap = {
+    "bg-cyan-500": "from-cyan-400 to-cyan-600 border-cyan-200 text-cyan-700",
+    "bg-violet-500": "from-violet-400 to-violet-600 border-violet-200 text-violet-700",
+    "bg-amber-500": "from-amber-400 to-amber-500 border-amber-200 text-amber-700",
+    "bg-emerald-500": "from-emerald-400 to-emerald-600 border-emerald-200 text-emerald-700"
+  };
+  const gradient = colorMap[color] || "from-gray-200 to-gray-400 border-gray-200 text-gray-700";
   return (
-    <div className={`rounded-xl p-4 text-center text-white shadow ${color}`}>
-      <div className="text-2xl font-bold mb-1">{value}</div>
-      <div className="text-sm font-medium">{label}</div>
+    <div className={`rounded-2xl p-6 text-center shadow-lg bg-gradient-to-br ${gradient} border backdrop-blur-sm`}
+      style={{ minWidth: 120 }}>
+      <div className={`text-3xl font-extrabold mb-1 drop-shadow-sm`}>{value}</div>
+      <div className="text-base font-semibold opacity-90">{label}</div>
     </div>
   );
 }
