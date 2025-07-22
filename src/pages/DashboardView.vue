@@ -39,11 +39,10 @@ import ProgressChart from '../components/charts/ProgressChart.vue';
 const { plan, phaseList, lang, t, setView } = inject('app') as any;
 const weeks = computed(() => plan.value);
 const phases = computed(() => phaseList.value);
-const currentWeek = computed(() => weeks.value[0]); // يمكن تحسينه لاحقًا
+const currentWeek = computed(() => weeks.value[0]);
 const weekProgress = computed(() => getWeekProgress(currentWeek.value));
 function getWeekProgress(week: any) {
   const total = week.days.reduce((acc: number, day: any) => acc + day.tasks.length, 0);
-  // هنا يمكن ربط التقدم الفعلي من appState
   return total > 0 ? Math.round((week.days.reduce((acc: number, day: any) => acc + day.tasks.filter((t: any) => t.completed).length, 0) / total) * 100) : 0;
 }
 function getPhaseProgress(phaseKey: string) {
@@ -51,13 +50,15 @@ function getPhaseProgress(phaseKey: string) {
   const total = phaseWeeks.reduce((acc: number, w: any) => acc + w.days.reduce((a: number, d: any) => a + d.tasks.length, 0), 0);
   return total > 0 ? Math.round((phaseWeeks.reduce((acc: number, w: any) => acc + w.days.reduce((a: number, d: any) => a + d.tasks.filter((t: any) => t.completed).length, 0), 0) / total) * 100) : 0;
 }
-function goToPhase(phaseId: string | number) {
-  setView({ page: 'week', params: { phaseId } });
-}
 function goToWeek(weekId: number) {
   setView({ page: 'day', params: { weekId } });
 }
-function goToDay(_key: string) { /* ربط مع التنقل */ }
+function goToPhase(phaseId: string | number) {
+  setView({ page: 'week', params: { phaseId } });
+}
+function goToDay(dayKey: string) {
+  setView({ page: 'day', params: { dayKey } });
+}
 const achievements = computed(() => [
   { id: 'a1', title: t.value['firstNote' as 'ar' | 'en'] || 'أول ملاحظة', date: '2024-05-01' },
   { id: 'a2', title: t.value['weekComplete' as 'ar' | 'en'] || 'إكمال أسبوع', date: '2024-05-07' },
