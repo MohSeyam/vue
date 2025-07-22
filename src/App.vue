@@ -24,24 +24,24 @@
     <!-- Main Content Area -->
     <v-main>
       <v-container fluid class="pa-4 pa-md-8">
-        <component :is="currentViewComponent" class="animate-fade-in"></component>
+        <router-view class="animate-fade-in" />
       </v-container>
     </v-main>
     <!-- Mobile Bottom Navigation -->
-    <v-bottom-navigation v-model="view.page" color="primary" grow class="d-md-none" app>
-      <v-btn value="dashboard">
+    <v-bottom-navigation color="primary" grow class="d-md-none" app>
+      <v-btn to="/" link>
         <v-icon>mdi-home-variant</v-icon>
         <span>{{ t.home }}</span>
       </v-btn>
-      <v-btn value="sidebar">
+      <v-btn to="/plan" link>
         <v-icon>mdi-format-list-bulleted-square</v-icon>
         <span>{{ t.planOverview }}</span>
       </v-btn>
-      <v-btn value="achievements">
+      <v-btn to="/achievements" link>
         <v-icon>mdi-trophy-variant</v-icon>
         <span>{{ t.achievements }}</span>
       </v-btn>
-      <v-btn value="notebook">
+      <v-btn to="/notebook" link>
         <v-icon>mdi-notebook</v-icon>
         <span>{{ t.notebook }}</span>
       </v-btn>
@@ -51,7 +51,7 @@
   </v-app>
 </template>
 <script setup lang="ts">
-import { ref, reactive, computed, provide, onMounted, watch, markRaw } from 'vue'
+import { ref, reactive, computed, provide, onMounted, watch } from 'vue'
 import translations from '@/data/translations.json'
 import phases from '@/data/phases.json'
 
@@ -87,18 +87,6 @@ watch(appState, (newState) => {
   }
 }, { deep: true })
 provide('app', { lang, theme, view, setView, appState, t, phases })
-const components: Record<string, any> = {
-  dashboard: markRaw({}),
-  achievements: markRaw({}),
-  notebook: markRaw({}),
-  phase: markRaw({}),
-  week: markRaw({}),
-  day: markRaw({}),
-  sidebar: markRaw({}),
-}
-const currentViewComponent = computed(() => {
-  return components[view.page] || components.dashboard
-})
 </script>
 <style scoped>
 body {

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <SidebarMenu />
+    <SidebarMenu class="d-none d-md-flex" />
     <AppBar
       :model-value="page"
       :lang="lang"

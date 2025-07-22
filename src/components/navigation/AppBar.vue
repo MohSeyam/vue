@@ -4,10 +4,10 @@
       {{ title }}
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-tabs v-model="modelValue" color="primary" class="d-none d-md-flex" grow>
-      <v-tab value="dashboard" prepend-icon="mdi-home-variant" />
-      <v-tab value="achievements" prepend-icon="mdi-trophy-variant" />
-      <v-tab value="notebook" prepend-icon="mdi-notebook" />
+    <v-tabs color="primary" class="d-none d-md-flex" grow>
+      <v-tab to="/" link prepend-icon="mdi-home-variant" />
+      <v-tab to="/achievements" link prepend-icon="mdi-trophy-variant" />
+      <v-tab to="/notebook" link prepend-icon="mdi-notebook" />
     </v-tabs>
     <v-spacer></v-spacer>
     <v-btn @click="$emit('toggle-lang')" variant="text" class="font-weight-bold mx-1">
