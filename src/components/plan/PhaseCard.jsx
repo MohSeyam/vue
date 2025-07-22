@@ -6,7 +6,9 @@ export default function PhaseCard({ phase }) {
         <span className="text-lg font-bold text-cyan-600">{phase.name}</span>
         <span className="text-xs bg-cyan-100 text-cyan-700 rounded px-2 py-0.5">مرحلة {phase.id}</span>
       </div>
-      {/* يمكن إضافة وصف أو زر تفاصيل لاحقًا */}
+      <div className="text-sm text-gray-700 dark:text-gray-200 mb-2">{phase.description || ""}</div>
+      <button className="text-xs text-cyan-700 hover:underline">تفاصيل</button>
+      {/* TODO: يمكن إضافة خصائص أو مكونات أخرى هنا */}
     </div>
   );
 }
