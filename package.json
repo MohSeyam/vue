@@ -9,14 +9,31 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "@tiptap/extension-code-block-lowlight": "^3.0.7",
+    "@tiptap/extension-highlight": "^3.0.7",
+    "@tiptap/extension-link": "^3.0.7",
+    "@tiptap/extension-placeholder": "^3.0.7",
+    "@tiptap/extension-text-align": "^3.0.7",
+    "@tiptap/extension-underline": "^3.0.7",
+    "@tiptap/starter-kit": "^3.0.7",
+    "@tiptap/vue-3": "^3.0.7",
+    "@types/quill": "^2.0.14",
+    "chart.js": "^4.5.0",
     "dexie": "^4.0.11",
+    "fuse.js": "^7.1.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.1",
+    "lowlight": "^3.3.0",
+    "marked": "^16.1.1",
     "pinia": "^3.0.3",
+    "quill": "^2.0.3",
     "turndown": "^7.2.0",
     "vue": "^3.5.17",
+    "vue-chartjs": "^5.3.2",
     "vue-i18n": "^11.1.10",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "vuetify": "^3.9.2"
   },
   "devDependencies": {
     "@types/node": "^24.0.15",

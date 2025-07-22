@@ -1,0 +1,107 @@
+{
+  "tasks": {
+    "noTasks": "No tasks for today.",
+    "done": "Completed",
+    "title": "Tasks",
+    "min": "min"
+  },
+  "pomodoro": {
+    "work": "Work",
+    "shortBreak": "Short Break",
+    "longBreak": "Long Break",
+    "start": "Start",
+    "pause": "Pause",
+    "reset": "Reset",
+    "sessions": "Completed Sessions"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language"
+  },
+  "resources": {
+    "noResources": "No resources for today.",
+    "open": "Open link",
+    "title": "Resources"
+  },
+  "week": {
+    "noDayData": "No data for this day.",
+    "notFound": "Week not found."
+  },
+  "notebook": {
+    "title": "Notebook",
+    "addNote": "Add Note",
+    "editNote": "Edit Note",
+    "noNotes": "No notes yet.",
+    "addEntry": "Add Entry",
+    "editEntry": "Edit Entry",
+    "titleEn": "Title (English)",
+    "titleAr": "Title (Arabic)",
+    "contentEn": "Content (English)",
+    "contentAr": "Content (Arabic)",
+    "tags": "Tags",
+    "tagsHint": "e.g. review, security, learning",
+    "search": "Search notes...",
+    "templates": "Templates",
+    "graphTitle": "Notes Graph Relationships",
+    "graphDesc": "Graph visualization of note relationships coming soon.",
+    "allTags": "All",
+    "export": "Export",
+    "toastSaved": "Note saved successfully!",
+    "toastDeleted": "Note deleted!",
+    "toastExportedPDF": "Notes exported as PDF!",
+    "toastExportedMD": "Notes exported as Markdown!",
+    "toastNoNotes": "No notes to export!",
+    "toastTemplate": "Template inserted!"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "notebook": "Notebook",
+    "achievements": "Achievements",
+    "journal": "Journal",
+    "settings": "Settings",
+    "langSwitch": "Switch Language",
+    "themeSwitch": "Toggle Dark/Light Mode"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "progress": "Progress",
+    "completedTasks": "Completed Tasks",
+    "totalTasks": "Total Tasks",
+    "details": "Achievement Details",
+    "phaseProgress": "Phase Progress",
+    "skills": "Skills",
+    "skill_network": "Networking",
+    "skill_linux": "Linux",
+    "skill_web": "Web Apps",
+    "skill_crypto": "Cryptography",
+    "stats": "Statistics",
+    "weeks": "Weeks",
+    "days": "Days",
+    "tasks": "Tasks",
+    "completed": "Completed",
+    "exportPDF": "Export PDF",
+    "exportMD": "Export Markdown",
+    "notesCount": "Notes count: {count}"
+  },
+  "journal": {
+    "copy": "Copy Content",
+    "allTags": "All Tags",
+    "search": "Search journal...",
+    "exportLang": "Export Language"
+  },
+  "dashboard": {
+    "welcome": "Welcome to the Dashboard!",
+    "simple": "Start your journey here. Use the icons above to navigate."
+  },
+  "clock": "Local Time",
+  "calendar": "Calendar",
+  "upcoming": "Upcoming Tasks",
+  "noUpcoming": "No upcoming tasks",
+  "weeks": "Weeks",
+  "currentPhase": "Current Phase",
+  "phase": "Phase"
+}

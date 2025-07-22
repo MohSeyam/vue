@@ -1,15 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import DashboardView from '../pages/DashboardView.vue';
+import PhaseView from '../components/phase/PhaseView.vue';
+import AchievementsView from '../components/achievements/AchievementsView.vue';
+import NotebookView from '../pages/NotebookView.vue';
 
 const routes = [
-  { path: '/', name: 'Home', component: () => import('../pages/Home.vue') },
-  { path: '/day', name: 'DayView', component: () => import('../pages/DayView.vue') },
-  { path: '/notebook', name: 'Notebook', component: () => import('../pages/Notebook.vue') },
-  { path: '/achievements', name: 'Achievements', component: () => import('../pages/Achievements.vue') },
-  { path: '/calendar', name: 'CalendarView', component: () => import('../pages/CalendarView.vue') },
-  { path: '/skills', name: 'SkillMatrix', component: () => import('../pages/SkillMatrix.vue') },
+  { path: '/', name: 'dashboard', component: DashboardView },
+  { path: '/plan', name: 'plan', component: PhaseView },
+  { path: '/achievements', name: 'achievements', component: AchievementsView },
+  { path: '/notebook', name: 'notebook', component: NotebookView },
+  // يمكنك إضافة باقي المسارات هنا
 ];
 
-export const router = createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+export default router;

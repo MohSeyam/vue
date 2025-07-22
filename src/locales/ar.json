@@ -1,0 +1,113 @@
+{
+  "tasks": {
+    "noTasks": "لا توجد مهام لهذا اليوم.",
+    "done": "تم الإنجاز",
+    "title": "المهام",
+    "min": "دقيقة"
+  },
+  "pomodoro": {
+    "work": "عمل",
+    "shortBreak": "استراحة قصيرة",
+    "longBreak": "استراحة طويلة",
+    "start": "ابدأ",
+    "pause": "إيقاف مؤقت",
+    "reset": "إعادة",
+    "sessions": "جلسات مكتملة"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "language": "اللغة"
+  },
+  "resources": {
+    "noResources": "لا توجد موارد لهذا اليوم.",
+    "open": "فتح الرابط",
+    "title": "الموارد"
+  },
+  "week": {
+    "noDayData": "لا يوجد بيانات لهذا اليوم.",
+    "notFound": "لم يتم العثور على الأسبوع المطلوب."
+  },
+  "notebook": {
+    "title": "دفتر الملاحظات",
+    "addNote": "إضافة ملاحظة",
+    "editNote": "تعديل الملاحظة",
+    "noNotes": "لا توجد ملاحظات بعد.",
+    "titleEn": "العنوان (إنجليزي)",
+    "titleAr": "العنوان (عربي)",
+    "contentEn": "المحتوى (إنجليزي)",
+    "contentAr": "المحتوى (عربي)",
+    "tags": "الوسوم",
+    "tagsHint": "مثال: أساسيات, أمن, شبكات",
+    "search": "بحث في الملاحظات...",
+    "templates": "قوالب جاهزة",
+    "graphTitle": "العلاقات البيانية بين الملاحظات",
+    "graphDesc": "سيتم قريبًا عرض العلاقات بين الملاحظات بشكل بياني تفاعلي.",
+    "allTags": "الكل",
+    "export": "تصدير",
+    "toastSaved": "تم حفظ الملاحظة بنجاح!",
+    "toastDeleted": "تم حذف الملاحظة!",
+    "toastExportedPDF": "تم تصدير الملاحظات كـ PDF!",
+    "toastExportedMD": "تم تصدير الملاحظات كـ Markdown!",
+    "toastNoNotes": "لا توجد ملاحظات للتصدير!",
+    "toastTemplate": "تم إدراج القالب!"
+  },
+  "sidebar": {
+    "dashboard": "الرئيسية",
+    "notebook": "الملاحظات",
+    "achievements": "الإنجازات",
+    "journal": "التدوين",
+    "settings": "الإعدادات",
+    "langSwitch": "تبديل اللغة",
+    "themeSwitch": "تبديل الوضع الليلي/النهاري"
+  },
+  "common": {
+    "save": "حفظ",
+    "cancel": "إلغاء"
+  },
+  "achievements": {
+    "title": "الإنجازات",
+    "progress": "نسبة الإنجاز",
+    "completedTasks": "المهام المنجزة",
+    "totalTasks": "إجمالي المهام",
+    "details": "تفاصيل الإنجاز",
+    "phaseProgress": "تقدم المراحل",
+    "skills": "المهارات",
+    "skill_network": "الشبكات",
+    "skill_linux": "لينكس",
+    "skill_web": "تطبيقات الويب",
+    "skill_crypto": "التشفير",
+    "stats": "إحصائيات",
+    "weeks": "أسابيع",
+    "days": "أيام",
+    "tasks": "مهام",
+    "completed": "منجز",
+    "exportPDF": "تصدير PDF",
+    "exportMD": "تصدير Markdown",
+    "notesCount": "عدد الملاحظات: {count}"
+  },
+  "journal": {
+    "copy": "نسخ المحتوى",
+    "allTags": "الكل",
+    "search": "بحث في التدوينات...",
+    "addEntry": "إضافة تدوينة",
+    "editEntry": "تعديل التدوينة",
+    "titleEn": "العنوان (إنجليزي)",
+    "titleAr": "العنوان (عربي)",
+    "contentEn": "المحتوى (إنجليزي)",
+    "contentAr": "المحتوى (عربي)",
+    "tags": "الوسوم",
+    "tagsHint": "مثال: مراجعة, أمن, تعلم",
+    "exportLang": "لغة التصدير"
+  },
+  "dashboard": {
+    "welcome": "مرحبًا بك في لوحة التحكم!",
+    "simple": "ابدأ رحلتك من هنا. استخدم الأيقونات أعلاه للتنقل."
+  },
+  "clock": "الساعة الآن",
+  "calendar": "التقويم",
+  "upcoming": "المهام القادمة",
+  "noUpcoming": "لا توجد مهام قادمة",
+  "weeks": "عدد الأسابيع",
+  "currentPhase": "المرحلة الحالية",
+  "phase": "مرحلة"
+}
