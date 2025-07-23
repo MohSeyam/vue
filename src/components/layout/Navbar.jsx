@@ -5,6 +5,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import { ShieldCheck, Languages, Sun, Moon, Settings, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useState, useRef, useEffect } from "react";
 
 const navLinks = [
   { to: "/", label: "لوحة التحكم", key: "dashboard" },
@@ -15,75 +16,50 @@ const navLinks = [
 
 export default function Navbar() {
   const { theme, setTheme, lang, setLang } = useApp();
-  const { t, i18n } = useTranslation();
-  const location = useLocation();
-  const isRTL = lang === "ar";
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef();
 
-  // تبديل الوضع الليلي/النهاري
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClick(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setOpen(false);
+    }
+    if (open) document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open]);
+
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
-  // تبديل اللغة
   const toggleLang = () => setLang(lang === "ar" ? "en" : "ar");
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 shadow-sm">
-      <nav className={`flex items-center justify-between h-16 max-w-7xl mx-auto px-4`}
-      >
-        {/* شعار وأيقونة */}
-        <Link to="/" className="flex items-center gap-2 group" tabIndex={0}>
+      <nav className="flex items-center justify-between h-16 max-w-7xl mx-auto px-4">
+        {/* شعار يمين */}
+        <button onClick={() => window.location.href = '/'} className="flex items-center gap-2 group focus:outline-none" tabIndex={0} aria-label="العودة للوحة التحكم">
           <ShieldCheck className="w-6 h-6 text-blue-600 dark:text-sky-400 group-hover:scale-110 transition" />
-          <span className="font-bold text-lg text-slate-900 dark:text-white drop-shadow-sm">خطة الأمن السيبراني</span>
-        </Link>
-        {/* روابط التنقل */}
-        <ul className="hidden md:flex gap-4 items-center">
-          {navLinks.map(link => (
-            <li key={link.key}>
-              <NavLink
-                to={link.to}
-                className={({ isActive }) =>
-                  `px-3 py-1 rounded-full font-medium transition text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white ${
-                    isActive ? "text-blue-600 dark:text-sky-400 bg-blue-50 dark:bg-sky-900/30" : ""
-                  }`
-                }
-                end={link.to === "/"}
-              >
-                {link.label}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-        {/* أزرار الإجراءات */}
-        <div className="flex items-center gap-1">
-          {/* زر اللغة */}
+        </button>
+        {/* إعدادات يسار */}
+        <div className="relative" ref={dropdownRef}>
           <button
-            onClick={toggleLang}
-            className="px-2 transition hover:text-blue-700 dark:hover:text-blue-300"
-            aria-label={t("changeLanguage", "تغيير اللغة")}
-          >
-            <Globe className="w-6 h-6" />
-            <Tooltip>{lang === "ar" ? "Change Language" : "تغيير اللغة"}</Tooltip>
-          </button>
-          {/* زر الثيم */}
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition group relative"
-            aria-label={theme === "dark" ? t("lightMode", "الوضع الفاتح") : t("darkMode", "الوضع الليلي")}
-          >
-            {theme === "dark" ? (
-              <Sun className="w-5 h-5 text-slate-500 dark:text-sky-400 group-hover:text-slate-900 dark:group-hover:text-white" />
-            ) : (
-              <Moon className="w-5 h-5 text-slate-500 dark:text-sky-400 group-hover:text-slate-900 dark:group-hover:text-white" />
-            )}
-            <Tooltip>{theme === "dark" ? t("lightMode", "الوضع الفاتح") : t("darkMode", "الوضع الليلي")}</Tooltip>
-          </button>
-          {/* زر الإعدادات */}
-          <Link
-            to="/settings"
-            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition group relative"
+            onClick={() => setOpen(v => !v)}
+            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
             aria-label={t("settings", "الإعدادات")}
           >
-            <Settings className="w-5 h-5 text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white" />
-            <Tooltip>{t("settings", "الإعدادات")}</Tooltip>
-          </Link>
+            <Settings className="w-6 h-6 text-slate-600 dark:text-slate-300" />
+          </button>
+          {open && (
+            <div className="absolute left-0 mt-2 w-44 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl py-2 z-50 animate-fade-in">
+              <button onClick={toggleTheme} className="w-full flex items-center gap-2 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-200">
+                {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                {theme === "dark" ? t("lightMode", "الوضع الفاتح") : t("darkMode", "الوضع الليلي")}
+              </button>
+              <button onClick={toggleLang} className="w-full flex items-center gap-2 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-200">
+                <Languages className="w-5 h-5" />
+                {lang === "ar" ? "English" : "العربية"}
+              </button>
+            </div>
+          )}
         </div>
       </nav>
     </header>
