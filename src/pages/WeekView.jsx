@@ -68,10 +68,10 @@ export default function WeekView() {
     <div className="max-w-5xl mx-auto py-8 px-2 bg-light-background dark:bg-dark-background">
       <Breadcrumbs weekTitle={week.title?.[lang] || week.title?.ar || week.title?.en} />
       <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-extrabold text-blue-700 dark:text-sky-400 mb-1">
+        <h1>
           {week.title?.[lang] || week.title?.ar || week.title?.en}
         </h1>
-        <p className="text-base text-slate-700 dark:text-slate-200 opacity-90 font-medium">
+        <p>
           {week.objective?.[lang] || week.objective?.ar || week.objective?.en}
         </p>
       </div>
