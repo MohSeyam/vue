@@ -257,6 +257,19 @@ export default function DayView(props) {
                               if (task.type === 'Soft Skills') typeColor = '#FFD700';
                               if (task.type === 'Policies') typeColor = '#AE81FF';
                               if (task.type === 'Practical') typeColor = '#00B8D9';
+                              // ملاحظة المهمة (من state)
+                              const noteContent = appState.notes[weekId]?.days[dayIndex]?.[task.id]?.content || "";
+                              const dateKey = `${weekId}-${dayKey}-${task.id}`;
+                              const handleSaveNote = (content) => {
+                                setAppState(prev => {
+                                  const newState = JSON.parse(JSON.stringify(prev));
+                                  if (!newState.notes[weekId]) newState.notes[weekId] = { days: [] };
+                                  if (!newState.notes[weekId].days[dayIndex]) newState.notes[weekId].days[dayIndex] = {};
+                                  if (!newState.notes[weekId].days[dayIndex][task.id]) newState.notes[weekId].days[dayIndex][task.id] = {};
+                                  newState.notes[weekId].days[dayIndex][task.id].content = content;
+                                  return newState;
+                                });
+                              };
                               return (
                                 <AccordionTaskCard
                                   key={task.id}
@@ -273,8 +286,9 @@ export default function DayView(props) {
                                   lang={lang}
                                   description={task.details?.[lang] || ''}
                                   resourcesSection={<ResourcesSection weekId={weekId} dayIndex={dayIndex} />}
-                                  notesSection={null} // سيتم ربطه لاحقًا بمحرر الملاحظات
-                                  pomodoroSection={null} // سيتم ربطه لاحقًا بمؤقت البومودورو
+                                  noteContent={noteContent}
+                                  onSaveNote={handleSaveNote}
+                                  dateKey={dateKey}
                                 />
                               );
                             })}

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import TiptapJournalEditor from "./TiptapJournalEditor";
+import PomodoroTimer from "./PomodoroTimer";
 
 export default function AccordionTaskCard({
   task,
@@ -13,8 +15,12 @@ export default function AccordionTaskCard({
   resourcesSection,
   notesSection,
   pomodoroSection,
+  noteContent,
+  onSaveNote,
+  dateKey,
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [showNoteEditor, setShowNoteEditor] = useState(false);
   return (
     <div className="card w-full mb-4 transition-all">
       {/* الحالة المصغرة */}
@@ -39,8 +45,25 @@ export default function AccordionTaskCard({
         <div className="mt-4 space-y-4">
           <div className="text-sm text-gray-700 dark:text-gray-200 mb-2">{description}</div>
           {resourcesSection}
-          {notesSection}
-          {pomodoroSection}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-semibold text-violet-700 dark:text-violet-400">ملاحظاتي</span>
+              <button className="btn-secondary text-xs py-1 px-3" onClick={() => setShowNoteEditor(v => !v)}>
+                {showNoteEditor ? "إغلاق" : "تعديل الملاحظة"}
+              </button>
+            </div>
+            {showNoteEditor && (
+              <TiptapJournalEditor
+                onSave={onSaveNote}
+                dateKey={dateKey}
+                initialContent={noteContent}
+              />
+            )}
+            {!showNoteEditor && noteContent && (
+              <div className="prose prose-sm max-w-none bg-white/80 dark:bg-zinc-900 border border-slate-200 dark:border-slate-800 rounded p-2 mt-2" dangerouslySetInnerHTML={{ __html: noteContent }} />
+            )}
+          </div>
+          <PomodoroTimer />
         </div>
       )}
     </div>
