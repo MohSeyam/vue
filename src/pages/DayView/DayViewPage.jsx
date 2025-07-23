@@ -3,6 +3,7 @@ import { AppContext } from "../../context/AppContext";
 import { useParams } from "react-router-dom";
 import AccordionTaskCard from "./AccordionTaskCard";
 import NotesPrompt from "./NotesPrompt";
+import TiptapJournalEditor from "./TiptapJournalEditor";
 
 // NoteEditor component
 function NoteEditor({ note, taskDescription, onSave, onDelete }) {
