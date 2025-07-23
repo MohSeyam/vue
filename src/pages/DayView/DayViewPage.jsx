@@ -179,7 +179,8 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
 }
 
 // DayView main component
-export default function DayView(props) {
+export default function DayViewPage(props) {
+    if (!props.day) return <div className="text-center text-red-500 py-12">اليوم غير موجود (day prop مفقود)</div>;
     const params = useParams();
     const weekId = props.weekId || params.weekId;
     const dayKey = props.dayKey || params.dayKey;
