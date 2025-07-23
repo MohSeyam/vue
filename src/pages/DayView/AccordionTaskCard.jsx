@@ -65,7 +65,7 @@ const AccordionTaskCard = React.memo(function AccordionTaskCard({
   }
 
   return (
-    <div className="card w-full mb-4 transition-all">
+    <div className="card w-full mb-4 transition-all bg-light-card border border-light-border dark:bg-dark-card dark:border-dark-border">
       {/* الحالة المصغرة */}
       <div className="flex items-center cursor-pointer" onClick={() => setExpanded((v) => !v)}>
         <span
@@ -76,7 +76,7 @@ const AccordionTaskCard = React.memo(function AccordionTaskCard({
             <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4 8.5l3 3 5-5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
           )}
         </span>
-        <span className="font-bold flex-1 text-base" style={{ color: typeColor }}>{task.title}</span>
+        <span className="font-bold flex-1 text-base text-light-text dark:text-dark-text">{task.title}</span>
         <span className="ml-2 flex items-center" title={task.type} style={{ color: typeColor }}>{typeIcon}</span>
         <span className="ml-2 text-xs text-gray-500">{duration}</span>
         <span className="ml-2">
@@ -129,7 +129,10 @@ const AccordionTaskCard = React.memo(function AccordionTaskCard({
             {showNoteEditor && (
               <Suspense fallback={<div className="text-center text-slate-400 py-4">جاري تحميل المحرر...</div>}>
                 <TiptapJournalEditor
-                  onSave={onSaveNote}
+                  onSave={content => {
+                    onSaveNote(content);
+                    setShowNoteEditor(false);
+                  }}
                   dateKey={dateKey}
                   initialContent={noteContent}
                 />
@@ -139,7 +142,7 @@ const AccordionTaskCard = React.memo(function AccordionTaskCard({
               <div className="prose prose-sm max-w-none bg-white/80 dark:bg-zinc-900 border border-slate-200 dark:border-slate-800 rounded p-2 mt-2" dangerouslySetInnerHTML={{ __html: noteContent }} />
             )}
           </div>
-          <PomodoroTimer />
+          <PomodoroTimer initialMinutes={parseInt(duration)} />
         </div>
       )}
     </div>

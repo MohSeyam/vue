@@ -44,10 +44,13 @@ function TiptapToolbar({ editor, lang }) {
   );
 }
 
-export default function TiptapJournalEditor({ onSave, dateKey }) {
+export default function TiptapJournalEditor({ onSave, dateKey, initialContent = "", initialTitle = "", initialTags = "" }) {
   const { lang } = useApp();
   const { t, i18n } = useTranslation();
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(initialContent);
+  const [title, setTitle] = useState(initialTitle);
+  const [tags, setTags] = useState(initialTags);
+  const [error, setError] = useState("");
   const [entryId, setEntryId] = useState(null);
   // Load journal entry for this dateKey (e.g., weekId-dayKey)
   useEffect(() => {
@@ -56,9 +59,13 @@ export default function TiptapJournalEditor({ onSave, dateKey }) {
       const found = entries.find(e => e.date === dateKey);
       if (found) {
         setContent(found.content || "");
+        setTitle(found.title || "");
+        setTags(found.tags || "");
         setEntryId(found.id);
       } else {
         setContent("");
+        setTitle("");
+        setTags("");
         setEntryId(null);
       }
     }
@@ -92,16 +99,34 @@ export default function TiptapJournalEditor({ onSave, dateKey }) {
     onUpdate: ({ editor }) => setContent(editor.getHTML())
   });
   async function handleSave() {
-    if (entryId) {
-      await updateJournalEntry(entryId, { content });
-    } else {
-      await addJournalEntry({ content, date: dateKey });
+    if (!title.trim() || !tags.trim()) {
+      setError("يجب إدخال عنوان وتاجات");
+      return;
     }
-    onSave?.(content);
+    setError("");
+    if (entryId) {
+      await updateJournalEntry(entryId, { content, title, tags });
+    } else {
+      await addJournalEntry({ content, title, tags, date: dateKey });
+    }
+    onSave?.({ content, title, tags });
   }
   return (
     <div className="rounded-2xl bg-white/80 dark:bg-zinc-900 border border-slate-200 dark:border-slate-800 shadow p-4 flex flex-col">
       <span className="font-bold text-lg text-violet-700 dark:text-violet-400 mb-2">{t("eveningJournal", "التدوين المسائي")}</span>
+      <input
+        className="mb-2 p-2 rounded border"
+        placeholder="العنوان..."
+        value={title}
+        onChange={e => setTitle(e.target.value)}
+      />
+      <input
+        className="mb-2 p-2 rounded border"
+        placeholder="تاجات (افصل بينها بفاصلة)..."
+        value={tags}
+        onChange={e => setTags(e.target.value)}
+      />
+      {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
       <TiptapToolbar editor={editor} lang={lang} />
       <EditorContent editor={editor} />
       <button

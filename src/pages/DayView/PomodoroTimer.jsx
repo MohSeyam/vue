@@ -2,9 +2,9 @@ import React from "react";
 import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-export default function PomodoroTimer() {
+export default function PomodoroTimer({ initialMinutes = 25 }) {
   const { t } = useTranslation();
-  const [seconds, setSeconds] = useState(25 * 60);
+  const [seconds, setSeconds] = useState(initialMinutes * 60);
   const [running, setRunning] = useState(false);
   const intervalRef = useRef(null);
 
@@ -23,7 +23,7 @@ export default function PomodoroTimer() {
   function reset() {
     setRunning(false);
     clearInterval(intervalRef.current);
-    setSeconds(25 * 60);
+    setSeconds(initialMinutes * 60);
   }
 
   // Cleanup
