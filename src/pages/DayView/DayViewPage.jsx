@@ -271,6 +271,18 @@ export default function DayView(props) {
                                   return newState;
                                 });
                               };
+                              // مراجع المهمة (من state)
+                              const taskResources = (appState.resources?.[weekId]?.days?.[dayIndex]?.[task.id]) || [];
+                              const handleResourcesChange = (newResources) => {
+                                setAppState(prev => {
+                                  const newState = JSON.parse(JSON.stringify(prev));
+                                  if (!newState.resources) newState.resources = {};
+                                  if (!newState.resources[weekId]) newState.resources[weekId] = { days: [] };
+                                  if (!newState.resources[weekId].days[dayIndex]) newState.resources[weekId].days[dayIndex] = {};
+                                  newState.resources[weekId].days[dayIndex][task.id] = newResources;
+                                  return newState;
+                                });
+                              };
                               return (
                                 <AccordionTaskCard
                                   key={task.id}
@@ -286,7 +298,8 @@ export default function DayView(props) {
                                   duration={`${task.duration} ${t.minutes}`}
                                   lang={lang}
                                   description={task.details?.[lang] || ''}
-                                  resourcesSection={<ResourcesSection weekId={weekId} dayIndex={dayIndex} />}
+                                  resources={taskResources}
+                                  onResourcesChange={handleResourcesChange}
                                   noteContent={noteContent}
                                   onSaveNote={handleSaveNote}
                                   dateKey={dateKey}
