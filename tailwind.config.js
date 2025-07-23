@@ -30,8 +30,8 @@ module.exports = {
       colors: {
         // Light mode
         light: {
-          background: '#F8F9FA', // خلفية رئيسية
-          card: '#FFFFFF', // خلفية البطاقات
+          background: '#F4F6F8', // خلفية رئيسية موحدة وأقل حدة
+          card: '#FAFAFA', // خلفية البطاقات أقل بياضًا
           text: '#1D2D35', // نص أساسي
           textSecondary: '#5A6A72', // نص ثانوي
           border: '#E9ECEF', // حدود
