@@ -181,15 +181,13 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
 // DayView main component
 export default function DayViewPage(props) {
     const ctx = useContext(AppContext);
-    const { planData } = ctx || {};
+    const { planData, lang, appState, setAppState, translations, Icons, setModal } = ctx || {};
     const params = useParams();
     const weekId = props.weekId || params.weekId;
     const dayKey = props.dayKey || params.dayKey;
     if (!planData) return <div className="text-center text-red-500 py-12">الخطة غير محملة (planData not loaded)</div>;
     if (!weekId || !dayKey) return <div className="text-center text-red-500 py-12">weekId أو dayKey مفقود</div>;
     if (!props.day) return <div className="text-center text-red-500 py-12">اليوم غير موجود (day prop مفقود)</div>;
-    const { lang, appState, setAppState, planData, translations, Icons, setModal } = ctx;
-    if (!planData) return <div>planData not loaded</div>;
     if (!appState) return <div>appState not loaded</div>;
     if (!Icons) return <div>Icons not loaded</div>;
     if (!translations) return <div>translations not loaded</div>;
