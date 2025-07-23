@@ -206,16 +206,28 @@ export default function DayViewPage(props) {
 
     // دالة لتغيير حالة المهمة بين مكتملة وغير مكتملة
     const handleTaskToggle = (taskIndex) => {
-        setAppState(prevState => {
-            const newState = JSON.parse(JSON.stringify(prevState));
-            // تأكد من تهيئة progress بشكل آمن
-            if (!newState.progress) newState.progress = {};
-            if (!newState.progress[weekId]) newState.progress[weekId] = { days: [] };
-            if (!newState.progress[weekId].days[dayIndex]) newState.progress[weekId].days[dayIndex] = { tasks: [] };
-            if (!Array.isArray(newState.progress[weekId].days[dayIndex].tasks)) newState.progress[weekId].days[dayIndex].tasks = [];
-            const currentStatus = newState.progress[weekId].days[dayIndex].tasks[taskIndex];
-            newState.progress[weekId].days[dayIndex].tasks[taskIndex] = currentStatus === 'completed' ? 'pending' : 'completed';
-            return newState;
+        setAppState(prev => {
+            // تهيئة progress إذا لم يكن موجودًا
+            const prevProgress = prev.progress?.[weekId]?.days?.[dayIndex]?.tasks || [];
+            const updatedTasks = [...prevProgress];
+            updatedTasks[taskIndex] = updatedTasks[taskIndex] === 'completed' ? 'pending' : 'completed';
+            // تهيئة days إذا لم تكن موجودة
+            const prevDays = prev.progress?.[weekId]?.days || [];
+            const updatedDays = [...prevDays];
+            updatedDays[dayIndex] = {
+                ...(prevDays[dayIndex] || {}),
+                tasks: updatedTasks,
+            };
+            return {
+                ...prev,
+                progress: {
+                    ...prev.progress,
+                    [weekId]: {
+                        ...prev.progress?.[weekId],
+                        days: updatedDays,
+                    },
+                },
+            };
         });
     };
     // دالة لفتح نافذة تعديل الملاحظات

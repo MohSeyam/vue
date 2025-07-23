@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import TiptapJournalEditor from "./TiptapJournalEditor";
+import React, { useState, Suspense } from "react";
 import PomodoroTimer from "./PomodoroTimer";
 
 function isValidUrl(url) {
@@ -11,7 +10,7 @@ function isValidUrl(url) {
   }
 }
 
-export default function AccordionTaskCard({
+const AccordionTaskCard = React.memo(function AccordionTaskCard({
   task,
   checked,
   onToggle,
@@ -128,11 +127,13 @@ export default function AccordionTaskCard({
               </button>
             </div>
             {showNoteEditor && (
-              <TiptapJournalEditor
-                onSave={onSaveNote}
-                dateKey={dateKey}
-                initialContent={noteContent}
-              />
+              <Suspense fallback={<div className="text-center text-slate-400 py-4">جاري تحميل المحرر...</div>}>
+                <TiptapJournalEditor
+                  onSave={onSaveNote}
+                  dateKey={dateKey}
+                  initialContent={noteContent}
+                />
+              </Suspense>
             )}
             {!showNoteEditor && noteContent && (
               <div className="prose prose-sm max-w-none bg-white/80 dark:bg-zinc-900 border border-slate-200 dark:border-slate-800 rounded p-2 mt-2" dangerouslySetInnerHTML={{ __html: noteContent }} />
@@ -143,4 +144,5 @@ export default function AccordionTaskCard({
       )}
     </div>
   );
-}
+});
+export default AccordionTaskCard;
