@@ -98,8 +98,11 @@ export function AppProvider({ children }) {
   };
 
   useEffect(() => {
+    document.documentElement.classList.remove("dark", "light");
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    }
     console.log('theme:', theme);
-    document.documentElement.classList.toggle("dark", theme === "dark");
     console.log('document.documentElement.className:', document.documentElement.className);
   }, [theme]);
 
