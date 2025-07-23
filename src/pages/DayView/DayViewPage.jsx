@@ -208,7 +208,12 @@ export default function DayViewPage(props) {
     const handleTaskToggle = (taskIndex) => {
         setAppState(prevState => {
             const newState = JSON.parse(JSON.stringify(prevState));
-            const currentStatus = newState.progress[weekId]?.days[dayIndex].tasks[taskIndex];
+            // تأكد من تهيئة progress بشكل آمن
+            if (!newState.progress) newState.progress = {};
+            if (!newState.progress[weekId]) newState.progress[weekId] = { days: [] };
+            if (!newState.progress[weekId].days[dayIndex]) newState.progress[weekId].days[dayIndex] = { tasks: [] };
+            if (!Array.isArray(newState.progress[weekId].days[dayIndex].tasks)) newState.progress[weekId].days[dayIndex].tasks = [];
+            const currentStatus = newState.progress[weekId].days[dayIndex].tasks[taskIndex];
             newState.progress[weekId].days[dayIndex].tasks[taskIndex] = currentStatus === 'completed' ? 'pending' : 'completed';
             return newState;
         });
