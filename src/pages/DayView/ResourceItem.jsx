@@ -4,10 +4,14 @@ import { useApp } from "../../context/AppContext";
 import { useState } from "react";
 
 const typeIcons = {
-  video: <i className="i-lucide-youtube text-red-500" />,
-  article: <i className="i-lucide-file-text text-blue-500" />,
-  link: <i className="i-lucide-link text-emerald-500" />,
-  default: <i className="i-lucide-link text-slate-400" />
+  video: <span title="فيديو">🎬</span>,
+  article: <span title="مقالة">📄</span>,
+  link: <span title="رابط">🔗</span>,
+  book: <span title="كتاب">📚</span>,
+  course: <span title="دورة">🎓</span>,
+  podcast: <span title="بودكاست">🎧</span>,
+  pdf: <span title="PDF">📑</span>,
+  default: <span title="مرجع">🔖</span>,
 };
 
 export default function ResourceItem({ resource, onEdit }) {
@@ -33,6 +37,10 @@ export default function ResourceItem({ resource, onEdit }) {
           <option value="video">{t("video", "فيديو")}</option>
           <option value="article">{t("article", "مقالة")}</option>
           <option value="link">{t("link", "رابط")}</option>
+          <option value="book">{t("book", "كتاب")}</option>
+          <option value="course">{t("course", "دورة")}</option>
+          <option value="podcast">{t("podcast", "بودكاست")}</option>
+          <option value="pdf">{t("pdf", "PDF")}</option>
         </select>
         <input
           className="rounded border px-2 py-1 flex-1"

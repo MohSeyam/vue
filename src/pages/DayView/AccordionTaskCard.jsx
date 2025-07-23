@@ -129,8 +129,8 @@ const AccordionTaskCard = React.memo(function AccordionTaskCard({
             {showNoteEditor && (
               <Suspense fallback={<div className="text-center text-slate-400 py-4">جاري تحميل المحرر...</div>}>
                 <TiptapJournalEditor
-                  onSave={content => {
-                    onSaveNote(content);
+                  onSave={data => {
+                    onSaveNote(data.content || "");
                     setShowNoteEditor(false);
                   }}
                   dateKey={dateKey}
