@@ -2,6 +2,7 @@
 import { useTranslation } from "react-i18next";
 import { useApp } from "../../context/AppContext";
 import { useState } from "react";
+import Card from "../ui/Card";
 
 const shadowMap = {
   blue: "shadow-[0_4px_32px_0_rgba(59,130,246,0.25)]", // blue-500
@@ -17,7 +18,8 @@ export default function WeekCard({ week, className = "", color = "blue", DaySumm
   const handleClick = () => onExpand?.(week.week);
 
   return (
-    <div className={`group rounded-2xl p-6 bg-black/90 ${shadowMap[color] || shadowMap.blue} hover:-translate-y-1.5 hover:shadow-2xl transition-all duration-200 cursor-pointer backdrop-blur-md flex flex-col gap-2 min-h-[120px] border border-white/10 ${className}`}
+    <Card
+      className={`cursor-pointer flex flex-col gap-2 min-h-[120px] ${className}`}
       tabIndex={0}
       onClick={handleClick}
       role="button"
@@ -25,13 +27,13 @@ export default function WeekCard({ week, className = "", color = "blue", DaySumm
     >
       {/* شارة رقم الأسبوع */}
       <div className="flex justify-start mb-2">
-        <span className="text-xs bg-white text-slate-700 rounded-full px-3 py-1 font-bold shadow-sm">
+        <span className="text-xs bg-light-background dark:bg-blue-900 text-light-text dark:text-blue-200 rounded-full px-3 py-1 font-bold shadow-sm">
           {t("week", "أسبوع")} {week.week}
         </span>
       </div>
       {/* اسم الأسبوع */}
       <div className="mb-3">
-        <span className="block text-xl md:text-2xl font-extrabold text-white drop-shadow-sm">
+        <span className="block text-xl md:text-2xl font-extrabold text-light-text dark:text-white drop-shadow-sm">
           {week.title?.[lang] || week.title?.ar || week.title?.en}
         </span>
       </div>
@@ -53,6 +55,6 @@ export default function WeekCard({ week, className = "", color = "blue", DaySumm
           ))}
         </div>
       )}
-    </div>
+    </Card>
   );
 }
