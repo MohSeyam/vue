@@ -98,7 +98,9 @@ export function AppProvider({ children }) {
   };
 
   useEffect(() => {
+    console.log('theme:', theme);
     document.documentElement.classList.toggle("dark", theme === "dark");
+    console.log('document.documentElement.className:', document.documentElement.className);
   }, [theme]);
 
   return (
