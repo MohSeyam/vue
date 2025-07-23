@@ -12,6 +12,8 @@ import DayView from "./pages/DayView";
 import { useCyberPlan } from "./hooks/useCyberPlan";
 import { useEffect, useState } from "react";
 import { getPlanData } from "./services/dataService";
+import PomodoroTimer from "./pages/DayView/PomodoroTimer";
+import { useApp } from "./context/AppContext";
 
 function GlobalProgressBar() {
   const { plan } = useCyberPlan();
@@ -40,6 +42,7 @@ export default function App() {
     <div className="min-h-screen bg-light-background text-light-text dark:bg-dark-background dark:text-dark-text font-tajawal">
       <ThemeProvider>
         <AppProvider>
+          <GlobalPomodoroOverlay />
           <BrowserRouter>
             <GlobalProgressBar />
             <Routes>
@@ -56,6 +59,20 @@ export default function App() {
           </BrowserRouter>
         </AppProvider>
       </ThemeProvider>
+    </div>
+  );
+}
+
+function GlobalPomodoroOverlay() {
+  const { globalPomodoro, setGlobalPomodoro } = useApp();
+  if (!globalPomodoro || !globalPomodoro.running) return null;
+  return (
+    <div className="fixed bottom-6 right-6 z-50 bg-white dark:bg-zinc-900 border border-light-border dark:border-dark-border rounded-2xl shadow-xl p-6 flex flex-col items-center min-w-[260px]">
+      <div className="flex items-center justify-between w-full mb-2">
+        <span className="font-bold text-base text-light-text dark:text-dark-text">{globalPomodoro.title}</span>
+        <button className="ml-2 text-red-500 hover:text-red-700" onClick={() => setGlobalPomodoro(null)} title="إغلاق المؤقت">✕</button>
+      </div>
+      <PomodoroTimer initialMinutes={globalPomodoro.minutes} />
     </div>
   );
 }

@@ -17,6 +17,7 @@ export function AppProvider({ children }) {
   });
   const [modal, setModal] = useState({ isOpen: false, content: null });
   const [theme, setTheme] = useState("light");
+  const [globalPomodoro, setGlobalPomodoro] = useState(null); // { title, minutes, running }
 
   const Icons = {
     check: FaCheck,
@@ -123,7 +124,9 @@ export function AppProvider({ children }) {
   }, [theme]);
 
   return (
-    <AppContext.Provider value={{ user, setUser, lang, setLang, settings, setSettings, planData, setPlanData, appState, setAppState, Icons, translations, modal, setModal, theme, setTheme }}>
+    <AppContext.Provider value={{ user, setUser, lang, setLang, settings, setSettings, planData, setPlanData, appState, setAppState, Icons, translations, modal, setModal, theme, setTheme,
+      globalPomodoro, setGlobalPomodoro
+    }}>
       {children}
       {modal.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">

@@ -1,4 +1,5 @@
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useContext } from "react";
+import { AppContext } from "../../context/AppContext";
 import PomodoroTimer from "./PomodoroTimer";
 
 function isValidUrl(url) {
@@ -142,7 +143,23 @@ const AccordionTaskCard = React.memo(function AccordionTaskCard({
               <div className="prose prose-sm max-w-none bg-white/80 dark:bg-zinc-900 border border-slate-200 dark:border-slate-800 rounded p-2 mt-2" dangerouslySetInnerHTML={{ __html: noteContent }} />
             )}
           </div>
-          <PomodoroTimer initialMinutes={parseInt(duration)} />
+          <button
+            className="btn-primary mt-2"
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                const ctx = window.__APP_CONTEXT__ || {};
+                if (ctx.setGlobalPomodoro) {
+                  ctx.setGlobalPomodoro({
+                    title: task.title,
+                    minutes: parseInt(duration),
+                    running: true,
+                  });
+                }
+              }
+            }}
+          >
+            بدء مؤقت التركيز (بومودورو)
+          </button>
         </div>
       )}
     </div>
