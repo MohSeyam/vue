@@ -239,37 +239,37 @@ export default function DayView(props) {
         });
     };
     return (
-        <div className="bg-white dark:bg-[#111] rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-800 animate-fade-in">
-            <h1 className="text-3xl font-bold text-blue-600 dark:text-blue-400">{dayData.day[lang]}: {dayData.topic[lang]}</h1>
+        <div className="bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text font-tajawal rounded-xl shadow-lg p-6 border border-light-border dark:border-dark-border animate-fade-in">
+            <h1 className="text-3xl font-bold text-light-accent dark:text-dark-accent">{dayData.day[lang]}: {dayData.topic[lang]}</h1>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
                 <div className="lg:col-span-2 space-y-8">
                     {/* قسم المهام */}
                     <div>
-                        <h4 className="text-lg font-semibold mb-3">{t.activeTasks}</h4>
+                        <h4 className="text-lg font-semibold mb-3 text-light-text dark:text-dark-text">{t.activeTasks}</h4>
                         <div className="space-y-3">
                             {dayData.tasks.map((task, taskIndex) => (
-                                <div key={task.id} className={`flex items-start p-3 rounded-lg transition-colors ${appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed' ? 'opacity-60' : ''}`}>
+                                <div key={task.id} className={`flex items-start p-3 rounded-lg transition-colors ${appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed' ? 'opacity-60' : ''} bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border`}>
                                     <input type="checkbox" id={`task-${task.id}`} className="hidden"
                                         checked={appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed'}
                                         onChange={() => handleTaskToggle(taskIndex)}
                                     />
                                     <label htmlFor={`task-${task.id}`} className="flex items-start cursor-pointer w-full">
-                                        <span className={`w-5 h-5 mt-1 ${lang === 'ar' ? 'ml-4' : 'mr-4'} inline-block border-2 border-gray-300 dark:border-gray-600 rounded-md flex-shrink-0 relative ${appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed' ? 'bg-blue-500 border-blue-500' : ''}`}>
+                                        <span className={`w-5 h-5 mt-1 ${lang === 'ar' ? 'ml-4' : 'mr-4'} inline-block border-2 border-light-border dark:border-dark-border rounded-md flex-shrink-0 relative ${appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed' ? 'bg-light-accent dark:bg-dark-accent border-light-accent dark:border-dark-accent' : ''}`}>
                                             {appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed' && <Icons.check className="w-3 h-3 text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />}
                                         </span>
                                         <div className="flex-grow">
-                                            <p className={`text-gray-800 dark:text-gray-200 ${appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed' ? 'line-through' : ''}`}>{task.description[lang]}</p>
+                                            <p className={`text-light-text dark:text-dark-text ${appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed' ? 'line-through' : ''}`}>{task.description[lang]}</p>
                                             <div className="flex items-center mt-2 space-x-3 rtl:space-x-reverse">
-                                                <span className="text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 px-2 py-0.5 rounded-full flex items-center gap-1.5">{Icons.task(task.type)} {task.type}</span>
-                                                <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full">
+                                                <span className="text-xs font-medium bg-light-accent/10 dark:bg-dark-accent/10 text-light-accent dark:text-dark-accent px-2 py-0.5 rounded-full flex items-center gap-1.5">{Icons.task(task.type)} {task.type}</span>
+                                                <div className="flex items-center text-xs text-light-textSecondary dark:text-dark-textSecondary bg-light-background dark:bg-dark-background px-2 py-1 rounded-full">
                                                     <Icons.clock className="w-4 h-4 me-1" />
                                                     <span>{task.duration} {t.minutes}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </label>
-                                    <button onClick={() => openNoteModal(task.id, task.description[lang])} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                                        <Icons.edit className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                                    <button onClick={() => openNoteModal(task.id, task.description[lang])} className="p-2 rounded-full hover:bg-light-background dark:hover:bg-dark-background transition-colors">
+                                        <Icons.edit className="w-4 h-4 text-light-textSecondary dark:text-dark-textSecondary" />
                                     </button>
                                 </div>
                             ))}
@@ -281,9 +281,9 @@ export default function DayView(props) {
                 {/* قسم مهمة التدوين المسائية */}
                 {dayData.notes_prompt && dayData.notes_prompt.points.length > 0 && (
                      <div className="lg:col-span-1">
-                        <div className="bg-gray-100 dark:bg-gray-800/50 p-4 rounded-lg sticky top-8 border border-gray-200 dark:border-gray-800">
-                            <h4 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-200">{t.eveningJournaling}</h4>
-                            <ul className="space-y-3 list-disc list-inside text-gray-600 dark:text-gray-400">
+                        <div className="bg-light-card dark:bg-dark-card p-4 rounded-lg sticky top-8 border border-light-border dark:border-dark-border">
+                            <h4 className="text-lg font-semibold mb-3 text-light-text dark:text-dark-text">{t.eveningJournaling}</h4>
+                            <ul className="space-y-3 list-disc list-inside text-light-textSecondary dark:text-dark-textSecondary">
                                 {dayData.notes_prompt.points.map((point, index) => <li key={index}>{point[lang]}</li>)}
                             </ul>
                         </div>
