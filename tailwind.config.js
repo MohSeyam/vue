@@ -26,7 +26,41 @@ module.exports = {
     "ring-2", "ring-cyan-400", "ring-violet-400", "ring-amber-400", "border-e", "border-b", "text-center", "text-right", "text-left", "flex", "items-center", "justify-between", "justify-center", "flex-col", "flex-1", "cursor-pointer", "transition", "hidden", "block", "w-full", "min-h-[60vh]", "min-h-[100px]", "prose", "prose-sm", "max-w-none"
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        // Light mode
+        light: {
+          background: '#F8F9FA', // خلفية رئيسية
+          card: '#FFFFFF', // خلفية البطاقات
+          text: '#1D2D35', // نص أساسي
+          textSecondary: '#5A6A72', // نص ثانوي
+          border: '#E9ECEF', // حدود
+          accent: '#64FFDA', // لون مميز
+          danger: '#FF5252',
+          success: '#69F0AE',
+          info: '#40C4FF',
+          soft: '#FFD700',
+          policy: '#AE81FF',
+        },
+        // Dark mode
+        dark: {
+          background: '#0A192F', // خلفية رئيسية
+          card: '#172A45', // خلفية البطاقات
+          text: '#CCD6F6', // نص أساسي
+          textSecondary: '#8892B0', // نص ثانوي
+          border: '#233554', // حدود
+          accent: '#64FFDA', // لون مميز
+          danger: '#FF5252',
+          success: '#69F0AE',
+          info: '#40C4FF',
+          soft: '#FFD700',
+          policy: '#AE81FF',
+        },
+      },
+      fontFamily: {
+        tajawal: ["Tajawal", "sans-serif"],
+      },
+    },
   },
   plugins: [],
 }
