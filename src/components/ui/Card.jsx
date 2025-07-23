@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Card({ children, className = "" }) {
+export default function Card({ children, className = "", ...props }) {
   return (
     <div
       className={`
@@ -14,6 +14,7 @@ export default function Card({ children, className = "" }) {
         hover:-translate-y-1 hover:shadow-lg
         ${className}
       `}
+      {...props}
     >
       {children}
     </div>
