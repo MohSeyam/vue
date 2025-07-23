@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import { useParams } from "react-router-dom";
 import AccordionTaskCard from "./AccordionTaskCard";
+import NotesPrompt from "./NotesPrompt";
 
 // NoteEditor component
 function NoteEditor({ note, taskDescription, onSave, onDelete }) {
@@ -299,14 +300,24 @@ export default function DayView(props) {
                 </div>
                 {/* قسم مهمة التدوين المسائية */}
                 {dayData.notes_prompt && dayData.notes_prompt.points.length > 0 && (
-                     <div className="lg:col-span-1">
-                        <div className="bg-light-card dark:bg-dark-card p-4 rounded-lg sticky top-8 border border-light-border dark:border-dark-border">
-                            <h4 className="text-lg font-semibold mb-3 text-light-text dark:text-dark-text">{t.eveningJournaling}</h4>
-                            <ul className="space-y-3 list-disc list-inside text-light-textSecondary dark:text-dark-textSecondary">
-                                {dayData.notes_prompt.points.map((point, index) => <li key={index}>{point[lang]}</li>)}
-                            </ul>
-                        </div>
+                  <div className="lg:col-span-1">
+                    <div className="card sticky top-8">
+                      <NotesPrompt prompt={dayData.notes_prompt} />
+                      <TiptapJournalEditor
+                        onSave={content => {
+                          setAppState(prev => {
+                            const newState = JSON.parse(JSON.stringify(prev));
+                            if (!newState.journal) newState.journal = {};
+                            if (!newState.journal[weekId]) newState.journal[weekId] = {};
+                            newState.journal[weekId][dayKey] = content;
+                            return newState;
+                          });
+                        }}
+                        dateKey={`${weekId}-${dayKey}`}
+                        initialContent={appState.journal?.[weekId]?.[dayKey] || ""}
+                      />
                     </div>
+                  </div>
                 )}
             </div>
         </div>
