@@ -35,7 +35,7 @@ module.exports = {
           text: '#1D2D35', // نص أساسي
           textSecondary: '#5A6A72', // نص ثانوي
           border: '#E9ECEF', // حدود
-          accent: '#4DD0E1', // لون حيادي مريح للوضع الفاتح
+          accent: '#00B8D9', // لون سيان محايد وواضح في الوضعين
           danger: '#FF5252',
           success: '#69F0AE',
           info: '#40C4FF',
@@ -49,7 +49,7 @@ module.exports = {
           text: '#CCD6F6', // نص أساسي
           textSecondary: '#8892B0', // نص ثانوي
           border: '#233554', // حدود
-          accent: '#64FFDA', // لون مميز
+          accent: '#00B8D9', // لون سيان محايد وواضح في الوضعين
           danger: '#FF5252',
           success: '#69F0AE',
           info: '#40C4FF',
