@@ -24,19 +24,19 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className={`max-w-6xl mx-auto py-8 px-2 ${isRTL ? "rtl" : "ltr"}`}>
+    <div className={`max-w-6xl mx-auto py-8 px-2 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text font-tajawal ${isRTL ? "rtl" : "ltr"}`}>
       {/* العنوان والرسالة */}
       <div className="mb-8 text-center">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-blue-700 dark:text-sky-400 mb-2 drop-shadow-sm">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-light-accent dark:text-dark-accent mb-2 drop-shadow-sm">
           {t("dashboardTitle", "لوحة التحكم")}
         </h1>
-        <p className="text-lg text-slate-700 dark:text-slate-200 opacity-90 font-medium">
+        <p className="text-lg text-light-textSecondary dark:text-dark-textSecondary opacity-90 font-medium">
           {t("welcomeMsg", "مرحبًا بعودتك! استكشف تقدمك وابدأ يومك بخطوة جديدة.")}
         </p>
       </div>
       {/* بطاقات المراحل */}
       {phases.length === 0 ? (
-        <div className="text-center text-slate-400 py-12">لا توجد بيانات متاحة</div>
+        <div className="text-center text-light-textSecondary dark:text-dark-textSecondary py-12">لا توجد بيانات متاحة</div>
       ) : (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         {phases.slice(0, 3).map((phase, idx) => {
@@ -62,22 +62,22 @@ export default function Dashboard() {
       {/* شبكة بينتو */}
       <div className="grid md:grid-cols-3 gap-6">
         {/* ماذا بعد؟ */}
-        <div className="rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg p-6 flex flex-col min-h-[220px]">
-          <h2 className="font-bold text-lg text-slate-800 dark:text-slate-100 mb-3 flex items-center gap-2">
+        <div className="rounded-2xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border shadow-lg p-6 flex flex-col min-h-[220px]">
+          <h2 className="font-bold text-lg text-light-text dark:text-dark-text mb-3 flex items-center gap-2">
             {t("upcomingTasks", "ماذا بعد؟")}
           </h2>
           <UpcomingTasks />
         </div>
         {/* التقدم الأسبوعي */}
-        <div className="rounded-2xl bg-gradient-to-br from-blue-100 via-sky-100 to-emerald-100 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 border border-slate-200 dark:border-slate-800 shadow-lg p-6 flex flex-col items-center justify-center min-h-[220px]">
-          <h2 className="font-bold text-lg text-slate-800 dark:text-slate-100 mb-3">
+        <div className="rounded-2xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border shadow-lg p-6 flex flex-col items-center justify-center min-h-[220px]">
+          <h2 className="font-bold text-lg text-light-text dark:text-dark-text mb-3">
             {t("weekProgress", "التقدم الأسبوعي")}
           </h2>
           <WeekProgress />
         </div>
         {/* ملخص الإنجازات */}
-        <div className="rounded-2xl bg-gradient-to-br from-violet-100 via-amber-100 to-emerald-100 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 border border-slate-200 dark:border-slate-800 shadow-lg p-6 flex flex-col items-center justify-center min-h-[220px]">
-          <h2 className="font-bold text-lg text-slate-800 dark:text-slate-100 mb-3">
+        <div className="rounded-2xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border shadow-lg p-6 flex flex-col items-center justify-center min-h-[220px]">
+          <h2 className="font-bold text-lg text-light-text dark:text-dark-text mb-3">
             {t("achievementsSummary", "ملخص الإنجازات")}
           </h2>
           <AchievementsSummary />
