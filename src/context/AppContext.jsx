@@ -16,6 +16,7 @@ export function AppProvider({ children }) {
     resources: {},
   });
   const [modal, setModal] = useState({ isOpen: false, content: null });
+  const [theme, setTheme] = useState("light");
 
   const Icons = {
     check: FaCheck,
@@ -96,8 +97,12 @@ export function AppProvider({ children }) {
     setLangState(lng);
   };
 
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
+
   return (
-    <AppContext.Provider value={{ user, setUser, lang, setLang, settings, setSettings, planData, setPlanData, appState, setAppState, Icons, translations, modal, setModal }}>
+    <AppContext.Provider value={{ user, setUser, lang, setLang, settings, setSettings, planData, setPlanData, appState, setAppState, Icons, translations, modal, setModal, theme, setTheme }}>
       {children}
       {modal.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">

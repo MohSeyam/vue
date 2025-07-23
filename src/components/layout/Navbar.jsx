@@ -2,7 +2,6 @@
 // شريط التنقل العلوي
 
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { useTheme } from "../../context/ThemeProvider";
 import { useApp } from "../../context/AppContext";
 import { ShieldCheck, Languages, Sun, Moon, Settings, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -15,8 +14,7 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-  const { theme, setTheme } = useTheme();
-  const { lang, setLang } = useApp();
+  const { theme, setTheme, lang, setLang } = useApp();
   const { t, i18n } = useTranslation();
   const location = useLocation();
   const isRTL = lang === "ar";
