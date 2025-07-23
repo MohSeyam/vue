@@ -26,7 +26,7 @@ function DaySummaryCard({ day, lang, weekId, color = "stone", onDayClick }) {
   };
   return (
     <div
-      className={`rounded-xl p-4 bg-white/80 dark:bg-zinc-900 border ${colorMap[color]?.border} shadow flex flex-col justify-center items-center gap-1 cursor-pointer hover:-translate-y-1 hover:shadow-lg transition text-center min-h-[80px]`}
+      className={`rounded-xl p-4 bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border shadow flex flex-col justify-center items-center gap-1 cursor-pointer hover:-translate-y-1 hover:shadow-lg transition text-center min-h-[80px]`}
       onClick={onDayClick}
       tabIndex={0}
       role="button"
@@ -65,7 +65,7 @@ export default function WeekView() {
   if (!week) return <div className="text-center text-red-500 py-12">{t("weekNotFound", "الأسبوع غير موجود")}</div>;
 
   return (
-    <div className="max-w-5xl mx-auto py-8 px-2">
+    <div className="max-w-5xl mx-auto py-8 px-2 bg-light-background dark:bg-dark-background">
       <Breadcrumbs weekTitle={week.title?.[lang] || week.title?.ar || week.title?.en} />
       <div className="mb-6">
         <h1 className="text-2xl md:text-3xl font-extrabold text-blue-700 dark:text-sky-400 mb-1">
