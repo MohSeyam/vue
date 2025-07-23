@@ -35,7 +35,7 @@ module.exports = {
           text: '#1D2D35', // نص أساسي
           textSecondary: '#5A6A72', // نص ثانوي
           border: '#E9ECEF', // حدود
-          accent: '#64FFDA', // لون مميز
+          accent: '#4DD0E1', // لون حيادي مريح للوضع الفاتح
           danger: '#FF5252',
           success: '#69F0AE',
           info: '#40C4FF',
