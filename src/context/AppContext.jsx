@@ -92,6 +92,22 @@ export function AppProvider({ children }) {
     fetchPlan();
   }, []);
 
+  // استعادة اللغة والثيم من localStorage عند بدء التطبيق
+  useEffect(() => {
+    const storedLang = localStorage.getItem("lang");
+    if (storedLang) setLangState(storedLang);
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme) setTheme(storedTheme);
+  }, []);
+
+  // حفظ اللغة والثيم في localStorage عند التغيير
+  useEffect(() => {
+    localStorage.setItem("lang", lang);
+  }, [lang]);
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
   // عند تغيير اللغة، حدث i18n دومًا
   const setLang = (lng) => {
     setLangState(lng);
