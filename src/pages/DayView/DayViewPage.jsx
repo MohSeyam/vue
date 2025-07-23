@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import { useParams } from "react-router-dom";
+import AccordionTaskCard from "./AccordionTaskCard";
 
 // NoteEditor component
 function NoteEditor({ note, taskDescription, onSave, onDelete }) {
@@ -247,32 +248,36 @@ export default function DayView(props) {
                     <div>
                         <h4 className="text-lg font-semibold mb-3 text-light-text dark:text-dark-text">{t.activeTasks}</h4>
                         <div className="space-y-3">
-                            {dayData.tasks.map((task, taskIndex) => (
-                                <div key={task.id} className={`flex items-start p-3 rounded-lg transition-colors ${appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed' ? 'opacity-60' : ''} bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border`}>
-                                    <input type="checkbox" id={`task-${task.id}`} className="hidden"
-                                        checked={appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed'}
-                                        onChange={() => handleTaskToggle(taskIndex)}
-                                    />
-                                    <label htmlFor={`task-${task.id}`} className="flex items-start cursor-pointer w-full">
-                                        <span className={`w-5 h-5 mt-1 ${lang === 'ar' ? 'ml-4' : 'mr-4'} inline-block border-2 border-light-border dark:border-dark-border rounded-md flex-shrink-0 relative ${appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed' ? 'bg-light-accent dark:bg-dark-accent border-light-accent dark:border-dark-accent' : ''}`}>
-                                            {appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed' && <Icons.check className="w-3 h-3 text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />}
-                                        </span>
-                                        <div className="flex-grow">
-                                            <p className={`text-light-text dark:text-dark-text ${appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed' ? 'line-through' : ''}`}>{task.description[lang]}</p>
-                                            <div className="flex items-center mt-2 space-x-3 rtl:space-x-reverse">
-                                                <span className="text-xs font-medium bg-light-accent/10 dark:bg-dark-accent/10 text-light-accent dark:text-dark-accent px-2 py-0.5 rounded-full flex items-center gap-1.5">{Icons.task(task.type)} {task.type}</span>
-                                                <div className="flex items-center text-xs text-light-textSecondary dark:text-dark-textSecondary bg-light-background dark:bg-dark-background px-2 py-1 rounded-full">
-                                                    <Icons.clock className="w-4 h-4 me-1" />
-                                                    <span>{task.duration} {t.minutes}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </label>
-                                    <button onClick={() => openNoteModal(task.id, task.description[lang])} className="p-2 rounded-full hover:bg-light-background dark:hover:bg-dark-background transition-colors">
-                                        <Icons.edit className="w-4 h-4 text-light-textSecondary dark:text-dark-textSecondary" />
-                                    </button>
-                                </div>
-                            ))}
+                            {dayData.tasks.map((task, taskIndex) => {
+                              // تحديد الأيقونة واللون حسب نوع المهمة
+                              let typeIcon = Icons.task(task.type);
+                              let typeColor = '#00B8D9';
+                              if (task.type === 'Red Team') typeColor = '#FF5252';
+                              if (task.type === 'Blue Team') typeColor = '#40C4FF';
+                              if (task.type === 'Soft Skills') typeColor = '#FFD700';
+                              if (task.type === 'Policies') typeColor = '#AE81FF';
+                              if (task.type === 'Practical') typeColor = '#00B8D9';
+                              return (
+                                <AccordionTaskCard
+                                  key={task.id}
+                                  task={{
+                                    title: task.description[lang],
+                                    type: task.type,
+                                  }}
+                                  checked={appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed'}
+                                  onToggle={() => handleTaskToggle(taskIndex)}
+                                  onEditNote={() => openNoteModal(task.id, task.description[lang])}
+                                  typeIcon={typeIcon}
+                                  typeColor={typeColor}
+                                  duration={`${task.duration} ${t.minutes}`}
+                                  lang={lang}
+                                  description={task.details?.[lang] || ''}
+                                  resourcesSection={<ResourcesSection weekId={weekId} dayIndex={dayIndex} />}
+                                  notesSection={null} // سيتم ربطه لاحقًا بمحرر الملاحظات
+                                  pomodoroSection={null} // سيتم ربطه لاحقًا بمؤقت البومودورو
+                                />
+                              );
+                            })}
                         </div>
                     </div>
                     {/* قسم المراجع */}
