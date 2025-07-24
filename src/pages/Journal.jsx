@@ -154,29 +154,29 @@ export default function Blog() {
         )}
         {expanded && (
           <Dialog open={!!expanded} onOpenChange={v => !v && setExpanded(null)}>
-            <div className="p-4 max-w-lg">
-              <h2 className="font-bold text-2xl mb-2 text-emerald-700 flex items-center gap-2">
+            <div className="p-4 max-w-lg flex flex-col gap-2">
+              <h2 className="font-bold text-2xl mb-2 text-light-text dark:text-dark-text flex items-center gap-2">
                 <FaBookOpen /> {expanded.title || t("untitled", "(بدون عنوان)")}
               </h2>
-              <div className="flex flex-wrap gap-2 mb-2">
+              <div className="text-gray-800 dark:text-gray-100 prose prose-sm max-w-none mb-2" dangerouslySetInnerHTML={{ __html: expanded.content }} />
+              <div className="flex flex-wrap gap-2 mt-2">
                 {Array.isArray(expanded.tags) && expanded.tags.length > 0 && expanded.tags.map(tag => (
-                  <span key={tag} className="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full text-xs flex items-center gap-1"><FaTag />{tag}</span>
+                  <span key={tag} className="px-2 py-0.5 bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-gray-200 rounded-full text-xs flex items-center gap-1"><FaTag />{tag}</span>
                 ))}
                 {typeof expanded.tags === "string" && expanded.tags.trim() && expanded.tags.split(",").map(tag => (
-                  <span key={tag} className="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full text-xs flex items-center gap-1"><FaTag />{tag.trim()}</span>
+                  <span key={tag} className="px-2 py-0.5 bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-gray-200 rounded-full text-xs flex items-center gap-1"><FaTag />{tag.trim()}</span>
                 ))}
               </div>
-              <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
+              <div className="flex items-center gap-2 text-xs text-gray-500 mt-2">
                 <span className="font-bold text-emerald-700">
                   {getDayTitle(expanded) ? getDayTitle(expanded) : t("unknownDay", "يوم غير معروف")}
                 </span>
                 <span>|</span>
                 <span>{new Date(expanded.date).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US")}</span>
               </div>
-              <div className="text-gray-800 dark:text-gray-100 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: expanded.content }} />
               <div className="flex gap-2 mt-4">
                 <button
-                  className="px-3 py-1 text-xs rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 flex items-center gap-1 transition"
+                  className="px-3 py-1 text-xs rounded-lg bg-light-blue hover:bg-blue-200 text-white border border-light-blue flex items-center gap-1 transition"
                   onClick={() => openEdit(expanded)}
                   aria-label={t("edit", "تعديل")}
                 >
@@ -202,14 +202,14 @@ export default function Blog() {
         )}
         {editing && (
           <Dialog open={!!editing} onOpenChange={v => !v && setEditing(null)}>
-            <div className="p-4 max-w-lg">
+            <div className="p-4 max-w-lg flex flex-col gap-2">
               <h2 className="font-bold text-lg mb-2">{t("editBlogEntry", "تعديل التدوينة")}</h2>
               <input className="w-full mb-2 p-2 rounded border" value={editTitle} onChange={e => setEditTitle(e.target.value)} placeholder="العنوان..." />
               <input className="w-full mb-2 p-2 rounded border" value={editTags} onChange={e => setEditTags(e.target.value)} placeholder="تاجات (افصل بينها بفاصلة)" />
               <TiptapToolbar editor={editEditor} lang={lang} />
               <EditorContent editor={editEditor} />
               <div className="flex gap-2 mt-2">
-                <button className="px-3 py-1 text-xs rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 flex items-center gap-1 transition" onClick={saveEdit}><FaEdit /> {t("save", "حفظ")}</button>
+                <button className="px-3 py-1 text-xs rounded-lg bg-light-blue hover:bg-blue-200 text-white border border-light-blue flex items-center gap-1 transition" onClick={saveEdit}><FaEdit /> {t("save", "حفظ")}</button>
                 <button className="px-3 py-1 text-xs rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200 flex items-center gap-1 transition" onClick={() => setEditing(null)}>{t("close", "إغلاق")}</button>
               </div>
             </div>
