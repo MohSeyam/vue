@@ -16,6 +16,51 @@ export default function Blog() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(null);
+  const [editing, setEditing] = useState(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editTags, setEditTags] = useState("");
+  const [editContent, setEditContent] = useState("");
+
+  // Tiptap editor for editing
+  const editEditor = useEditor({
+    extensions: [
+      StarterKit,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Link,
+      Placeholder.configure({
+        placeholder: t("blogPlaceholder", "اكتب نص التدوينة...")
+      })
+    ],
+    content: editContent,
+    editorProps: {
+      attributes: {
+        class: `min-h-[100px] w-full rounded border p-2 bg-white/80 dark:bg-zinc-900 text-gray-800 dark:text-gray-100 focus:outline-none ${i18n.language === "ar" ? "text-right" : "text-left"}`,
+        dir: i18n.language === "ar" ? "rtl" : "ltr"
+      }
+    },
+    onUpdate: ({ editor }) => setEditContent(editor.getHTML())
+  });
+
+  function openEdit(entry) {
+    setEditing(entry);
+    setEditTitle(entry.title || "");
+    setEditTags(Array.isArray(entry.tags) ? entry.tags.join(", ") : (entry.tags || ""));
+    setEditContent(entry.content || "");
+    setTimeout(() => {
+      if (editEditor) editEditor.commands.setContent(entry.content || "");
+    }, 0);
+  }
+
+  async function saveEdit() {
+    if (!editing) return;
+    await updateJournalEntry(editing.id, {
+      title: editTitle,
+      tags: editTags,
+      content: editContent,
+    });
+    setEditing(null);
+    fetchEntries();
+  }
 
   useEffect(() => {
     fetchEntries();
@@ -90,7 +135,7 @@ export default function Blog() {
                   </button>
                   <button
                     className="px-3 py-1 text-xs rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 flex items-center gap-1 transition"
-                    onClick={e => { e.stopPropagation(); /* implement edit logic here */ }}
+                    onClick={e => { e.stopPropagation(); openEdit(entry); }}
                     aria-label={t("edit", "تعديل")}
                   >
                     <FaEdit />
@@ -132,7 +177,7 @@ export default function Blog() {
               <div className="flex gap-2 mt-4">
                 <button
                   className="px-3 py-1 text-xs rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 flex items-center gap-1 transition"
-                  onClick={() => {/* implement edit logic here */}}
+                  onClick={() => openEdit(expanded)}
                   aria-label={t("edit", "تعديل")}
                 >
                   <FaEdit /> تعديل
@@ -151,6 +196,21 @@ export default function Blog() {
                 >
                   إغلاق
                 </button>
+              </div>
+            </div>
+          </Dialog>
+        )}
+        {editing && (
+          <Dialog open={!!editing} onOpenChange={v => !v && setEditing(null)}>
+            <div className="p-4 max-w-lg">
+              <h2 className="font-bold text-lg mb-2">{t("editBlogEntry", "تعديل التدوينة")}</h2>
+              <input className="w-full mb-2 p-2 rounded border" value={editTitle} onChange={e => setEditTitle(e.target.value)} placeholder="العنوان..." />
+              <input className="w-full mb-2 p-2 rounded border" value={editTags} onChange={e => setEditTags(e.target.value)} placeholder="تاجات (افصل بينها بفاصلة)" />
+              <TiptapToolbar editor={editEditor} lang={lang} />
+              <EditorContent editor={editEditor} />
+              <div className="flex gap-2 mt-2">
+                <button className="px-3 py-1 text-xs rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 flex items-center gap-1 transition" onClick={saveEdit}><FaEdit /> {t("save", "حفظ")}</button>
+                <button className="px-3 py-1 text-xs rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200 flex items-center gap-1 transition" onClick={() => setEditing(null)}>{t("close", "إغلاق")}</button>
               </div>
             </div>
           </Dialog>
