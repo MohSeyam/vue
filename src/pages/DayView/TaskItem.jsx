@@ -4,31 +4,24 @@ import { useApp } from "../../context/AppContext";
 import { useState, useEffect } from "react";
 import { addNote, updateNote, getNotes } from "../../services/dbService";
 import { Dialog, DialogContent, DialogTitle } from "../../components/ui/Dialog";
+import { ShieldCheck, Flame, User, Cpu, List } from "lucide-react";
 
 // Utility to join class names
 function cn(...args) {
   return args.filter(Boolean).join(" ");
 }
 
-const typeColors = {
-  "Blue Team": "border-blue-400 bg-blue-50 dark:bg-blue-900/40",
-  "Red Team": "border-rose-400 bg-rose-50 dark:bg-rose-900/40",
-  "Soft Skills": "border-amber-400 bg-amber-50 dark:bg-amber-900/40",
-  "Practical": "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/40",
-  "Default": "border-slate-300 bg-white dark:bg-zinc-900/60"
-};
 const typeIcons = {
-  "Blue Team": <i className="i-lucide-shield-check text-blue-500" />,
-  "Red Team": <i className="i-lucide-flame text-rose-500" />,
-  "Soft Skills": <i className="i-lucide-user text-amber-500" />,
-  "Practical": <i className="i-lucide-cpu text-emerald-500" />,
-  "Default": <i className="i-lucide-list text-slate-400" />
+  "Blue Team": <ShieldCheck className="w-6 h-6 text-blue-500" />,
+  "Red Team": <Flame className="w-6 h-6 text-rose-500" />,
+  "Soft Skills": <User className="w-6 h-6 text-amber-500" />,
+  "Practical": <Cpu className="w-6 h-6 text-emerald-500" />,
+  "Default": <List className="w-6 h-6 text-slate-400" />
 };
 
 export default function TaskItem({ task, weekId, dayKey, checked, onToggle }) {
   const { lang } = useApp();
   const { t } = useTranslation();
-  const color = typeColors[task.type] || typeColors["Default"];
   const icon = typeIcons[task.type] || typeIcons["Default"];
   const [noteOpen, setNoteOpen] = useState(false);
   const [note, setNote] = useState("");
@@ -66,8 +59,7 @@ export default function TaskItem({ task, weekId, dayKey, checked, onToggle }) {
   return (
     <div
       className={cn(
-        "flex items-center gap-3 p-4 rounded-xl border shadow hover:shadow-lg transition group",
-        color
+        "flex items-center gap-3 p-4 rounded-xl border border-light-border dark:border-dark-border bg-light-card dark:bg-dark-card shadow hover:shadow-lg transition group"
       )}
       tabIndex={0}
       role="listitem"
