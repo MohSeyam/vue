@@ -5,6 +5,8 @@ import { Dialog } from "../components/ui/Dialog";
 import { Goal, Clock, Flame } from "lucide-react";
 import { FaBookOpen } from "react-icons/fa";
 import { FaCrown } from "react-icons/fa";
+import { useCyberPlan } from "../hooks/useCyberPlan";
+import { useEffect } from "react";
 
 // Placeholder components for charts and custom widgets
 const ProgressCircle = ({ percent = 85 }) => (
@@ -17,26 +19,57 @@ const ProgressCircle = ({ percent = 85 }) => (
   </div>
 );
 const Sparkline = () => <div className="h-8 w-full bg-gradient-to-r from-blue-200 to-blue-400 rounded" />;
-const StatsSummary = () => (
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
-    <Card className="flex flex-col items-center justify-center gap-2 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
-      <Goal className="w-8 h-8 text-blue-500 mb-2" />
-      <ProgressCircle percent={85} />
-      <div className="text-sm text-slate-500 mt-2">نسبة إنجاز الخطة</div>
-    </Card>
-    <Card className="flex flex-col items-center justify-center gap-2 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
-      <Clock className="w-8 h-8 text-sky-500 mb-2" />
-      <div className="text-4xl font-extrabold text-sky-600">120</div>
-      <div className="w-full"><Sparkline /></div>
-      <div className="text-sm text-slate-500 mt-2">إجمالي ساعات التعلم</div>
-    </Card>
-    <Card className="flex flex-col items-center justify-center gap-2 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
-      <Flame className="w-8 h-8 text-orange-500 mb-2" />
-      <div className="text-4xl font-extrabold text-orange-500">14</div>
-      <div className="text-sm text-slate-500 mt-2">سلسلة الإنجاز (أيام متتالية)</div>
-    </Card>
-  </div>
-);
+const StatsSummary = () => {
+  const { plan, journal, loading } = useCyberPlan();
+  // حساب نسبة التقدم
+  const allTasks = plan.flatMap(week => (week.days || []).flatMap(day => day.tasks || []));
+  const doneTasks = allTasks.filter(t => t.done);
+  const progress = allTasks.length ? Math.round((doneTasks.length / allTasks.length) * 100) : 0;
+  // حساب ساعات التعلم
+  const totalMinutes = doneTasks.reduce((sum, t) => sum + (t.duration || 0), 0);
+  const learningHours = Math.round(totalMinutes / 60);
+  // حساب سلسلة الإنجاز (streak)
+  // نستخدم journal: كل يوم فيه تدوينة يعتبر يوم دراسة
+  const daysSet = new Set(journal.map(j => new Date(j.date).toDateString()));
+  let streak = 0, maxStreak = 0;
+  let prev = null;
+  Array.from(daysSet).sort().forEach(dateStr => {
+    const date = new Date(dateStr);
+    if (prev) {
+      const diff = (date - prev) / (1000 * 60 * 60 * 24);
+      if (diff === 1) {
+        streak++;
+      } else {
+        streak = 1;
+      }
+    } else {
+      streak = 1;
+    }
+    maxStreak = Math.max(maxStreak, streak);
+    prev = date;
+  });
+  if (loading) return <div className="text-center text-slate-400">جاري التحميل...</div>;
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
+      <Card className="flex flex-col items-center justify-center gap-2 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
+        <Goal className="w-8 h-8 text-blue-500 mb-2" />
+        <ProgressCircle percent={progress} />
+        <div className="text-sm text-slate-500 mt-2">نسبة إنجاز الخطة</div>
+      </Card>
+      <Card className="flex flex-col items-center justify-center gap-2 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
+        <Clock className="w-8 h-8 text-sky-500 mb-2" />
+        <div className="text-4xl font-extrabold text-sky-600">{learningHours}</div>
+        <div className="w-full"><Sparkline /></div>
+        <div className="text-sm text-slate-500 mt-2">إجمالي ساعات التعلم</div>
+      </Card>
+      <Card className="flex flex-col items-center justify-center gap-2 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
+        <Flame className="w-8 h-8 text-orange-500 mb-2" />
+        <div className="text-4xl font-extrabold text-orange-500">{maxStreak}</div>
+        <div className="text-sm text-slate-500 mt-2">سلسلة الإنجاز (أيام متتالية)</div>
+      </Card>
+    </div>
+  );
+};
 
 const Tabs = ({ tabs, active, onTab }) => (
   <div className="mb-4">
