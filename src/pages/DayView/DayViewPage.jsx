@@ -5,6 +5,7 @@ import TaskItem from "./TaskItem";
 import NotesPrompt from "./NotesPrompt";
 import TiptapJournalEditor from "./TiptapJournalEditor";
 import { useApp } from "../../context/AppContext";
+import toast from "react-hot-toast";
 
 // NoteEditor component
 function NoteEditor({ note, taskDescription, onSave, onDelete }) {
@@ -209,7 +210,15 @@ export default function DayViewPage(props) {
     // دالة لتغيير حالة المهمة بين مكتملة وغير مكتملة
     const handleTaskToggle = (taskIndex) => {
       const task = dayData.tasks[taskIndex];
-      setTaskProgress(weekId, dayKey, task.id, !progress.find(p => p.weekId == weekId && p.dayKey == dayKey && p.taskId == task.id)?.done);
+      const wasDone = !!progress.find(p => p.weekId == weekId && p.dayKey == dayKey && p.taskId == task.id)?.done;
+      setTaskProgress(weekId, dayKey, task.id, !wasDone);
+      if (!wasDone) {
+        toast.success("تم إنجاز المهمة!");
+        // تحقق إذا كل المهام في الأسبوع أو المرحلة منجزة
+        const week = plan.find(w => String(w.week) === String(weekId));
+        const allWeekDone = week && week.days.every(day => day.tasks.every(t => progress.find(p => p.taskId === t.id && p.done) || (t.id === task.id)));
+        if (allWeekDone) toast.success("مبروك! أنجزت أسبوعًا كاملًا!");
+      }
     };
     // دالة لفتح نافذة تعديل الملاحظات
     const openNoteModal = (taskId, taskDescription) => {

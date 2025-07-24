@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useApp } from "../context/AppContext";
 import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
+import toast from "react-hot-toast";
 
 export default function Settings() {
   const { plan, notes, journal, progress, savePlan, addNote, addJournalEntry, setTaskProgress } = useApp();
@@ -17,6 +18,7 @@ export default function Settings() {
     a.download = "cyberplan-backup.json";
     a.click();
     URL.revokeObjectURL(url);
+    toast.success("تم تصدير البيانات بنجاح!");
   };
 
   // استيراد كل البيانات من JSON
@@ -30,9 +32,9 @@ export default function Settings() {
       if (data.notes) for (const n of data.notes) await addNote(n);
       if (data.journal) for (const j of data.journal) await addJournalEntry(j);
       if (data.progress) for (const p of data.progress) await setTaskProgress(p.weekId, p.dayKey, p.taskId, p.done);
-      alert("تم استيراد البيانات بنجاح!");
+      toast.success("تم استيراد البيانات بنجاح!");
     } catch {
-      alert("فشل في قراءة الملف. تأكد أنه نسخة احتياطية من التطبيق.");
+      toast.error("فشل في قراءة الملف. تأكد أنه نسخة احتياطية من التطبيق.");
     }
   };
 
