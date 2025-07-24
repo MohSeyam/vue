@@ -127,7 +127,7 @@ export function AppProvider({ children }) {
 
   return (
     <AppContext.Provider value={{ user, setUser, lang, setLang, settings, setSettings, planData, setPlanData, appState, setAppState, Icons, translations, modal, setModal, theme, setTheme,
-      globalPomodoro, setGlobalPomodoro, plan: cyberPlan.plan, savePlan: cyberPlan.savePlan, progress: cyberPlan.progress, setTaskProgress: cyberPlan.setTaskProgress }}>
+      globalPomodoro, setGlobalPomodoro, plan: cyberPlan.plan, savePlan: cyberPlan.savePlan, progress: cyberPlan.progress, setTaskProgress: cyberPlan.setTaskProgress, journal: cyberPlan.journal }}>
       {children}
       {modal.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
