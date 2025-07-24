@@ -12,6 +12,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, RadialLinearScale, PointElement, LineElement, Filler);
 import { useMemo } from "react";
 import jsPDF from "jspdf";
+import SkeletonCard from "../components/ui/SkeletonCard";
 
 // Placeholder components for charts and custom widgets
 const ProgressCircle = ({ percent = 85 }) => (
@@ -326,6 +327,7 @@ const ReportGenerator = () => {
 };
 
 export default function Achievements() {
+  const { loading } = useApp();
   return (
     <div className="min-h-screen bg-gradient-to-tr from-blue-50 via-sky-50 to-emerald-50 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-900 py-8 relative overflow-x-hidden">
       {/* Confetti background (simple animated dots) */}
@@ -342,11 +344,15 @@ export default function Achievements() {
         <div className="text-lg text-sky-600 dark:text-sky-400 font-semibold italic mb-2">"كل إنجاز صغير اليوم هو خطوة نحو نجاح كبير غدًا!"</div>
       </div>
       {/* Key Metrics (Bento Grid) */}
-      <StatsSummary />
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
+          {[1,2,3].map(i => <SkeletonCard key={i} />)}
+        </div>
+      ) : <StatsSummary />}
       {/* Deep Dive Analytics */}
-      <DeepDiveAnalytics />
+      {loading ? <SkeletonCard className="my-8" /> : <DeepDiveAnalytics />}
       {/* Consistency Section */}
-      <Consistency />
+      {loading ? <SkeletonCard className="my-8" /> : <Consistency />}
       {/* Reporting Section */}
       <div className="relative z-10">
         <ReportGenerator />
