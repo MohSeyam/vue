@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { getPlanData } from "./services/dataService";
 import PomodoroTimer from "./pages/DayView/PomodoroTimer";
 import { useApp } from "./context/AppContext";
+import Notebook from "./pages/Notebook";
 
 function GlobalProgressBar() {
   const { plan } = useCyberPlan();
@@ -53,6 +54,7 @@ export default function App() {
                 <Route path="/phase/:phaseId" element={<PhaseView />} />
                 <Route path="/week/:weekId" element={<WeekView />} />
                 <Route path="/day/:weekId/:dayKey" element={<DayView />} />
+                <Route path="/notebook" element={<Notebook />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>

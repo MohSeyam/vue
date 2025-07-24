@@ -1,11 +1,12 @@
 // Navbar.jsx
 // شريط التنقل العلوي
 
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import { ShieldCheck, Languages, Sun, Moon, Settings, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useState, useRef, useEffect } from "react";
+import { FaBook } from "react-icons/fa";
 
 const navLinks = [
   { to: "/", label: "لوحة التحكم", key: "dashboard" },
@@ -19,6 +20,7 @@ export default function Navbar() {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef();
+  const navigate = useNavigate();
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -40,7 +42,15 @@ export default function Navbar() {
           <ShieldCheck className="w-6 h-6 text-blue-600 dark:text-sky-400 group-hover:scale-110 transition" />
         </button>
         {/* إعدادات يسار */}
-        <div className="relative" ref={dropdownRef}>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigate("/notebook")}
+            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
+            aria-label={t("notebook", "دفتر الملاحظات")}
+          >
+            <FaBook className="w-6 h-6 text-slate-600 dark:text-slate-300" />
+          </button>
+          <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setOpen(v => !v)}
             className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
