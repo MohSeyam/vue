@@ -13,6 +13,7 @@ export default function Card({ children, className = "", ...props }) {
         dark:shadow-[0_10px_30px_-15px_rgba(2,12,27,0.7)]
         transition-all duration-200
         hover:-translate-y-1 hover:shadow-lg
+        [&_.card-secondary]:text-light-textSecondary dark:[&_.card-secondary]:text-dark-textSecondary
         ${className}
       `}
       {...props}

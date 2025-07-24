@@ -33,7 +33,7 @@ module.exports = {
           background: '#FAFAF9', // خلفية رئيسية فاتحة جدًا
           card: '#fffbe8', // بطاقات أبيض مائل للذهبي
           text: '#222', // نص أسود داكن
-          textSecondary: '#7c6f3c', // نص ثانوي ذهبي باهت
+          textSecondary: '#23395d', // أزرق داكن للنصوص الثانوية
           border: '#FFD700', // حدود ذهبية واضحة
           accent: '#FFD700', // ذهبي أساسي
           danger: '#FF5252',
@@ -47,7 +47,7 @@ module.exports = {
           background: '#111', // أسود عميق
           card: '#18181b', // بطاقات رمادي غامق جدًا
           text: '#fff', // نص أبيض
-          textSecondary: '#FFD700', // نص ثانوي ذهبي
+          textSecondary: '#7ca7e6', // أزرق فاتح مائل للرمادي للنصوص الثانوية
           border: '#FFD700', // حدود ذهبية واضحة
           accent: '#FFD700', // ذهبي أساسي
           danger: '#FF5252',
@@ -55,6 +55,7 @@ module.exports = {
           info: '#40C4FF',
           soft: '#222',
           policy: '#AE81FF',
+          blue: '#23395d', // أزرق داكن متناسق
         },
       },
       fontFamily: {
