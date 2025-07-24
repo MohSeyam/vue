@@ -11,6 +11,7 @@ import { Bar, Pie, Radar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, RadialLinearScale, PointElement, LineElement, Filler } from "chart.js";
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, RadialLinearScale, PointElement, LineElement, Filler);
 import { useMemo } from "react";
+import jsPDF from "jspdf";
 
 // Placeholder components for charts and custom widgets
 const ProgressCircle = ({ percent = 85 }) => (
@@ -244,6 +245,62 @@ const Consistency = () => {
 
 const ReportGenerator = () => {
   const [open, setOpen] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const { plan, journal } = useCyberPlan();
+  // حساب القيم كما في StatsSummary وBadges
+  const allTasks = plan.flatMap(week => (week.days || []).flatMap(day => day.tasks || []));
+  const doneTasks = allTasks.filter(t => t.done);
+  const progress = allTasks.length ? Math.round((doneTasks.length / allTasks.length) * 100) : 0;
+  const totalMinutes = doneTasks.reduce((sum, t) => sum + (t.duration || 0), 0);
+  const learningHours = Math.round(totalMinutes / 60);
+  const daysSet = new Set(journal.map(j => new Date(j.date).toDateString()));
+  let streak = 0, maxStreak = 0;
+  let prev = null;
+  Array.from(daysSet).sort().forEach(dateStr => {
+    const date = new Date(dateStr);
+    if (prev) {
+      const diff = (date - prev) / (1000 * 60 * 60 * 24);
+      if (diff === 1) {
+        streak++;
+      } else {
+        streak = 1;
+      }
+    } else {
+      streak = 1;
+    }
+    maxStreak = Math.max(maxStreak, streak);
+    prev = date;
+  });
+  // Badges
+  const phases = Array.from(new Set(plan.map(w => w.phase)));
+  const phaseDone = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks?.filter(t => t.done) || [])).length);
+  const phaseTotals = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks || [])).length);
+  const firstPhaseComplete = phaseDone[0] === phaseTotals[0] && phaseTotals[0] > 0;
+  const hasStreak7 = maxStreak >= 7;
+  const allPhasesComplete = phaseDone.every((d, i) => d === phaseTotals[i] && phaseTotals[i] > 0);
+
+  function handleDownload() {
+    const doc = new jsPDF();
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.text("تقرير إنجازاتك", 105, 20, { align: "center" });
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "normal");
+    doc.text(`نسبة إنجاز الخطة: ${progress}%`, 20, 40);
+    doc.text(`إجمالي ساعات التعلم: ${learningHours} ساعة`, 20, 50);
+    doc.text(`أطول سلسلة التزام: ${maxStreak} يوم`, 20, 60);
+    let badges = [];
+    if (firstPhaseComplete) badges.push("🏅 أول مرحلة مكتملة");
+    if (hasStreak7) badges.push("🏆 سلسلة 7 أيام");
+    if (allPhasesComplete) badges.push("👑 جميع المراحل مكتملة");
+    doc.text(`الشارات: ${badges.length ? badges.join("، ") : "-"}`, 20, 70);
+    doc.setFontSize(11);
+    doc.text("تم توليد هذا التقرير تلقائيًا من لوحة إنجازاتك في تطبيق سايبر بلان.", 20, 90);
+    doc.save("achievements-report.pdf");
+    setSuccess(true);
+    setTimeout(() => setSuccess(false), 2500);
+  }
+
   return (
     <Card className="my-8 flex flex-col items-center justify-center gap-4">
       <div className="text-2xl font-bold text-sky-700">وثّق رحلتك</div>
@@ -258,9 +315,9 @@ const ReportGenerator = () => {
           </select>
           <select className="w-full mb-4 p-2 rounded border">
             <option>PDF</option>
-            <option>Word</option>
           </select>
-          <Button className="w-full">تحميل التقرير</Button>
+          <Button className="w-full" onClick={handleDownload}>تحميل التقرير</Button>
+          {success && <div className="text-green-600 text-center mt-2">تم تحميل التقرير بنجاح!</div>}
         </div>
       </Dialog>
     </Card>
