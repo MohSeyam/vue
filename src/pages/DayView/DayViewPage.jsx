@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import TaskItem from "./TaskItem";
 import NotesPrompt from "./NotesPrompt";
 import TiptapJournalEditor from "./TiptapJournalEditor";
-import { useCyberPlan } from "../../hooks/useCyberPlan";
+import { useApp } from "../../context/AppContext";
 
 // NoteEditor component
 function NoteEditor({ note, taskDescription, onSave, onDelete }) {
@@ -182,7 +182,7 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
 
 // DayView main component
 export default function DayViewPage(props) {
-    const cyberPlan = useCyberPlan();
+    const { plan, savePlan } = useApp();
     const ctx = useContext(AppContext);
     const { planData, lang, appState, setAppState, translations, Icons, setModal } = ctx || {};
     const params = useParams();
@@ -208,9 +208,8 @@ export default function DayViewPage(props) {
 
     // دالة لتغيير حالة المهمة بين مكتملة وغير مكتملة
     const handleTaskToggle = (taskIndex) => {
-      // تحديث الخطة في قاعدة البيانات (db.plan)
-      cyberPlan.savePlan(
-        cyberPlan.plan.map(week => {
+      savePlan(
+        plan.map(week => {
           if (String(week.week) !== String(weekId)) return week;
           return {
             ...week,
@@ -272,7 +271,7 @@ export default function DayViewPage(props) {
                                 task={task}
                                 weekId={weekId}
                                 dayKey={dayKey}
-                                checked={!!cyberPlan.plan.find(w => String(w.week) === String(weekId))?.days?.[dayIndex]?.tasks?.[taskIndex]?.done}
+                                checked={!!plan.find(w => String(w.week) === String(weekId))?.days?.[dayIndex]?.tasks?.[taskIndex]?.done}
                                 onToggle={() => handleTaskToggle(taskIndex)}
                               />
                             ))}

@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import i18n from "../i18n/i18n";
 import { getPlanData } from "../services/dataService";
 import { FaCheck, FaEdit, FaClock } from "react-icons/fa";
+import { useCyberPlan } from "../hooks/useCyberPlan";
 
 const AppContext = createContext();
 
@@ -18,6 +19,7 @@ export function AppProvider({ children }) {
   const [modal, setModal] = useState({ isOpen: false, content: null });
   const [theme, setTheme] = useState("light");
   const [globalPomodoro, setGlobalPomodoro] = useState(null); // { title, minutes, running }
+  const cyberPlan = useCyberPlan();
 
   const Icons = {
     check: FaCheck,
@@ -125,8 +127,7 @@ export function AppProvider({ children }) {
 
   return (
     <AppContext.Provider value={{ user, setUser, lang, setLang, settings, setSettings, planData, setPlanData, appState, setAppState, Icons, translations, modal, setModal, theme, setTheme,
-      globalPomodoro, setGlobalPomodoro
-    }}>
+      globalPomodoro, setGlobalPomodoro, plan: cyberPlan.plan, savePlan: cyberPlan.savePlan }}>
       {children}
       {modal.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
