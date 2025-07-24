@@ -10,6 +10,7 @@ import WeekProgress from "../components/dashboard/WeekProgress";
 import AchievementsSummary from "../components/dashboard/AchievementsSummary";
 import { getPhases } from "../services/dataService";
 import { useCyberPlan } from "../hooks/useCyberPlan";
+import SkeletonCard from "../components/ui/SkeletonCard";
 
 export default function Dashboard() {
   const { t } = useTranslation();
@@ -36,27 +37,29 @@ export default function Dashboard() {
       </div>
       {/* بطاقات المراحل */}
       {phases.length === 0 ? (
-        <div className="text-center text-light-textSecondary dark:text-dark-textSecondary py-12">لا توجد بيانات متاحة</div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          {[1,2,3].map(i => <SkeletonCard key={i} />)}
+        </div>
       ) : (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        {phases.slice(0, 3).map((phase, idx) => {
-          // حساب نسبة الإنجاز للمرحلة بناءً على progress
-          const phaseWeeks = plan.filter(w => String(w.phase) === String(phase.id));
-          const allTasks = phaseWeeks.flatMap(w => (w.days || []).flatMap(d => d.tasks || []));
-          const doneCount = allTasks.filter(task => progress.find(p => p.taskId === task.id && p.done)).length;
-          const percent = allTasks.length ? Math.round((doneCount / allTasks.length) * 100) : 0;
-          return (
-            <PhaseCard
-              key={phase.id}
-              phase={phase}
-              color={idx === 0 ? "blue" : idx === 1 ? "emerald" : "violet"}
-              progress={percent}
-              onClick={() => navigate(`/phase/${phase.id}`)}
-              className="cursor-pointer"
-            />
-          );
-        })}
-      </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          {phases.slice(0, 3).map((phase, idx) => {
+            // حساب نسبة الإنجاز للمرحلة بناءً على progress
+            const phaseWeeks = plan.filter(w => String(w.phase) === String(phase.id));
+            const allTasks = phaseWeeks.flatMap(w => (w.days || []).flatMap(d => d.tasks || []));
+            const doneCount = allTasks.filter(task => progress.find(p => p.taskId === task.id && p.done)).length;
+            const percent = allTasks.length ? Math.round((doneCount / allTasks.length) * 100) : 0;
+            return (
+              <PhaseCard
+                key={phase.id}
+                phase={phase}
+                color={idx === 0 ? "blue" : idx === 1 ? "emerald" : "violet"}
+                progress={percent}
+                onClick={() => navigate(`/phase/${phase.id}`)}
+                className="cursor-pointer"
+              />
+            );
+          })}
+        </div>
       )}
       {/* شبكة بينتو */}
       <div className="grid md:grid-cols-3 gap-6">
