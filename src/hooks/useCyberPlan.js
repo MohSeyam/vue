@@ -22,13 +22,15 @@ export function useCyberPlan() {
       ...week,
       days: (week.days || []).map(day => ({
         ...day,
-        tasks: (day.tasks || []).map(task => ({
-          ...task,
-          done: typeof task.done === 'boolean' ? task.done : false
-        }))
+        tasks: (day.tasks || []).map(task => {
+          const t = { ...task, done: typeof task.done === 'boolean' ? task.done : false };
+          if (typeof task.done !== 'boolean') console.log('Initialized done for task:', t);
+          return t;
+        })
       }))
     }));
     setPlan(normalizedPlan);
+    console.log('fetchAll: setPlan', normalizedPlan);
     setNotes(notesData);
     setJournal(journalData);
     setLoading(false);
@@ -40,8 +42,11 @@ export function useCyberPlan() {
 
   // تحديث الخطة
   const savePlan = async (planArr) => {
+    console.log('savePlan: planArr before save', planArr);
     await db.savePlan(planArr);
-    setPlan(await db.getPlan());
+    const newPlan = await db.getPlan();
+    console.log('savePlan: plan after save', newPlan);
+    setPlan(newPlan);
   };
 
   // إدارة الملاحظات

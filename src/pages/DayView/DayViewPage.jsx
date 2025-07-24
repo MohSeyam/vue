@@ -256,6 +256,14 @@ export default function DayViewPage(props) {
                     />
         });
     };
+    // Debug: log plan and checked state
+    console.log('DayViewPage plan (first week):', plan && plan[0]);
+    if (plan && weekData && typeof dayIndex === 'number') {
+      dayData.tasks.forEach((task, taskIndex) => {
+        const checked = !!plan.find(w => String(w.week) === String(weekId))?.days?.[dayIndex]?.tasks?.[taskIndex]?.done;
+        console.log(`Task ${task.id} checked:`, checked);
+      });
+    }
     return (
         <div className="bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text font-tajawal rounded-xl shadow-lg p-6 border border-light-border dark:border-dark-border animate-fade-in">
             <h1 className="text-3xl font-bold text-light-accent dark:text-dark-accent">{dayData.day[lang]}: {dayData.topic[lang]}</h1>
