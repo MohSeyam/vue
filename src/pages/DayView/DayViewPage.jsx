@@ -284,7 +284,7 @@ export default function DayViewPage(props) {
                 {/* قسم مهمة التدوين المسائية */}
                 {dayData.notes_prompt && dayData.notes_prompt.points.length > 0 && (
                   <div className="lg:col-span-1">
-                    <div className="card sticky top-8">
+                    <div className="rounded-xl bg-gray-100 dark:bg-zinc-900 border border-light-border dark:border-dark-border shadow p-4 sticky top-8 flex flex-col gap-4">
                       <NotesPrompt prompt={dayData.notes_prompt} />
                       <TiptapJournalEditor
                         onSave={content => {
