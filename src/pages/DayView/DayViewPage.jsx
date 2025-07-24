@@ -182,7 +182,7 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
 
 // DayView main component
 export default function DayViewPage(props) {
-    const { plan, savePlan } = useApp();
+    const { plan, progress, setTaskProgress } = useApp();
     const ctx = useContext(AppContext);
     const { planData, lang, appState, setAppState, translations, Icons, setModal } = ctx || {};
     const params = useParams();
@@ -208,24 +208,8 @@ export default function DayViewPage(props) {
 
     // دالة لتغيير حالة المهمة بين مكتملة وغير مكتملة
     const handleTaskToggle = (taskIndex) => {
-      savePlan(
-        plan.map(week => {
-          if (String(week.week) !== String(weekId)) return week;
-          return {
-            ...week,
-            days: week.days.map((day, idx) => {
-              if (idx !== dayIndex) return day;
-              return {
-                ...day,
-                tasks: day.tasks.map((task, tIdx) => {
-                  if (tIdx !== taskIndex) return task;
-                  return { ...task, done: !task.done };
-                })
-              };
-            })
-          };
-        })
-      );
+      const task = dayData.tasks[taskIndex];
+      setTaskProgress(weekId, dayKey, task.id, !progress.find(p => p.weekId == weekId && p.dayKey == dayKey && p.taskId == task.id)?.done);
     };
     // دالة لفتح نافذة تعديل الملاحظات
     const openNoteModal = (taskId, taskDescription) => {
@@ -279,7 +263,7 @@ export default function DayViewPage(props) {
                                 task={task}
                                 weekId={weekId}
                                 dayKey={dayKey}
-                                checked={!!plan.find(w => String(w.week) === String(weekId))?.days?.[dayIndex]?.tasks?.[taskIndex]?.done}
+                                checked={!!progress.find(p => p.weekId == weekId && p.dayKey == dayKey && p.taskId == task.id)?.done}
                                 onToggle={() => handleTaskToggle(taskIndex)}
                               />
                             ))}

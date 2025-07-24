@@ -7,17 +7,19 @@ export function useCyberPlan() {
   const [plan, setPlan] = useState([]);
   const [notes, setNotes] = useState([]);
   const [journal, setJournal] = useState([]);
+  const [progress, setProgress] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // جلب كل البيانات من القاعدة
   const fetchAll = useCallback(async () => {
     setLoading(true);
-    const [planData, notesData, journalData] = await Promise.all([
+    const [planData, notesData, journalData, progressData] = await Promise.all([
       db.getPlan(),
       db.getNotes(),
-      db.getJournalEntries()
+      db.getJournalEntries(),
+      db.getProgress()
     ]);
-    // تهيئة كل مهمة بـ done: false إذا لم تكن موجودة
+    // تهيئة كل مهمة بـ done: false إذا لم تكن موجودة (للتوافق فقط)
     const normalizedPlan = planData.map(week => ({
       ...week,
       days: (week.days || []).map(day => ({
@@ -30,6 +32,7 @@ export function useCyberPlan() {
       }))
     }));
     setPlan(normalizedPlan);
+    setProgress(progressData);
     console.log('fetchAll: setPlan', normalizedPlan);
     setNotes(notesData);
     setJournal(journalData);
@@ -47,6 +50,12 @@ export function useCyberPlan() {
     const newPlan = await db.getPlan();
     console.log('savePlan: plan after save', newPlan);
     setPlan(newPlan);
+  };
+
+  // تحديث حالة مهمة واحدة في progress
+  const setTaskProgress = async (weekId, dayKey, taskId, done) => {
+    await db.setTaskProgress(weekId, dayKey, taskId, done);
+    setProgress(await db.getProgress());
   };
 
   // إدارة الملاحظات
@@ -78,8 +87,9 @@ export function useCyberPlan() {
   };
 
   return {
-    plan, notes, journal, loading,
+    plan, notes, journal, loading, progress,
     savePlan,
+    setTaskProgress,
     addNote, updateNote, deleteNote,
     addJournalEntry, updateJournalEntry, deleteJournalEntry,
     refresh: fetchAll
