@@ -7,6 +7,9 @@ import { FaBookOpen } from "react-icons/fa";
 import { FaCrown } from "react-icons/fa";
 import { useCyberPlan } from "../hooks/useCyberPlan";
 import { useEffect } from "react";
+import { Bar, Pie, Radar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, RadialLinearScale, PointElement, LineElement, Filler } from "chart.js";
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, RadialLinearScale, PointElement, LineElement, Filler);
 
 // Placeholder components for charts and custom widgets
 const ProgressCircle = ({ percent = 85 }) => (
@@ -83,13 +86,80 @@ const Tabs = ({ tabs, active, onTab }) => (
 
 const DeepDiveAnalytics = () => {
   const [tab, setTab] = useState(0);
+  const { plan } = useCyberPlan();
+  // تحليل المهارات
+  const allTasks = plan.flatMap(week => (week.days || []).flatMap(day => day.tasks || []));
+  const doneTasks = allTasks.filter(t => t.done);
+  const skillTypes = ["Blue Team", "Red Team", "Soft Skills", "Practical"];
+  const skillColors = ["#3b82f6", "#ef4444", "#f59e42", "#10b981"];
+  const skillsData = skillTypes.map(type => doneTasks.filter(t => t.type === type).length);
+  const barData = {
+    labels: skillTypes,
+    datasets: [
+      {
+        label: "عدد المهام المنجزة",
+        data: skillsData,
+        backgroundColor: skillColors,
+        borderRadius: 8,
+      },
+    ],
+  };
+  // تقدم المراحل
+  const phases = Array.from(new Set(plan.map(w => w.phase)));
+  const phaseLabels = phases.map(p => `المرحلة ${p}`);
+  const phaseColors = ["#3b82f6", "#10b981", "#a78bfa", "#f59e42", "#f43f5e"];
+  const phaseTotals = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks || [])).length);
+  const phaseDone = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks?.filter(t => t.done) || [])).length);
+  const pieData = {
+    labels: phaseLabels,
+    datasets: [
+      {
+        data: phaseTotals.map((total, i) => phaseDone[i] / (total || 1) * 100),
+        backgroundColor: phaseColors,
+      },
+    ],
+  };
+  // خريطة المهارات (راداري)
+  const radarData = {
+    labels: skillTypes,
+    datasets: [
+      {
+        label: "توازن المهارات",
+        data: skillsData,
+        backgroundColor: "rgba(59,130,246,0.2)",
+        borderColor: "#3b82f6",
+        pointBackgroundColor: skillColors,
+      },
+    ],
+  };
   return (
     <Card className="my-8">
       <Tabs tabs={["تحليل المهارات", "تقدم المراحل", "خريطة المهارات"]} active={tab} onTab={setTab} />
       <div className="min-h-[220px] flex items-center justify-center">
-        {tab === 0 && <div className="w-full text-center">[مخطط الأعمدة: توزيع المهارات]</div>}
-        {tab === 1 && <div className="w-full text-center">[مخطط دائري: تقدم المراحل]</div>}
-        {tab === 2 && <div className="w-full text-center">[مخطط راداري: خريطة المهارات]</div>}
+        {tab === 0 && (
+          <div className="w-full max-w-xl mx-auto">
+            <Bar data={barData} options={{
+              responsive: true,
+              plugins: { legend: { display: false }, title: { display: true, text: "توزيع المهارات المنجزة" } },
+              scales: { y: { beginAtZero: true } },
+            }} />
+          </div>
+        )}
+        {tab === 1 && (
+          <div className="w-full max-w-xs mx-auto">
+            <Pie data={pieData} options={{
+              plugins: { legend: { position: "bottom" }, title: { display: true, text: "نسبة الإنجاز في كل مرحلة" } },
+            }} />
+          </div>
+        )}
+        {tab === 2 && (
+          <div className="w-full max-w-xl mx-auto">
+            <Radar data={radarData} options={{
+              scale: { ticks: { beginAtZero: true, stepSize: 1 } },
+              plugins: { legend: { display: false }, title: { display: true, text: "خريطة توازن المهارات" } },
+            }} />
+          </div>
+        )}
       </div>
     </Card>
   );
