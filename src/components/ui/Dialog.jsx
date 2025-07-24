@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { X } from "lucide-react";
 
 export function Dialog({ open, onOpenChange, children }) {
   // Close on ESC
@@ -12,9 +13,14 @@ export function Dialog({ open, onOpenChange, children }) {
   }, [open, onOpenChange]);
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => onOpenChange?.(false)}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity duration-200 animate-fade-in"
+      style={{ animation: 'fadeInBg 0.2s' }}
+      onClick={() => onOpenChange?.(false)}
+    >
       <div
-        className="relative w-full max-w-md mx-auto bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-6 animate-in fade-in zoom-in"
+        className="relative w-full max-w-md mx-auto bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-6 transition-all duration-200 transform animate-dialog-in"
+        style={{ animation: 'dialogIn 0.22s cubic-bezier(.4,2,.6,1)' }}
         onClick={e => e.stopPropagation()}
         tabIndex={-1}
         role="dialog"
@@ -26,9 +32,13 @@ export function Dialog({ open, onOpenChange, children }) {
           onClick={() => onOpenChange?.(false)}
           aria-label="إغلاق"
         >
-          <i className="i-lucide-x" />
+          <X className="w-6 h-6" />
         </button>
       </div>
+      <style>{`
+        @keyframes fadeInBg { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes dialogIn { from { opacity: 0; transform: scale(0.92) translateY(40px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+      `}</style>
     </div>
   );
 }
