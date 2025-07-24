@@ -65,13 +65,20 @@ export default function Navbar() {
           >
             <FaMedal className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
           </button>
+          <button
+            onClick={() => navigate("/settings")}
+            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
+            aria-label={t("settings", "الإعدادات")}
+          >
+            <Settings className="w-6 h-6 text-slate-600 dark:text-slate-300" />
+          </button>
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setOpen(v => !v)}
               className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
-              aria-label={t("settings", "الإعدادات")}
+              aria-label={t("themeAndLang", "الثيم واللغة")}
             >
-              <Settings className="w-6 h-6 text-slate-600 dark:text-slate-300" />
+              <Globe className="w-6 h-6 text-slate-600 dark:text-slate-300" />
             </button>
             {open && (
               <div className="absolute left-0 mt-2 w-44 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl py-2 z-50 animate-fade-in">
