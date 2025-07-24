@@ -60,6 +60,7 @@ export default function Blog() {
     });
     setEditing(null);
     setExpanded({ ...editing, title: editTitle, tags: editTags, content: editContent });
+    console.log('After save, expanded:', { ...editing, title: editTitle, tags: editTags, content: editContent });
     fetchEntries();
   }
 
@@ -168,7 +169,29 @@ export default function Blog() {
                   <FaEdit /> تعديل
                 </button>
               </div>
-              <div className="prose prose-sm max-w-none mb-2 text-light-text dark:text-dark-text" style={{color: 'inherit'}} dangerouslySetInnerHTML={{ __html: expanded.content }} />
+              <div
+                className="prose prose-sm max-w-none mb-2 text-light-text dark:text-dark-text"
+                style={{
+                  color: 'inherit',
+                  '--tw-prose-body': 'inherit',
+                  '--tw-prose-headings': 'inherit',
+                  '--tw-prose-links': 'inherit',
+                  '--tw-prose-bold': 'inherit',
+                  '--tw-prose-counters': 'inherit',
+                  '--tw-prose-bullets': 'inherit',
+                  '--tw-prose-hr': 'inherit',
+                  '--tw-prose-quotes': 'inherit',
+                  '--tw-prose-quote-borders': 'inherit',
+                  '--tw-prose-captions': 'inherit',
+                  '--tw-prose-code': 'inherit',
+                  '--tw-prose-pre-code': 'inherit',
+                  '--tw-prose-pre-bg': 'inherit',
+                  '--tw-prose-th-borders': 'inherit',
+                  '--tw-prose-td-borders': 'inherit',
+                }}
+                dangerouslySetInnerHTML={{ __html: expanded.content }}
+              />
+              {console.log('Expanded dialog render:', expanded)}
               <div className="flex flex-wrap gap-2 mt-2">
                 {Array.isArray(expanded.tags) && expanded.tags.length > 0 && expanded.tags.map(tag => (
                   <span key={tag} className="px-2 py-0.5 bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-gray-200 rounded-full text-xs flex items-center gap-1"><FaTag />{tag}</span>
