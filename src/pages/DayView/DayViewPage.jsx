@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import { useParams } from "react-router-dom";
-import AccordionTaskCard from "./AccordionTaskCard";
+import TaskItem from "./TaskItem";
 import NotesPrompt from "./NotesPrompt";
 import TiptapJournalEditor from "./TiptapJournalEditor";
 
@@ -268,63 +268,16 @@ export default function DayViewPage(props) {
                     <div>
                         <h4 className="text-lg font-semibold mb-3 text-light-text dark:text-dark-text">{t.activeTasks}</h4>
                         <div className="space-y-3">
-                            {dayData.tasks.map((task, taskIndex) => {
-                              // تحديد الأيقونة واللون حسب نوع المهمة
-                              let typeIcon = Icons.task(task.type);
-                              let typeColor = '#00B8D9';
-                              if (task.type === 'Red Team') typeColor = '#FF5252';
-                              if (task.type === 'Blue Team') typeColor = '#40C4FF';
-                              if (task.type === 'Soft Skills') typeColor = '#FFD700';
-                              if (task.type === 'Policies') typeColor = '#AE81FF';
-                              if (task.type === 'Practical') typeColor = '#00B8D9';
-                              // ملاحظة المهمة (من state)
-                              const noteContent = appState.notes[weekId]?.days[dayIndex]?.[task.id]?.content || "";
-                              const dateKey = `${weekId}-${dayKey}-${task.id}`;
-                              const handleSaveNote = (content) => {
-                                setAppState(prev => {
-                                  const newState = JSON.parse(JSON.stringify(prev));
-                                  if (!newState.notes[weekId]) newState.notes[weekId] = { days: [] };
-                                  if (!newState.notes[weekId].days[dayIndex]) newState.notes[weekId].days[dayIndex] = {};
-                                  if (!newState.notes[weekId].days[dayIndex][task.id]) newState.notes[weekId].days[dayIndex][task.id] = {};
-                                  newState.notes[weekId].days[dayIndex][task.id].content = content;
-                                  return newState;
-                                });
-                              };
-                              // مراجع المهمة (من state)
-                              const taskResources = (appState.resources?.[weekId]?.days?.[dayIndex]?.[task.id]) || [];
-                              const handleResourcesChange = (newResources) => {
-                                setAppState(prev => {
-                                  const newState = JSON.parse(JSON.stringify(prev));
-                                  if (!newState.resources) newState.resources = {};
-                                  if (!newState.resources[weekId]) newState.resources[weekId] = { days: [] };
-                                  if (!newState.resources[weekId].days[dayIndex]) newState.resources[weekId].days[dayIndex] = {};
-                                  newState.resources[weekId].days[dayIndex][task.id] = newResources;
-                                  return newState;
-                                });
-                              };
-                              return (
-                                <AccordionTaskCard
-                                  key={task.id}
-                                  task={{
-                                    title: task.description[lang],
-                                    type: task.type,
-                                  }}
-                                  checked={appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed'}
-                                  onToggle={() => handleTaskToggle(taskIndex)}
-                                  onEditNote={() => openNoteModal(task.id, task.description[lang])}
-                                  typeIcon={typeIcon}
-                                  typeColor={typeColor}
-                                  duration={`${task.duration} ${t.minutes}`}
-                                  lang={lang}
-                                  description={task.details?.[lang] || ''}
-                                  resources={taskResources}
-                                  onResourcesChange={handleResourcesChange}
-                                  noteContent={noteContent}
-                                  onSaveNote={handleSaveNote}
-                                  dateKey={dateKey}
-                                />
-                              );
-                            })}
+                            {dayData.tasks.map((task, taskIndex) => (
+                              <TaskItem
+                                key={task.id}
+                                task={task}
+                                weekId={weekId}
+                                dayKey={dayKey}
+                                checked={appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed'}
+                                onToggle={() => handleTaskToggle(taskIndex)}
+                              />
+                            ))}
                         </div>
                     </div>
                     {/* قسم المراجع */}

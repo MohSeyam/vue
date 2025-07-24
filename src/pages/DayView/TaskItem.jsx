@@ -25,7 +25,7 @@ const typeIcons = {
   "Default": <i className="i-lucide-list text-slate-400" />
 };
 
-export default function TaskItem({ task, weekId, dayKey }) {
+export default function TaskItem({ task, weekId, dayKey, checked, onToggle }) {
   const { lang } = useApp();
   const { t } = useTranslation();
   const color = typeColors[task.type] || typeColors["Default"];
@@ -74,7 +74,13 @@ export default function TaskItem({ task, weekId, dayKey }) {
       aria-label={task.description?.[lang] || task.description?.ar || task.description?.en}
     >
       <span className="text-xl">{icon}</span>
-      <input type="checkbox" className="accent-blue-500 w-5 h-5" aria-label={t("markComplete", "تم الإنجاز")} />
+      <input
+        type="checkbox"
+        className="accent-blue-500 w-5 h-5"
+        aria-label={t("markComplete", "تم الإنجاز")}
+        checked={checked}
+        onChange={onToggle}
+      />
       <div className="flex-1">
         <div className="font-semibold text-slate-800 dark:text-slate-100 mb-0.5">{task.description?.[lang] || task.description?.ar || task.description?.en}</div>
         <div className="text-xs text-slate-500 dark:text-slate-400 flex gap-2 items-center">
