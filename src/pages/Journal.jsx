@@ -59,6 +59,7 @@ export default function Blog() {
       content: editContent,
     });
     setEditing(null);
+    setExpanded({ ...editing, title: editTitle, tags: editTags, content: editContent });
     fetchEntries();
   }
 
@@ -167,7 +168,7 @@ export default function Blog() {
                   <FaEdit /> تعديل
                 </button>
               </div>
-              <div className="text-gray-800 dark:text-gray-100 prose prose-sm max-w-none mb-2" dangerouslySetInnerHTML={{ __html: expanded.content }} />
+              <div className="prose prose-sm max-w-none mb-2 text-light-text dark:text-dark-text" style={{color: 'inherit'}} dangerouslySetInnerHTML={{ __html: expanded.content }} />
               <div className="flex flex-wrap gap-2 mt-2">
                 {Array.isArray(expanded.tags) && expanded.tags.length > 0 && expanded.tags.map(tag => (
                   <span key={tag} className="px-2 py-0.5 bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-gray-200 rounded-full text-xs flex items-center gap-1"><FaTag />{tag}</span>
