@@ -39,7 +39,7 @@ function GlobalProgressBar() {
 export default function App() {
   console.log("App.jsx loaded");
   return (
-    <div className="min-h-screen bg-light-background text-light-text dark:bg-dark-background dark:text-dark-text font-tajawal">
+    <div className="min-h-screen bg-light-background text-light-text dark:bg-dark-background dark:text-dark-text font-tajawal" style={{ background: '#B0BEC5' }}>
       <ThemeProvider>
         <AppProvider>
           <GlobalPomodoroOverlay />
