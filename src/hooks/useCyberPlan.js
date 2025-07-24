@@ -17,7 +17,18 @@ export function useCyberPlan() {
       db.getNotes(),
       db.getJournalEntries()
     ]);
-    setPlan(planData);
+    // تهيئة كل مهمة بـ done: false إذا لم تكن موجودة
+    const normalizedPlan = planData.map(week => ({
+      ...week,
+      days: (week.days || []).map(day => ({
+        ...day,
+        tasks: (day.tasks || []).map(task => ({
+          ...task,
+          done: typeof task.done === 'boolean' ? task.done : false
+        }))
+      }))
+    }));
+    setPlan(normalizedPlan);
     setNotes(notesData);
     setJournal(journalData);
     setLoading(false);

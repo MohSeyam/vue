@@ -155,9 +155,18 @@ export default function Blog() {
         {expanded && (
           <Dialog open={!!expanded} onOpenChange={v => !v && setExpanded(null)}>
             <div className="p-4 max-w-lg flex flex-col gap-2">
-              <h2 className="font-bold text-2xl mb-2 text-light-text dark:text-dark-text flex items-center gap-2">
-                <FaBookOpen /> {expanded.title || t("untitled", "(بدون عنوان)")}
-              </h2>
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="font-bold text-2xl text-light-text dark:text-dark-text flex items-center gap-2">
+                  <FaBookOpen /> {expanded.title || t("untitled", "(بدون عنوان)")}
+                </h2>
+                <button
+                  className="px-3 py-1 text-xs rounded-lg bg-light-blue hover:bg-blue-200 text-white border border-light-blue flex items-center gap-1 transition font-bold"
+                  onClick={() => openEdit(expanded)}
+                  aria-label={t("edit", "تعديل")}
+                >
+                  <FaEdit /> تعديل
+                </button>
+              </div>
               <div className="text-gray-800 dark:text-gray-100 prose prose-sm max-w-none mb-2" dangerouslySetInnerHTML={{ __html: expanded.content }} />
               <div className="flex flex-wrap gap-2 mt-2">
                 {Array.isArray(expanded.tags) && expanded.tags.length > 0 && expanded.tags.map(tag => (
@@ -175,13 +184,6 @@ export default function Blog() {
                 <span>{new Date(expanded.date).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US")}</span>
               </div>
               <div className="flex gap-2 mt-4">
-                <button
-                  className="px-3 py-1 text-xs rounded-lg bg-light-blue hover:bg-blue-200 text-white border border-light-blue flex items-center gap-1 transition"
-                  onClick={() => openEdit(expanded)}
-                  aria-label={t("edit", "تعديل")}
-                >
-                  <FaEdit /> تعديل
-                </button>
                 <button
                   className="px-3 py-1 text-xs rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 flex items-center gap-1 transition"
                   onClick={() => { handleDelete(expanded.id); setExpanded(null); }}
