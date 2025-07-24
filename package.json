@@ -21,6 +21,7 @@
   "homepage": "https://github.com/MohSeyam/vue#readme",
   "description": "",
   "dependencies": {
+    "@hello-pangea/dnd": "^18.0.1",
     "@tiptap/extension-code": "^3.0.7",
     "@tiptap/extension-color": "^3.0.7",
     "@tiptap/extension-highlight": "^3.0.7",
