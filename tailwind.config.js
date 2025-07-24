@@ -34,7 +34,7 @@ module.exports = {
           card: '#fffbe8', // بطاقات أبيض مائل للذهبي
           text: '#222', // نص أسود داكن
           textSecondary: '#7c6f3c', // نص ثانوي ذهبي باهت
-          border: '#F3E9C7', // حدود ذهبية باهتة
+          border: '#FFD700', // حدود ذهبية واضحة
           accent: '#FFD700', // ذهبي أساسي
           danger: '#FF5252',
           success: '#69F0AE',
@@ -46,9 +46,9 @@ module.exports = {
         dark: {
           background: '#111', // أسود عميق
           card: '#18181b', // بطاقات رمادي غامق جدًا
-          text: '#FFD700', // نص ذهبي
-          textSecondary: '#bfae5a', // نص ثانوي ذهبي باهت
-          border: '#333', // حدود رمادية داكنة
+          text: '#fff', // نص أبيض
+          textSecondary: '#FFD700', // نص ثانوي ذهبي
+          border: '#FFD700', // حدود ذهبية واضحة
           accent: '#FFD700', // ذهبي أساسي
           danger: '#FF5252',
           success: '#69F0AE',
