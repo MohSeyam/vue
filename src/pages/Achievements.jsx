@@ -4,24 +4,33 @@ import Button from "../components/ui/Button";
 import { Dialog } from "../components/ui/Dialog";
 import { Goal, Clock, Flame } from "lucide-react";
 import { FaBookOpen } from "react-icons/fa";
+import { FaCrown } from "react-icons/fa";
 
 // Placeholder components for charts and custom widgets
-const ProgressCircle = () => <div className="flex flex-col items-center justify-center"><div className="w-24 h-24 rounded-full border-8 border-blue-400 flex items-center justify-center text-3xl font-bold">85%</div><div className="mt-2 text-blue-600 font-semibold">إجمالي التقدم</div></div>;
+const ProgressCircle = ({ percent = 85 }) => (
+  <div className="flex flex-col items-center justify-center relative">
+    <div className="w-24 h-24 rounded-full border-8 border-blue-400 flex items-center justify-center text-3xl font-bold bg-white/80 dark:bg-zinc-900/80 relative">
+      {percent === 100 && <FaCrown className="absolute -top-4 left-1/2 -translate-x-1/2 text-yellow-400 w-8 h-8 animate-bounce" />}
+      {percent}%
+    </div>
+    <div className="mt-2 text-blue-600 font-semibold">إجمالي التقدم</div>
+  </div>
+);
 const Sparkline = () => <div className="h-8 w-full bg-gradient-to-r from-blue-200 to-blue-400 rounded" />;
 const StatsSummary = () => (
   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
-    <Card className="flex flex-col items-center justify-center gap-2">
+    <Card className="flex flex-col items-center justify-center gap-2 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
       <Goal className="w-8 h-8 text-blue-500 mb-2" />
-      <ProgressCircle />
+      <ProgressCircle percent={85} />
       <div className="text-sm text-slate-500 mt-2">نسبة إنجاز الخطة</div>
     </Card>
-    <Card className="flex flex-col items-center justify-center gap-2">
+    <Card className="flex flex-col items-center justify-center gap-2 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
       <Clock className="w-8 h-8 text-sky-500 mb-2" />
       <div className="text-4xl font-extrabold text-sky-600">120</div>
       <div className="w-full"><Sparkline /></div>
       <div className="text-sm text-slate-500 mt-2">إجمالي ساعات التعلم</div>
     </Card>
-    <Card className="flex flex-col items-center justify-center gap-2">
+    <Card className="flex flex-col items-center justify-center gap-2 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
       <Flame className="w-8 h-8 text-orange-500 mb-2" />
       <div className="text-4xl font-extrabold text-orange-500">14</div>
       <div className="text-sm text-slate-500 mt-2">سلسلة الإنجاز (أيام متتالية)</div>
@@ -91,11 +100,19 @@ const ReportGenerator = () => {
 
 export default function Achievements() {
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-blue-50 via-sky-50 to-emerald-50 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-900 py-8">
+    <div className="min-h-screen bg-gradient-to-tr from-blue-50 via-sky-50 to-emerald-50 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-900 py-8 relative overflow-x-hidden">
+      {/* Confetti background (simple animated dots) */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <div className="animate-pulse absolute top-10 left-1/4 w-6 h-6 bg-yellow-200 rounded-full opacity-40" />
+        <div className="animate-bounce absolute top-24 right-1/3 w-4 h-4 bg-blue-200 rounded-full opacity-30" />
+        <div className="animate-pulse absolute bottom-16 left-1/3 w-5 h-5 bg-emerald-200 rounded-full opacity-30" />
+        <div className="animate-bounce absolute bottom-10 right-1/4 w-7 h-7 bg-pink-200 rounded-full opacity-30" />
+      </div>
       {/* Hero Section */}
-      <div className="text-center mb-10">
+      <div className="text-center mb-10 relative z-10">
         <div className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-sky-400 mb-4">لوحة إنجازاتك</div>
-        <div className="text-xl text-slate-600 dark:text-slate-300 font-medium">رحلتك في عالم الأمن السيبراني بالأرقام</div>
+        <div className="text-xl text-slate-600 dark:text-slate-300 font-medium mb-2">رحلتك في عالم الأمن السيبراني بالأرقام</div>
+        <div className="text-lg text-sky-600 dark:text-sky-400 font-semibold italic mb-2">"كل إنجاز صغير اليوم هو خطوة نحو نجاح كبير غدًا!"</div>
       </div>
       {/* Key Metrics (Bento Grid) */}
       <StatsSummary />
@@ -104,7 +121,12 @@ export default function Achievements() {
       {/* Consistency Section */}
       <Consistency />
       {/* Reporting Section */}
-      <ReportGenerator />
+      <div className="relative z-10">
+        <ReportGenerator />
+        <div className="flex justify-center mt-[-32px]">
+          <span className="animate-bounce text-3xl text-sky-400">↓</span>
+        </div>
+      </div>
     </div>
   );
 }
