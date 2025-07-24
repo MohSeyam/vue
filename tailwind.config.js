@@ -30,30 +30,30 @@ module.exports = {
       colors: {
         // Light mode
         light: {
-          background: '#B0BEC5', // خلفية رئيسية غامقة متوسطة
-          card: '#FAFAFA', // خلفية البطاقات تبقى فاتحة
-          text: '#1D2D35', // نص أساسي
-          textSecondary: '#5A6A72', // نص ثانوي
-          border: '#E9ECEF', // حدود
-          accent: '#00B8D9', // لون سيان محايد وواضح في الوضعين
+          background: '#FAFAF9', // خلفية رئيسية فاتحة جدًا
+          card: '#fffbe8', // بطاقات أبيض مائل للذهبي
+          text: '#222', // نص أسود داكن
+          textSecondary: '#7c6f3c', // نص ثانوي ذهبي باهت
+          border: '#F3E9C7', // حدود ذهبية باهتة
+          accent: '#FFD700', // ذهبي أساسي
           danger: '#FF5252',
           success: '#69F0AE',
           info: '#40C4FF',
-          soft: '#FFD700',
+          soft: '#FFF9C4',
           policy: '#AE81FF',
         },
         // Dark mode
         dark: {
-          background: '#0A192F', // خلفية رئيسية
-          card: '#172A45', // خلفية البطاقات
-          text: '#CCD6F6', // نص أساسي
-          textSecondary: '#8892B0', // نص ثانوي
-          border: '#233554', // حدود
-          accent: '#00B8D9', // لون سيان محايد وواضح في الوضعين
+          background: '#111', // أسود عميق
+          card: '#18181b', // بطاقات رمادي غامق جدًا
+          text: '#FFD700', // نص ذهبي
+          textSecondary: '#bfae5a', // نص ثانوي ذهبي باهت
+          border: '#333', // حدود رمادية داكنة
+          accent: '#FFD700', // ذهبي أساسي
           danger: '#FF5252',
           success: '#69F0AE',
           info: '#40C4FF',
-          soft: '#FFD700',
+          soft: '#222',
           policy: '#AE81FF',
         },
       },
