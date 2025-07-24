@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useContext } from "react";
 import { AppContext } from "../context/AppContext";
-import { FaTag, FaEdit, FaTrash } from "react-icons/fa";
+import { FaTag, FaEdit, FaTrash, FaRegStickyNote } from "react-icons/fa";
 import { Dialog } from "../components/ui/Dialog";
 
 function extractAllNotes(appState, planData, lang) {
@@ -107,19 +107,25 @@ export default function Notebook() {
           <button className="ml-2 text-xs text-red-500 underline" onClick={() => setSelectedTag("")}>إزالة الفلتر</button>
         )}
       </div>
-      <div className="grid gap-4">
-        {filteredNotes.length === 0 && <div className="text-gray-400">لا توجد ملاحظات مطابقة.</div>}
+      <div className="grid gap-4 min-h-[60vh]">
+        {filteredNotes.length === 0 && (
+          <div className="flex flex-col items-center justify-center min-h-[40vh] text-center text-gray-400">
+            <FaRegStickyNote className="w-24 h-24 mb-4 text-blue-200 dark:text-blue-900" />
+            <div className="text-xl font-bold mb-2">لا توجد ملاحظات</div>
+            <div className="text-base">ابدأ بإضافة ملاحظاتك أثناء الدراسة وستظهر هنا تلقائيًا.</div>
+          </div>
+        )}
         {filteredNotes.map(note => (
-          <div key={note.id} className="glass-card p-4 flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-lg">{note.title}</span>
+          <div key={note.id} className="rounded-2xl shadow-lg bg-white/80 dark:bg-zinc-900/80 border border-slate-200 dark:border-zinc-800 p-5 flex flex-col gap-2 hover:shadow-2xl transition-all">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="font-bold text-lg text-blue-900 dark:text-blue-200">{note.title}</span>
               {note.tags.map(tag => <span key={tag} className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs ml-1">{tag}</span>)}
             </div>
-            <div className="text-xs text-gray-500">{note.dayTitle} - {note.taskTitle}</div>
-            <div className="text-sm text-gray-700 line-clamp-2" dangerouslySetInnerHTML={{ __html: note.content?.slice(0, 120) + (note.content?.length > 120 ? "..." : "") }} />
+            <div className="text-xs text-gray-500 mb-1">{note.dayTitle} - {note.taskTitle}</div>
+            <div className="text-sm text-gray-700 dark:text-gray-200 line-clamp-2 mb-2" dangerouslySetInnerHTML={{ __html: note.content?.slice(0, 120) + (note.content?.length > 120 ? "..." : "") }} />
             <div className="flex gap-2 mt-2">
-              <button className="brutal-btn px-3 py-1 text-xs" onClick={() => openEdit(note)}><FaEdit /> تحرير</button>
-              <button className="brutal-btn px-3 py-1 text-xs bg-red-100 text-red-600 border-red-400" onClick={() => { setSelectedNote(note); deleteNote(); }}><FaTrash /> حذف</button>
+              <button className="px-4 py-1 text-xs rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 flex items-center gap-1 transition" onClick={() => openEdit(note)}><FaEdit /> تحرير</button>
+              <button className="px-4 py-1 text-xs rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 flex items-center gap-1 transition" onClick={() => { setSelectedNote(note); deleteNote(); }}><FaTrash /> حذف</button>
             </div>
           </div>
         ))}
