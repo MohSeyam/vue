@@ -51,25 +51,26 @@ export default function Navbar() {
             <FaBook className="w-6 h-6 text-slate-600 dark:text-slate-300" />
           </button>
           <div className="relative" ref={dropdownRef}>
-          <button
-            onClick={() => setOpen(v => !v)}
-            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
-            aria-label={t("settings", "الإعدادات")}
-          >
-            <Settings className="w-6 h-6 text-slate-600 dark:text-slate-300" />
-          </button>
-          {open && (
-            <div className="absolute left-0 mt-2 w-44 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl py-2 z-50 animate-fade-in">
-              <button onClick={toggleTheme} className="w-full flex items-center gap-2 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-200">
-                {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                {theme === "dark" ? t("lightMode", "الوضع الفاتح") : t("darkMode", "الوضع الليلي")}
-              </button>
-              <button onClick={toggleLang} className="w-full flex items-center gap-2 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-200">
-                <Languages className="w-5 h-5" />
-                {lang === "ar" ? "English" : "العربية"}
-              </button>
-            </div>
-          )}
+            <button
+              onClick={() => setOpen(v => !v)}
+              className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
+              aria-label={t("settings", "الإعدادات")}
+            >
+              <Settings className="w-6 h-6 text-slate-600 dark:text-slate-300" />
+            </button>
+            {open && (
+              <div className="absolute left-0 mt-2 w-44 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl py-2 z-50 animate-fade-in">
+                <button onClick={toggleTheme} className="w-full flex items-center gap-2 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-200">
+                  {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                  {theme === "dark" ? t("lightMode", "الوضع الفاتح") : t("darkMode", "الوضع الليلي")}
+                </button>
+                <button onClick={toggleLang} className="w-full flex items-center gap-2 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-200">
+                  <Languages className="w-5 h-5" />
+                  {lang === "ar" ? "English" : "العربية"}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </nav>
     </header>
