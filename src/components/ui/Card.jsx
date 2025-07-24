@@ -6,6 +6,7 @@ export default function Card({ children, className = "", ...props }) {
       className={`
         bg-light-card dark:bg-dark-card
         border border-light-border dark:border-dark-border
+        border-light-border dark:border-dark-border
         text-light-text dark:text-dark-text
         rounded-lg
         p-6
@@ -14,6 +15,7 @@ export default function Card({ children, className = "", ...props }) {
         transition-all duration-200
         hover:-translate-y-1 hover:shadow-lg
         [&_.card-secondary]:text-light-textSecondary dark:[&_.card-secondary]:text-dark-textSecondary
+        border-2 border-light-border dark:border-dark-border
         ${className}
       `}
       {...props}

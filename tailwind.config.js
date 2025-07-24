@@ -30,12 +30,12 @@ module.exports = {
       colors: {
         // Light mode
         light: {
-          background: '#F7F6F2', // خلفية رئيسية off-white
-          card: '#FDF6E3', // بطاقات بيج فاتح جداً
+          background: '#F3F3EF', // خلفية رئيسية أغمق قليلاً
+          card: '#F8F8F5', // بطاقات أبيض مائل للرمادي
           text: '#222', // نص أسود داكن
           textSecondary: '#23395d', // أزرق داكن للنصوص الثانوية
-          border: '#E9E7D6', // حدود بيج باهتة
-          accent: '#FFD700', // ذهبي فقط للأزرار/الأيقونات المهمة
+          border: '#FFD700', // حدود ذهبية واضحة فقط
+          accent: '#FFD700', // ذهبي أساسي
           danger: '#FF5252',
           success: '#69F0AE',
           info: '#40C4FF',
