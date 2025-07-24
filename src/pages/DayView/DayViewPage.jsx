@@ -283,23 +283,21 @@ export default function DayViewPage(props) {
                 </div>
                 {/* قسم مهمة التدوين المسائية */}
                 {dayData.notes_prompt && dayData.notes_prompt.points.length > 0 && (
-                  <div className="lg:col-span-1">
-                    <div className="rounded-xl bg-gray-100 dark:bg-zinc-900 border border-light-border dark:border-dark-border shadow p-4 sticky top-8 flex flex-col gap-4">
-                      <NotesPrompt prompt={dayData.notes_prompt} />
-                      <TiptapJournalEditor
-                        onSave={content => {
-                          setAppState(prev => {
-                            const newState = JSON.parse(JSON.stringify(prev));
-                            if (!newState.journal) newState.journal = {};
-                            if (!newState.journal[weekId]) newState.journal[weekId] = {};
-                            newState.journal[weekId][dayKey] = content;
-                            return newState;
-                          });
-                        }}
-                        dateKey={`${weekId}-${dayKey}`}
-                        initialContent={appState.journal?.[weekId]?.[dayKey] || ""}
-                      />
-                    </div>
+                  <div className="lg:col-span-1 flex flex-col gap-4 sticky top-8">
+                    <NotesPrompt prompt={dayData.notes_prompt} />
+                    <TiptapJournalEditor
+                      onSave={content => {
+                        setAppState(prev => {
+                          const newState = JSON.parse(JSON.stringify(prev));
+                          if (!newState.journal) newState.journal = {};
+                          if (!newState.journal[weekId]) newState.journal[weekId] = {};
+                          newState.journal[weekId][dayKey] = content;
+                          return newState;
+                        });
+                      }}
+                      dateKey={`${weekId}-${dayKey}`}
+                      initialContent={appState.journal?.[weekId]?.[dayKey] || ""}
+                    />
                   </div>
                 )}
             </div>
