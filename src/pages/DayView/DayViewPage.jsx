@@ -272,7 +272,7 @@ export default function DayViewPage(props) {
                                 task={task}
                                 weekId={weekId}
                                 dayKey={dayKey}
-                                checked={appState.progress[weekId]?.days[dayIndex]?.tasks[taskIndex] === 'completed'}
+                                checked={!!cyberPlan.plan.find(w => String(w.week) === String(weekId))?.days?.[dayIndex]?.tasks?.[taskIndex]?.done}
                                 onToggle={() => handleTaskToggle(taskIndex)}
                               />
                             ))}
