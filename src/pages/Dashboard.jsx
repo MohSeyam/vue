@@ -17,7 +17,7 @@ export default function Dashboard() {
   const [phases, setPhases] = useState([]);
   const navigate = useNavigate();
   const isRTL = lang === "ar";
-  const { plan } = useCyberPlan();
+  const { plan, progress } = useApp();
 
   useEffect(() => {
     getPhases().then(setPhases);
@@ -40,18 +40,17 @@ export default function Dashboard() {
       ) : (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         {phases.slice(0, 3).map((phase, idx) => {
-          // حساب نسبة الإنجاز للمرحلة
-          const allTasks = plan
-            .filter(w => String(w.phase) === String(phase.id))
-            .flatMap(w => (w.tasks || []));
-          const doneCount = allTasks.filter(t => t.done).length;
-          const progress = allTasks.length ? Math.round((doneCount / allTasks.length) * 100) : 0;
+          // حساب نسبة الإنجاز للمرحلة بناءً على progress
+          const phaseWeeks = plan.filter(w => String(w.phase) === String(phase.id));
+          const allTasks = phaseWeeks.flatMap(w => (w.days || []).flatMap(d => d.tasks || []));
+          const doneCount = allTasks.filter(task => progress.find(p => p.taskId === task.id && p.done)).length;
+          const percent = allTasks.length ? Math.round((doneCount / allTasks.length) * 100) : 0;
           return (
             <PhaseCard
               key={phase.id}
               phase={phase}
               color={idx === 0 ? "blue" : idx === 1 ? "emerald" : "violet"}
-              progress={progress}
+              progress={percent}
               onClick={() => navigate(`/phase/${phase.id}`)}
               className="cursor-pointer"
             />

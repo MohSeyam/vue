@@ -72,7 +72,7 @@ export default function PhaseView() {
   const [phase, setPhase] = useState(null);
   const [weeks, setWeeks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { plan } = useCyberPlan();
+  const { plan, progress } = useApp();
   const [expandedWeek, setExpandedWeek] = useState(null);
 
   useEffect(() => {
@@ -113,14 +113,10 @@ export default function PhaseView() {
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {weeks.map((week, idx) => {
-          // حساب نسبة الإنجاز
+          // حساب نسبة الإنجاز للأسبوع بناءً على progress
           const allTasks = (week.days || []).flatMap(day => day.tasks || []);
-          const doneMap = {};
-          plan.forEach(w => {
-            (w.tasks || []).forEach(t => { if (t.id && t.done) doneMap[t.id] = true; });
-          });
-          const doneCount = allTasks.filter(task => doneMap[task.id]).length;
-          const progress = allTasks.length ? Math.round((doneCount / allTasks.length) * 100) : 0;
+          const doneCount = allTasks.filter(task => progress.find(p => p.taskId === task.id && p.done)).length;
+          const percent = allTasks.length ? Math.round((doneCount / allTasks.length) * 100) : 0;
           // لون المرحلة والأسابيع
           let phaseColor = "blue";
           if (phase.id === 2) phaseColor = "emerald";
@@ -130,7 +126,7 @@ export default function PhaseView() {
               key={week.week}
               week={week}
               lang={lang}
-              progress={progress}
+              progress={percent}
               color={phaseColor}
               DaySummaryCard={DaySummaryCard}
               dayColor="stone"
