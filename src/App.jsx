@@ -17,6 +17,8 @@ import { useApp } from "./context/AppContext";
 import Notebook from "./pages/Notebook";
 import Achievements from "./pages/Achievements";
 import { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function GlobalProgressBar() {
   const { plan } = useCyberPlan();
@@ -40,6 +42,37 @@ function GlobalProgressBar() {
 }
 
 export default function App() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    function onKey(e) {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.isContentEditable) return;
+      if (e.ctrlKey && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        toast("بحث سريع (غير مفعل بعد)");
+      }
+      if (e.key === "n" || e.key === "N") {
+        navigate("/notebook");
+        toast.success("انتقلت إلى دفتر الملاحظات (N)");
+      }
+      if (e.key === "j" || e.key === "J") {
+        navigate("/journal");
+        toast.success("انتقلت إلى المدونة (J)");
+      }
+      if (e.key === "a" || e.key === "A") {
+        navigate("/achievements");
+        toast.success("انتقلت إلى الإنجازات (A)");
+      }
+      if (e.key === "s" || e.key === "S") {
+        navigate("/settings");
+        toast.success("انتقلت إلى الإعدادات (S)");
+      }
+      if (e.key === "?" || (e.shiftKey && e.key === "/")) {
+        toast("اختصارات: N=دفتر الملاحظات، J=المدونة، A=الإنجازات، S=الإعدادات، Ctrl+K=بحث");
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [navigate]);
   console.log("App.jsx loaded");
   return (
     <div className="min-h-screen bg-light-background text-light-text dark:bg-dark-background dark:text-dark-text font-tajawal">
