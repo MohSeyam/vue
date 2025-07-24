@@ -87,10 +87,11 @@ const Tabs = ({ tabs, active, onTab }) => (
 
 const DeepDiveAnalytics = () => {
   const [tab, setTab] = useState(0);
-  const { plan } = useApp();
-  // تحليل المهارات
+  const { plan, progress } = useApp();
+  // جميع المهام
   const allTasks = plan.flatMap(week => (week.days || []).flatMap(day => day.tasks || []));
-  const doneTasks = allTasks.filter(t => t.done);
+  // المهام المنجزة حسب progress
+  const doneTasks = allTasks.filter(task => progress.find(p => p.taskId === task.id && p.done));
   const skillTypes = ["Blue Team", "Red Team", "Soft Skills", "Practical"];
   const skillColors = ["#3b82f6", "#ef4444", "#f59e42", "#10b981"];
   const skillsData = skillTypes.map(type => doneTasks.filter(t => t.type === type).length);
@@ -108,9 +109,9 @@ const DeepDiveAnalytics = () => {
   // تقدم المراحل
   const phases = Array.from(new Set(plan.map(w => w.phase)));
   const phaseLabels = phases.map(p => `المرحلة ${p}`);
-  const phaseColors = Array(phases.length).fill("#FFD700"); // ذهبي موحد لكل المراحل
+  const phaseColors = Array(phases.length).fill("#FFD700");
   const phaseTotals = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks || [])).length);
-  const phaseDone = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks?.filter(t => t.done) || [])).length);
+  const phaseDone = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks || [])).filter(task => progress.find(p => p.taskId === task.id && p.done)).length);
   const pieData = {
     labels: phaseLabels,
     datasets: [
@@ -193,11 +194,11 @@ const LearningHeatmap = ({ journal }) => {
   );
 };
 
-const Badges = ({ plan, journal, streak }) => {
+const Badges = ({ plan, progress, journal, streak }) => {
   // شارة أول مرحلة مكتملة
   const phases = Array.from(new Set(plan.map(w => w.phase)));
-  const phaseDone = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks?.filter(t => t.done) || [])).length);
   const phaseTotals = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks || [])).length);
+  const phaseDone = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks || [])).filter(task => progress.find(p => p.taskId === task.id && p.done)).length);
   const firstPhaseComplete = phaseDone[0] === phaseTotals[0] && phaseTotals[0] > 0;
   // شارة سلسلة 7 أيام
   const hasStreak7 = streak >= 7;
@@ -213,7 +214,7 @@ const Badges = ({ plan, journal, streak }) => {
 };
 
 const Consistency = () => {
-  const { plan, journal } = useApp();
+  const { plan, progress, journal } = useApp();
   // streak logic (نفس StatsSummary)
   const daysSet = new Set(journal.map(j => new Date(j.date).toDateString()));
   let streak = 0, maxStreak = 0;
@@ -237,7 +238,7 @@ const Consistency = () => {
     <Card className="my-8">
       <div className="mb-4 text-xl font-bold text-emerald-700">الالتزام اليومي</div>
       <LearningHeatmap journal={journal} />
-      <div className="mt-2"><Badges plan={plan} journal={journal} streak={maxStreak} /></div>
+      <div className="mt-2"><Badges plan={plan} progress={progress} journal={journal} streak={maxStreak} /></div>
     </Card>
   );
 };
@@ -246,9 +247,10 @@ const ReportGenerator = () => {
   const [open, setOpen] = useState(false);
   const [success, setSuccess] = useState(false);
   const { plan, progress } = useApp();
-  // حساب القيم كما في StatsSummary وBadges
+  // جميع المهام
   const allTasks = plan.flatMap(week => (week.days || []).flatMap(day => day.tasks || []));
-  const doneTasks = allTasks.filter(t => t.done);
+  // المهام المنجزة حسب progress
+  const doneTasks = allTasks.filter(task => progress.find(p => p.taskId === task.id && p.done));
   const progressPercent = allTasks.length ? Math.round((doneTasks.length / allTasks.length) * 100) : 0;
   const totalMinutes = doneTasks.reduce((sum, t) => sum + (t.duration || 0), 0);
   const learningHours = Math.round(totalMinutes / 60);
@@ -272,8 +274,8 @@ const ReportGenerator = () => {
   });
   // Badges
   const phases = Array.from(new Set(plan.map(w => w.phase)));
-  const phaseDone = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks?.filter(t => t.done) || [])).length);
   const phaseTotals = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks || [])).length);
+  const phaseDone = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks || [])).filter(task => progress.find(p => p.taskId === task.id && p.done)).length);
   const firstPhaseComplete = phaseDone[0] === phaseTotals[0] && phaseTotals[0] > 0;
   const hasStreak7 = maxStreak >= 7;
   const allPhasesComplete = phaseDone.every((d, i) => d === phaseTotals[i] && phaseTotals[i] > 0);
