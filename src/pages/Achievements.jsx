@@ -109,7 +109,7 @@ const DeepDiveAnalytics = () => {
   // تقدم المراحل
   const phases = Array.from(new Set(plan.map(w => w.phase)));
   const phaseLabels = phases.map(p => `المرحلة ${p}`);
-  const phaseColors = ["#3b82f6", "#10b981", "#a78bfa", "#f59e42", "#f43f5e"];
+  const phaseColors = Array(phases.length).fill("#FFD700"); // ذهبي موحد لكل المراحل
   const phaseTotals = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks || [])).length);
   const phaseDone = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks?.filter(t => t.done) || [])).length);
   const pieData = {
