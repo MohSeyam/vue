@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { Bar, Pie, Radar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, RadialLinearScale, PointElement, LineElement, Filler } from "chart.js";
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, RadialLinearScale, PointElement, LineElement, Filler);
+import { useMemo } from "react";
 
 // Placeholder components for charts and custom widgets
 const ProgressCircle = ({ percent = 85 }) => (
@@ -165,16 +166,81 @@ const DeepDiveAnalytics = () => {
   );
 };
 
-const LearningHeatmap = () => <div className="w-full h-32 bg-gradient-to-r from-emerald-200 to-emerald-400 rounded mb-2 flex items-center justify-center text-2xl text-emerald-900">[خريطة التعلم الحرارية]</div>;
-const Badges = () => <div className="flex gap-2 flex-wrap"><span className="bg-yellow-200 text-yellow-800 px-3 py-1 rounded-full font-bold">🏅 أول مرحلة</span><span className="bg-blue-200 text-blue-800 px-3 py-1 rounded-full font-bold">🏆 10 أيام متتالية</span></div>;
+const daysInYear = () => {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 1);
+  const arr = [];
+  for (let d = new Date(start); d.getFullYear() === now.getFullYear(); d.setDate(d.getDate() + 1)) {
+    arr.push(new Date(d));
+  }
+  return arr;
+};
+const LearningHeatmap = ({ journal }) => {
+  // daysSet: كل يوم فيه تدوينة
+  const daysSet = useMemo(() => new Set(journal.map(j => new Date(j.date).toDateString())), [journal]);
+  const yearDays = useMemo(() => daysInYear(), []);
+  return (
+    <div className="w-full overflow-x-auto">
+      <div className="flex gap-1 flex-wrap" style={{ maxWidth: 700 }}>
+        {yearDays.map((d, i) => {
+          const key = d.toDateString();
+          const active = daysSet.has(key);
+          return <div key={key} title={d.toLocaleDateString("ar-EG")} className={`w-3 h-3 rounded ${active ? "bg-emerald-500" : "bg-emerald-100 dark:bg-zinc-800"} border border-emerald-200 dark:border-zinc-700 transition`} />;
+        })}
+      </div>
+      <div className="text-xs text-slate-500 mt-2">كل مربع = يوم دراسة في السنة الحالية</div>
+    </div>
+  );
+};
 
-const Consistency = () => (
-  <Card className="my-8">
-    <div className="mb-4 text-xl font-bold text-emerald-700">الالتزام اليومي</div>
-    <LearningHeatmap />
-    <div className="mt-2"><Badges /></div>
-  </Card>
-);
+const Badges = ({ plan, journal, streak }) => {
+  // شارة أول مرحلة مكتملة
+  const phases = Array.from(new Set(plan.map(w => w.phase)));
+  const phaseDone = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks?.filter(t => t.done) || [])).length);
+  const phaseTotals = phases.map(phase => plan.filter(w => w.phase === phase).flatMap(w => (w.days || []).flatMap(d => d.tasks || [])).length);
+  const firstPhaseComplete = phaseDone[0] === phaseTotals[0] && phaseTotals[0] > 0;
+  // شارة سلسلة 7 أيام
+  const hasStreak7 = streak >= 7;
+  // شارة إنجاز كل المراحل
+  const allPhasesComplete = phaseDone.every((d, i) => d === phaseTotals[i] && phaseTotals[i] > 0);
+  return (
+    <div className="flex gap-2 flex-wrap">
+      {firstPhaseComplete && <span className="bg-yellow-200 text-yellow-800 px-3 py-1 rounded-full font-bold">🏅 أول مرحلة مكتملة</span>}
+      {hasStreak7 && <span className="bg-blue-200 text-blue-800 px-3 py-1 rounded-full font-bold">🏆 سلسلة 7 أيام</span>}
+      {allPhasesComplete && <span className="bg-emerald-200 text-emerald-800 px-3 py-1 rounded-full font-bold">👑 جميع المراحل مكتملة</span>}
+    </div>
+  );
+};
+
+const Consistency = () => {
+  const { plan, journal } = useCyberPlan();
+  // streak logic (نفس StatsSummary)
+  const daysSet = new Set(journal.map(j => new Date(j.date).toDateString()));
+  let streak = 0, maxStreak = 0;
+  let prev = null;
+  Array.from(daysSet).sort().forEach(dateStr => {
+    const date = new Date(dateStr);
+    if (prev) {
+      const diff = (date - prev) / (1000 * 60 * 60 * 24);
+      if (diff === 1) {
+        streak++;
+      } else {
+        streak = 1;
+      }
+    } else {
+      streak = 1;
+    }
+    maxStreak = Math.max(maxStreak, streak);
+    prev = date;
+  });
+  return (
+    <Card className="my-8">
+      <div className="mb-4 text-xl font-bold text-emerald-700">الالتزام اليومي</div>
+      <LearningHeatmap journal={journal} />
+      <div className="mt-2"><Badges plan={plan} journal={journal} streak={maxStreak} /></div>
+    </Card>
+  );
+};
 
 const ReportGenerator = () => {
   const [open, setOpen] = useState(false);
