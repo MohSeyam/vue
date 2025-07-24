@@ -5,7 +5,7 @@ import { Dialog } from "../components/ui/Dialog";
 import { Goal, Clock, Flame } from "lucide-react";
 import { FaBookOpen } from "react-icons/fa";
 import { FaCrown } from "react-icons/fa";
-import { useCyberPlan } from "../hooks/useCyberPlan";
+import { useApp } from "../context/AppContext";
 import { useEffect } from "react";
 import { Bar, Pie, Radar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, RadialLinearScale, PointElement, LineElement, Filler } from "chart.js";
@@ -25,17 +25,17 @@ const ProgressCircle = ({ percent = 85 }) => (
 );
 const Sparkline = () => <div className="h-8 w-full bg-gradient-to-r from-blue-200 to-blue-400 rounded" />;
 const StatsSummary = () => {
-  const { plan, journal, loading } = useCyberPlan();
-  // حساب نسبة التقدم
-  const allTasks = plan.flatMap(week => (week.days || []).flatMap(day => day.tasks || []));
-  const doneTasks = allTasks.filter(t => t.done);
-  const progress = allTasks.length ? Math.round((doneTasks.length / allTasks.length) * 100) : 0;
+  const { plan, progress } = useApp();
+  // حساب نسبة الإنجاز بناءً على progress
+  const totalTasks = plan.reduce((acc, week) => acc + week.days.reduce((a, d) => a + d.tasks.length, 0), 0);
+  const doneTasks = progress.filter(p => p.done).length;
+  const percent = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
   // حساب ساعات التعلم
-  const totalMinutes = doneTasks.reduce((sum, t) => sum + (t.duration || 0), 0);
+  const totalMinutes = progress.reduce((sum, p) => sum + (p.duration || 0), 0);
   const learningHours = Math.round(totalMinutes / 60);
   // حساب سلسلة الإنجاز (streak)
   // نستخدم journal: كل يوم فيه تدوينة يعتبر يوم دراسة
-  const daysSet = new Set(journal.map(j => new Date(j.date).toDateString()));
+  const daysSet = new Set(progress.map(p => new Date(p.date).toDateString()));
   let streak = 0, maxStreak = 0;
   let prev = null;
   Array.from(daysSet).sort().forEach(dateStr => {
@@ -53,12 +53,11 @@ const StatsSummary = () => {
     maxStreak = Math.max(maxStreak, streak);
     prev = date;
   });
-  if (loading) return <div className="text-center text-slate-400">جاري التحميل...</div>;
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
       <Card className="flex flex-col items-center justify-center gap-2 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
         <Goal className="w-8 h-8 text-blue-500 mb-2" />
-        <ProgressCircle percent={progress} />
+        <ProgressCircle percent={percent} />
         <div className="text-sm text-slate-500 mt-2">نسبة إنجاز الخطة</div>
       </Card>
       <Card className="flex flex-col items-center justify-center gap-2 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
@@ -88,7 +87,7 @@ const Tabs = ({ tabs, active, onTab }) => (
 
 const DeepDiveAnalytics = () => {
   const [tab, setTab] = useState(0);
-  const { plan } = useCyberPlan();
+  const { plan } = useApp();
   // تحليل المهارات
   const allTasks = plan.flatMap(week => (week.days || []).flatMap(day => day.tasks || []));
   const doneTasks = allTasks.filter(t => t.done);
@@ -214,7 +213,7 @@ const Badges = ({ plan, journal, streak }) => {
 };
 
 const Consistency = () => {
-  const { plan, journal } = useCyberPlan();
+  const { plan, journal } = useApp();
   // streak logic (نفس StatsSummary)
   const daysSet = new Set(journal.map(j => new Date(j.date).toDateString()));
   let streak = 0, maxStreak = 0;
@@ -246,14 +245,14 @@ const Consistency = () => {
 const ReportGenerator = () => {
   const [open, setOpen] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { plan, journal } = useCyberPlan();
+  const { plan, progress } = useApp();
   // حساب القيم كما في StatsSummary وBadges
   const allTasks = plan.flatMap(week => (week.days || []).flatMap(day => day.tasks || []));
   const doneTasks = allTasks.filter(t => t.done);
-  const progress = allTasks.length ? Math.round((doneTasks.length / allTasks.length) * 100) : 0;
+  const progressPercent = allTasks.length ? Math.round((doneTasks.length / allTasks.length) * 100) : 0;
   const totalMinutes = doneTasks.reduce((sum, t) => sum + (t.duration || 0), 0);
   const learningHours = Math.round(totalMinutes / 60);
-  const daysSet = new Set(journal.map(j => new Date(j.date).toDateString()));
+  const daysSet = new Set(progress.map(p => new Date(p.date).toDateString()));
   let streak = 0, maxStreak = 0;
   let prev = null;
   Array.from(daysSet).sort().forEach(dateStr => {
@@ -286,7 +285,7 @@ const ReportGenerator = () => {
     doc.text("تقرير إنجازاتك", 105, 20, { align: "center" });
     doc.setFontSize(14);
     doc.setFont("helvetica", "normal");
-    doc.text(`نسبة إنجاز الخطة: ${progress}%`, 20, 40);
+    doc.text(`نسبة إنجاز الخطة: ${progressPercent}%`, 20, 40);
     doc.text(`إجمالي ساعات التعلم: ${learningHours} ساعة`, 20, 50);
     doc.text(`أطول سلسلة التزام: ${maxStreak} يوم`, 20, 60);
     let badges = [];
