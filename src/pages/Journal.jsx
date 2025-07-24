@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getJournalEntries, updateJournalEntry, deleteJournalEntry } from "../services/dbService";
-import { FaBookOpen } from "react-icons/fa";
+import { FaBookOpen, FaEdit, FaTrash, FaTag } from "react-icons/fa";
+import { Dialog } from "../components/ui/Dialog";
 import { useApp } from "../context/AppContext";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -9,12 +10,12 @@ import TextAlign from "@tiptap/extension-text-align";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 
-export default function Journal() {
+export default function Blog() {
   const { t, i18n } = useTranslation();
   const { lang, planData } = useApp();
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState(null);
+  const [expanded, setExpanded] = useState(null);
 
   useEffect(() => {
     fetchEntries();
@@ -40,20 +41,37 @@ export default function Journal() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto py-8" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-      <h1 className="text-2xl font-bold mb-6 text-center text-emerald-700 flex items-center justify-center gap-2">
-        <FaBookOpen className="inline w-8 h-8 text-emerald-400" />
-        {t("journalTitle", "اليوميات")}
+    <div className="max-w-4xl mx-auto py-8 px-2" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+      <h1 className="text-3xl font-bold mb-6 flex items-center justify-center gap-2">
+        <FaBookOpen className="inline w-9 h-9 text-emerald-400" />
+        {t("blogTitle", "المدونة")}
       </h1>
       <div>
         {loading ? (
           <div className="text-center text-gray-400">{t("loading", "جاري التحميل...")}</div>
         ) : entries.length === 0 ? (
-          <div className="text-center text-gray-400">{t("noJournalEntries", "لا توجد تدوينات بعد.")}</div>
+          <div className="flex flex-col items-center justify-center min-h-[40vh] text-center text-gray-400">
+            <FaBookOpen className="w-24 h-24 mb-4 text-emerald-200 dark:text-emerald-900" />
+            <div className="text-xl font-bold mb-2">لا توجد تدوينات</div>
+            <div className="text-base">ابدأ بكتابة تدويناتك أثناء الدراسة وستظهر هنا تلقائيًا.</div>
+          </div>
         ) : (
-          <ul className="space-y-4">
+          <div className="grid gap-4 min-h-[60vh]">
             {entries.map(entry => (
-              <li key={entry.id} className="rounded border p-3 bg-white dark:bg-zinc-900 shadow flex flex-col gap-2">
+              <div
+                key={entry.id}
+                className="rounded-2xl shadow-lg bg-white/80 dark:bg-zinc-900/80 border border-slate-200 dark:border-zinc-800 p-5 flex flex-col gap-2 hover:shadow-2xl transition-all cursor-pointer"
+                onClick={() => setExpanded(entry)}
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="font-bold text-lg text-emerald-900 dark:text-emerald-200">{entry.title || t("untitled", "(بدون عنوان)")}</span>
+                  {Array.isArray(entry.tags) && entry.tags.length > 0 && entry.tags.map(tag => (
+                    <span key={tag} className="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full text-xs ml-1 flex items-center gap-1"><FaTag />{tag}</span>
+                  ))}
+                  {typeof entry.tags === "string" && entry.tags.trim() && entry.tags.split(",").map(tag => (
+                    <span key={tag} className="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full text-xs ml-1 flex items-center gap-1"><FaTag />{tag.trim()}</span>
+                  ))}
+                </div>
                 <div className="flex items-center gap-2 text-xs text-gray-500 mb-1">
                   <span className="font-bold text-emerald-700">
                     {getDayTitle(entry) ? getDayTitle(entry) : t("unknownDay", "يوم غير معروف")}
@@ -61,14 +79,81 @@ export default function Journal() {
                   <span>|</span>
                   <span>{new Date(entry.date).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US")}</span>
                 </div>
-                <div className="text-gray-800 dark:text-gray-100 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: entry.content }} />
-                <div className="flex gap-2 mt-1">
-                  <button onClick={() => setEditing(entry)} className="text-xs text-emerald-700 hover:underline">{t("edit", "تعديل")}</button>
-                  <button onClick={() => handleDelete(entry.id)} className="text-xs text-red-600 hover:underline">{t("delete", "حذف")}</button>
+                <div className="text-sm text-gray-700 dark:text-gray-200 line-clamp-2 mb-2" dangerouslySetInnerHTML={{ __html: entry.content?.slice(0, 120) + (entry.content?.length > 120 ? "..." : "") }} />
+                <div className="flex gap-2 mt-2">
+                  <button
+                    className="px-3 py-1 text-xs rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 flex items-center gap-1 transition"
+                    onClick={e => { e.stopPropagation(); setExpanded(entry); }}
+                    aria-label={t("expand", "عرض كامل")}
+                  >
+                    <FaBookOpen />
+                  </button>
+                  <button
+                    className="px-3 py-1 text-xs rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 flex items-center gap-1 transition"
+                    onClick={e => { e.stopPropagation(); /* implement edit logic here */ }}
+                    aria-label={t("edit", "تعديل")}
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    className="px-3 py-1 text-xs rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 flex items-center gap-1 transition"
+                    onClick={e => { e.stopPropagation(); handleDelete(entry.id); }}
+                    aria-label={t("delete", "حذف")}
+                  >
+                    <FaTrash />
+                  </button>
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
+        )}
+        {expanded && (
+          <Dialog open={!!expanded} onOpenChange={v => !v && setExpanded(null)}>
+            <div className="p-4 max-w-lg">
+              <h2 className="font-bold text-2xl mb-2 text-emerald-700 flex items-center gap-2">
+                <FaBookOpen /> {expanded.title || t("untitled", "(بدون عنوان)")}
+              </h2>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {Array.isArray(expanded.tags) && expanded.tags.length > 0 && expanded.tags.map(tag => (
+                  <span key={tag} className="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full text-xs flex items-center gap-1"><FaTag />{tag}</span>
+                ))}
+                {typeof expanded.tags === "string" && expanded.tags.trim() && expanded.tags.split(",").map(tag => (
+                  <span key={tag} className="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full text-xs flex items-center gap-1"><FaTag />{tag.trim()}</span>
+                ))}
+              </div>
+              <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
+                <span className="font-bold text-emerald-700">
+                  {getDayTitle(expanded) ? getDayTitle(expanded) : t("unknownDay", "يوم غير معروف")}
+                </span>
+                <span>|</span>
+                <span>{new Date(expanded.date).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US")}</span>
+              </div>
+              <div className="text-gray-800 dark:text-gray-100 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: expanded.content }} />
+              <div className="flex gap-2 mt-4">
+                <button
+                  className="px-3 py-1 text-xs rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 flex items-center gap-1 transition"
+                  onClick={() => {/* implement edit logic here */}}
+                  aria-label={t("edit", "تعديل")}
+                >
+                  <FaEdit /> تعديل
+                </button>
+                <button
+                  className="px-3 py-1 text-xs rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 flex items-center gap-1 transition"
+                  onClick={() => { handleDelete(expanded.id); setExpanded(null); }}
+                  aria-label={t("delete", "حذف")}
+                >
+                  <FaTrash /> حذف
+                </button>
+                <button
+                  className="px-3 py-1 text-xs rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200 flex items-center gap-1 transition"
+                  onClick={() => setExpanded(null)}
+                  aria-label={t("close", "إغلاق")}
+                >
+                  إغلاق
+                </button>
+              </div>
+            </div>
+          </Dialog>
         )}
       </div>
     </div>
