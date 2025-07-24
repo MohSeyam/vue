@@ -16,6 +16,7 @@ import PomodoroTimer from "./pages/DayView/PomodoroTimer";
 import { useApp } from "./context/AppContext";
 import Notebook from "./pages/Notebook";
 import Achievements from "./pages/Achievements";
+import { Toaster } from "react-hot-toast";
 
 function GlobalProgressBar() {
   const { plan } = useCyberPlan();
@@ -44,6 +45,10 @@ export default function App() {
     <div className="min-h-screen bg-light-background text-light-text dark:bg-dark-background dark:text-dark-text font-tajawal">
       <ThemeProvider>
         <AppProvider>
+          <Toaster position="top-center" toastOptions={{
+            style: { fontFamily: 'Tajawal, sans-serif', fontSize: 16 },
+            duration: 2500,
+          }} />
           <GlobalPomodoroOverlay />
           <BrowserRouter>
             <GlobalProgressBar />

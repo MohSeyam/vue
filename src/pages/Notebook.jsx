@@ -4,6 +4,7 @@ import React, { useState, useMemo, useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import { FaTag, FaEdit, FaTrash, FaRegStickyNote } from "react-icons/fa";
 import { Dialog } from "../components/ui/Dialog";
+import toast from "react-hot-toast";
 
 function extractAllNotes(appState, planData, lang) {
   const notes = [];
@@ -71,6 +72,7 @@ export default function Notebook() {
       return newState;
     });
     setSelectedNote(null);
+    toast.success("تم تعديل الملاحظة!");
   }
   function deleteNote() {
     setAppState(prev => {
@@ -82,6 +84,7 @@ export default function Notebook() {
       return newState;
     });
     setSelectedNote(null);
+    toast.success("تم حذف الملاحظة.");
   }
 
   return (
