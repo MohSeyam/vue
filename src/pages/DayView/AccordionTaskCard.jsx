@@ -1,7 +1,6 @@
 import React, { useState, Suspense, useContext } from "react";
 import { AppContext } from "../../context/AppContext";
 import { FaCheck, FaTimes, FaLink, FaBook, FaVideo, FaPodcast, FaShieldAlt, FaUserSecret, FaGavel, FaVial, FaHandsHelping } from "react-icons/fa";
-import "./glassmorphism.css";
 
 const resourceIcons = {
   video: <FaVideo />,
