@@ -30,17 +30,18 @@ module.exports = {
       colors: {
         // Light mode
         light: {
-          background: '#FAFAF9', // خلفية رئيسية فاتحة جدًا
-          card: '#fffbe8', // بطاقات أبيض مائل للذهبي
+          background: '#F7F6F2', // خلفية رئيسية off-white
+          card: '#FDF6E3', // بطاقات بيج فاتح جداً
           text: '#222', // نص أسود داكن
           textSecondary: '#23395d', // أزرق داكن للنصوص الثانوية
-          border: '#FFD700', // حدود ذهبية واضحة
-          accent: '#FFD700', // ذهبي أساسي
+          border: '#E9E7D6', // حدود بيج باهتة
+          accent: '#FFD700', // ذهبي فقط للأزرار/الأيقونات المهمة
           danger: '#FF5252',
           success: '#69F0AE',
           info: '#40C4FF',
           soft: '#FFF9C4',
           policy: '#AE81FF',
+          blue: '#23395d', // أزرق داكن متناسق
         },
         // Dark mode
         dark: {
