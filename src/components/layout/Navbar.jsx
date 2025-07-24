@@ -44,34 +44,46 @@ export default function Navbar() {
         </button>
         {/* إعدادات يسار */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => navigate("/notebook")}
-            className="p-2 rounded-full hover:bg-yellow-100 dark:hover:bg-yellow-900 transition group"
-            aria-label={t("notebook", "دفتر الملاحظات")}
-          >
-            <FaBook className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
-          </button>
-          <button
-            onClick={() => navigate("/journal")}
-            className="p-2 rounded-full hover:bg-yellow-100 dark:hover:bg-yellow-900 transition group"
-            aria-label={t("journal", "سجل التدوينات")}
-          >
-            <FaBookOpen className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
-          </button>
-          <button
-            onClick={() => navigate("/achievements")}
-            className="p-2 rounded-full hover:bg-yellow-100 dark:hover:bg-yellow-900 transition group"
-            aria-label={t("achievements", "الإنجازات")}
-          >
-            <FaMedal className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
-          </button>
-          <button
-            onClick={() => navigate("/settings")}
-            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
-            aria-label={t("settings", "الإعدادات")}
-          >
-            <Settings className="w-6 h-6 text-slate-600 dark:text-slate-300" />
-          </button>
+          <div className="relative group">
+            <button
+              onClick={() => navigate("/notebook")}
+              className={`p-2 rounded-full transition group ${location.pathname.startsWith("/notebook") ? "bg-yellow-100 dark:bg-yellow-900 border-2 border-yellow-400" : "hover:bg-yellow-100 dark:hover:bg-yellow-900"}`}
+              aria-label="دفتر الملاحظات"
+            >
+              <FaBook className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+            </button>
+            <Tooltip>دفتر الملاحظات</Tooltip>
+          </div>
+          <div className="relative group">
+            <button
+              onClick={() => navigate("/journal")}
+              className={`p-2 rounded-full transition group ${location.pathname.startsWith("/journal") ? "bg-yellow-100 dark:bg-yellow-900 border-2 border-yellow-400" : "hover:bg-yellow-100 dark:hover:bg-yellow-900"}`}
+              aria-label="سجل التدوينات"
+            >
+              <FaBookOpen className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+            </button>
+            <Tooltip>سجل التدوينات</Tooltip>
+          </div>
+          <div className="relative group">
+            <button
+              onClick={() => navigate("/achievements")}
+              className={`p-2 rounded-full transition group ${location.pathname.startsWith("/achievements") ? "bg-yellow-100 dark:bg-yellow-900 border-2 border-yellow-400" : "hover:bg-yellow-100 dark:hover:bg-yellow-900"}`}
+              aria-label="الإنجازات"
+            >
+              <FaMedal className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+            </button>
+            <Tooltip>الإنجازات</Tooltip>
+          </div>
+          <div className="relative group">
+            <button
+              onClick={() => navigate("/settings")}
+              className={`p-2 rounded-full transition group ${location.pathname.startsWith("/settings") ? "bg-slate-200 dark:bg-slate-800 border-2 border-yellow-400" : "hover:bg-slate-100 dark:hover:bg-slate-800"}`}
+              aria-label="الإعدادات"
+            >
+              <Settings className="w-6 h-6 text-slate-600 dark:text-slate-300" />
+            </button>
+            <Tooltip>الإعدادات</Tooltip>
+          </div>
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setOpen(v => !v)}
