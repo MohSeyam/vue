@@ -36,34 +36,34 @@ export default function Navbar() {
   const toggleLang = () => setLang(lang === "ar" ? "en" : "ar");
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 shadow-sm">
+    <header className="sticky top-0 z-50 w-full bg-light-background dark:bg-dark-background backdrop-blur-sm border-b border-light-border dark:border-dark-border shadow-sm">
       <nav className="flex items-center justify-between h-16 max-w-7xl mx-auto px-4">
         {/* شعار يمين */}
         <button onClick={() => window.location.href = '/'} className="flex items-center gap-2 group focus:outline-none" tabIndex={0} aria-label="العودة للوحة التحكم">
-          <ShieldCheck className="w-6 h-6 text-blue-600 dark:text-sky-400 group-hover:scale-110 transition" />
+          <ShieldCheck className="w-6 h-6 text-yellow-500 dark:text-yellow-400 group-hover:scale-110 transition" />
         </button>
         {/* إعدادات يسار */}
         <div className="flex items-center gap-2">
           <button
             onClick={() => navigate("/notebook")}
-            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
+            className="p-2 rounded-full hover:bg-yellow-100 dark:hover:bg-yellow-900 transition group"
             aria-label={t("notebook", "دفتر الملاحظات")}
           >
-            <FaBook className="w-6 h-6 text-slate-600 dark:text-slate-300" />
+            <FaBook className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
           </button>
           <button
             onClick={() => navigate("/journal")}
-            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
+            className="p-2 rounded-full hover:bg-yellow-100 dark:hover:bg-yellow-900 transition group"
             aria-label={t("journal", "سجل التدوينات")}
           >
-            <FaBookOpen className="w-6 h-6 text-emerald-600 dark:text-emerald-300" />
+            <FaBookOpen className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
           </button>
           <button
             onClick={() => navigate("/achievements")}
-            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
+            className="p-2 rounded-full hover:bg-yellow-100 dark:hover:bg-yellow-900 transition group"
             aria-label={t("achievements", "الإنجازات")}
           >
-            <FaMedal className="w-6 h-6 text-yellow-500 dark:text-yellow-400" />
+            <FaMedal className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
           </button>
           <div className="relative" ref={dropdownRef}>
             <button

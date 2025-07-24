@@ -6,6 +6,7 @@ export default function Card({ children, className = "", ...props }) {
       className={`
         bg-light-card dark:bg-dark-card
         border border-light-border dark:border-dark-border
+        text-light-text dark:text-dark-text
         rounded-lg
         p-6
         shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),0_2px_4px_-1px_rgba(0,0,0,0.04)]
