@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import TaskItem from "./TaskItem";
 import NotesPrompt from "./NotesPrompt";
 import TiptapJournalEditor from "./TiptapJournalEditor";
+import { useCyberPlan } from "../../hooks/useCyberPlan";
 
 // NoteEditor component
 function NoteEditor({ note, taskDescription, onSave, onDelete }) {
@@ -181,6 +182,7 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
 
 // DayView main component
 export default function DayViewPage(props) {
+    const cyberPlan = useCyberPlan();
     const ctx = useContext(AppContext);
     const { planData, lang, appState, setAppState, translations, Icons, setModal } = ctx || {};
     const params = useParams();
@@ -206,29 +208,25 @@ export default function DayViewPage(props) {
 
     // دالة لتغيير حالة المهمة بين مكتملة وغير مكتملة
     const handleTaskToggle = (taskIndex) => {
-        setAppState(prev => {
-            // تهيئة progress إذا لم يكن موجودًا
-            const prevProgress = prev.progress?.[weekId]?.days?.[dayIndex]?.tasks || [];
-            const updatedTasks = [...prevProgress];
-            updatedTasks[taskIndex] = updatedTasks[taskIndex] === 'completed' ? 'pending' : 'completed';
-            // تهيئة days إذا لم تكن موجودة
-            const prevDays = prev.progress?.[weekId]?.days || [];
-            const updatedDays = [...prevDays];
-            updatedDays[dayIndex] = {
-                ...(prevDays[dayIndex] || {}),
-                tasks: updatedTasks,
-            };
-            return {
-                ...prev,
-                progress: {
-                    ...prev.progress,
-                    [weekId]: {
-                        ...prev.progress?.[weekId],
-                        days: updatedDays,
-                    },
-                },
-            };
-        });
+      // تحديث الخطة في قاعدة البيانات (db.plan)
+      cyberPlan.savePlan(
+        cyberPlan.plan.map(week => {
+          if (String(week.week) !== String(weekId)) return week;
+          return {
+            ...week,
+            days: week.days.map((day, idx) => {
+              if (idx !== dayIndex) return day;
+              return {
+                ...day,
+                tasks: day.tasks.map((task, tIdx) => {
+                  if (tIdx !== taskIndex) return task;
+                  return { ...task, done: !task.done };
+                })
+              };
+            })
+          };
+        })
+      );
     };
     // دالة لفتح نافذة تعديل الملاحظات
     const openNoteModal = (taskId, taskDescription) => {
