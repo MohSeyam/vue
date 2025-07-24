@@ -28,36 +28,38 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        tajawal: ["Tajawal", "Inter", "sans-serif"],
-        inter: ["Inter", "sans-serif"],
-        sans: ["Tajawal", "Inter", "sans-serif"],
-      },
-      backgroundImage: {
-        'gradient-gold': 'linear-gradient(135deg, #FFD700 0%, #FFF9C4 100%)',
-        'gradient-blue': 'linear-gradient(135deg, #23395d 0%, #7ca7e6 100%)',
-        'gradient-dark': 'linear-gradient(135deg, #18181b 0%, #222 100%)',
-      },
-      transitionProperty: {
-        'card': 'box-shadow, transform, background-color, border-color',
-        'button': 'background-color, color, border-color, box-shadow, transform',
+        tajawal: ["Tajawal", "sans-serif"],
       },
       colors: {
-        amber: {
-          400: '#FFD700',
-          500: '#FFC107',
-          600: '#FFB300',
+        // Light mode
+        light: {
+          background: '#F3F3EF', // خلفية رئيسية أغمق قليلاً
+          card: '#F8F8F5', // بطاقات أبيض مائل للرمادي
+          text: '#222', // نص أسود داكن
+          textSecondary: '#23395d', // أزرق داكن للنصوص الثانوية
+          border: '#FFD700', // حدود ذهبية واضحة فقط
+          accent: '#FFD700', // ذهبي أساسي
+          danger: '#FF5252',
+          success: '#69F0AE',
+          info: '#40C4FF',
+          soft: '#FFF9C4',
+          policy: '#AE81FF',
+          blue: '#23395d', // أزرق داكن متناسق
         },
-        emerald: {
-          400: '#69F0AE',
-          500: '#10B981',
-        },
-        sky: {
-          400: '#40C4FF',
-          500: '#0EA5E9',
-        },
-        pink: {
-          400: '#F472B6',
-          500: '#EC4899',
+        // Dark mode
+        dark: {
+          background: '#111', // أسود عميق
+          card: '#18181b', // بطاقات رمادي غامق جدًا
+          text: '#fff', // نص أبيض
+          textSecondary: '#7ca7e6', // أزرق فاتح مائل للرمادي للنصوص الثانوية
+          border: '#FFD700', // حدود ذهبية واضحة
+          accent: '#FFD700', // ذهبي أساسي
+          danger: '#FF5252',
+          success: '#69F0AE',
+          info: '#40C4FF',
+          soft: '#222',
+          policy: '#AE81FF',
+          blue: '#23395d', // أزرق داكن متناسق
         },
       },
     },
