@@ -4,11 +4,12 @@ import Dexie from "dexie";
 
 // تعريف قاعدة البيانات والجداول
 export const db = new Dexie("cyberPlanDB");
-db.version(1).stores({
+db.version(2).stores({
   plan: "++id, week, phase", // بيانات الخطة (مراحل، أسابيع)
   notes: "++id, title, tags, createdAt, updatedAt",
   journal: "++id, date, content, tags",
-  settings: "key, value"
+  settings: "key, value",
+  progress: "++id, weekId, dayKey, taskId, done"
 });
 
 // --- دوال CRUD للخطة ---
@@ -46,6 +47,25 @@ export async function updateJournalEntry(id, updates) {
 }
 export async function deleteJournalEntry(id) {
   return await db.journal.delete(id);
+}
+
+// --- دوال CRUD للتقدم ---
+export async function getProgress() {
+  return await db.progress.toArray();
+}
+export async function getTaskProgress(weekId, dayKey, taskId) {
+  return await db.progress.where({ weekId, dayKey, taskId }).first();
+}
+export async function setTaskProgress(weekId, dayKey, taskId, done) {
+  const existing = await db.progress.where({ weekId, dayKey, taskId }).first();
+  if (existing) {
+    await db.progress.update(existing.id, { done });
+  } else {
+    await db.progress.add({ weekId, dayKey, taskId, done });
+  }
+}
+export async function clearProgress() {
+  await db.progress.clear();
 }
 
 // --- إعدادات المستخدم ---
