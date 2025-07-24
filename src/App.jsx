@@ -15,6 +15,7 @@ import { getPlanData } from "./services/dataService";
 import PomodoroTimer from "./pages/DayView/PomodoroTimer";
 import { useApp } from "./context/AppContext";
 import Notebook from "./pages/Notebook";
+import Achievements from "./pages/Achievements";
 
 function GlobalProgressBar() {
   const { plan } = useCyberPlan();
@@ -55,6 +56,7 @@ export default function App() {
                 <Route path="/week/:weekId" element={<WeekView />} />
                 <Route path="/day/:weekId/:dayKey" element={<DayView />} />
                 <Route path="/notebook" element={<Notebook />} />
+                <Route path="/achievements" element={<Achievements />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
