@@ -41,36 +41,7 @@ function GlobalProgressBar() {
 }
 
 export default function App() {
-  console.log("App.jsx loaded");
-  return (
-    <div className="min-h-screen bg-light-background text-light-text dark:bg-dark-background dark:text-dark-text font-tajawal">
-      <ThemeProvider>
-        <AppProvider>
-          <Sidebar />
-          <Toaster position="top-center" toastOptions={{
-            style: { fontFamily: 'Tajawal, sans-serif', fontSize: 16 },
-            duration: 2500,
-          }} />
-          <div className="pr-0 md:pr-64 transition-all">
-            <GlobalProgressBar />
-            <Routes>
-              <Route element={<MainLayout />}>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/plan" element={<CyberPlan />} />
-                <Route path="/journal" element={<Journal />} />
-                <Route path="/phase/:phaseId" element={<PhaseView />} />
-                <Route path="/week/:weekId" element={<WeekView />} />
-                <Route path="/day/:weekId/:dayKey" element={<DayView />} />
-                <Route path="/notebook" element={<Notebook />} />
-                <Route path="/achievements" element={<Achievements />} />
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
-          </div>
-        </AppProvider>
-      </ThemeProvider>
-    </div>
-  );
+  return <div style={{color:'blue'}}>app loaded</div>;
 }
 
 function GlobalPomodoroOverlay() {
