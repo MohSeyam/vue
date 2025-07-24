@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import { FaTag, FaEdit, FaTrash } from "react-icons/fa";
-import Dialog from "../components/ui/Dialog";
+import { Dialog } from "../components/ui/Dialog";
 
 function extractAllNotes(appState, planData, lang) {
   const notes = [];
