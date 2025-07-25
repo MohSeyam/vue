@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ThemeProvider from "./context/ThemeProvider";
-import AppProvider from "./context/AppContext";
+import { ThemeProvider } from "./context/ThemeProvider";
+import { AppProvider } from "./context/AppContext";
 import MainLayout from "./layouts/MainLayout";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
