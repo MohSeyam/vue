@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "./context/ThemeProvider";
-import { AppProvider } from "./context/AppContext";
-import Sidebar from "./components/layout/Sidebar";
+import ThemeProvider from "./context/ThemeProvider";
+import AppProvider from "./context/AppContext";
 import MainLayout from "./layouts/MainLayout";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
@@ -20,7 +19,6 @@ export default function App() {
       <ThemeProvider>
         <AppProvider>
           <BrowserRouter>
-            <Sidebar />
             <Toaster
               position="top-center"
               toastOptions={{
@@ -28,24 +26,19 @@ export default function App() {
                 duration: 2500,
               }}
             />
-            <div className="pr-0 md:pr-64 transition-all">
-              <Routes>
-                {/* Routes with the MainLayout */}
-                <Route element={<MainLayout />}>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/plan" element={<CyberPlan />} />
-                  <Route path="/journal" element={<Journal />} />
-                  <Route path="/phase/:phaseId" element={<PhaseView />} />
-                  <Route path="/week/:weekId" element={<WeekView />} />
-                  <Route path="/day/:weekId/:dayKey" element={<DayView />} />
-                  <Route path="/notebook" element={<Notebook />} />
-                </Route>
-
-                {/* Routes without the MainLayout */}
+            <Routes>
+              <Route element={<MainLayout />}>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/plan" element={<CyberPlan />} />
+                <Route path="/journal" element={<Journal />} />
+                <Route path="/phase/:phaseId" element={<PhaseView />} />
+                <Route path="/week/:weekId" element={<WeekView />} />
+                <Route path="/day/:weekId/:dayKey" element={<DayView />} />
+                <Route path="/notebook" element={<Notebook />} />
                 <Route path="/achievements" element={<Achievements />} />
                 <Route path="*" element={<NotFound />} />
-              </Routes>
-            </div>
+              </Route>
+            </Routes>
           </BrowserRouter>
         </AppProvider>
       </ThemeProvider>
