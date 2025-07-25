@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "./context/ThemeProvider";
-import { AppProvider } from "./context/AppContext";
+import ThemeProvider from "./context/ThemeProvider";
+import AppProvider from "./context/AppContext";
 import Sidebar from "./components/layout/Sidebar";
 import MainLayout from "./layouts/MainLayout";
 import Dashboard from "./pages/Dashboard";
@@ -21,12 +21,16 @@ export default function App() {
         <AppProvider>
           <BrowserRouter>
             <Sidebar />
-            <Toaster position="top-center" toastOptions={{
-              style: { fontFamily: 'Tajawal, sans-serif', fontSize: 16 },
-              duration: 2500,
-            }} />
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                style: { fontFamily: 'Tajawal, sans-serif', fontSize: 16 },
+                duration: 2500,
+              }}
+            />
             <div className="pr-0 md:pr-64 transition-all">
               <Routes>
+                {/* Routes with the MainLayout */}
                 <Route element={<MainLayout />}>
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/plan" element={<CyberPlan />} />
@@ -35,9 +39,11 @@ export default function App() {
                   <Route path="/week/:weekId" element={<WeekView />} />
                   <Route path="/day/:weekId/:dayKey" element={<DayView />} />
                   <Route path="/notebook" element={<Notebook />} />
-                  <Route path="/achievements" element={<Achievements />} />
-                  <Route path="*" element={<NotFound />} />
                 </Route>
+
+                {/* Routes without the MainLayout */}
+                <Route path="/achievements" element={<Achievements />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
           </BrowserRouter>
