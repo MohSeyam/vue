@@ -1,5 +1,6 @@
 import Sidebar from "../components/layout/Sidebar";
 import Navbar from "../components/layout/Navbar";
+import BottomNavigation from "../components/layout/BottomNavigation";
 import { Outlet } from "react-router-dom";
 
 export default function MainLayout() {
@@ -15,6 +16,7 @@ export default function MainLayout() {
         <main className="flex-1 p-4">
           <Outlet />
         </main>
+        <BottomNavigation />
       </div>
     </div>
   );
