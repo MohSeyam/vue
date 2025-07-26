@@ -3,6 +3,20 @@
 import { useEffect, useState, useCallback } from "react";
 import * as db from "../services/dbService";
 
+async function importPlanDataIfEmpty() {
+  const plan = await db.getPlan();
+  if (!plan || plan.length === 0) {
+    // استورد البيانات من PlanData.json
+    const res = await fetch("/src/data/PlanData.json");
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        await db.savePlan(data);
+      }
+    }
+  }
+}
+
 export function useCyberPlan() {
   const [plan, setPlan] = useState([]);
   const [notes, setNotes] = useState([]);
@@ -13,6 +27,7 @@ export function useCyberPlan() {
   // جلب كل البيانات من القاعدة
   const fetchAll = useCallback(async () => {
     setLoading(true);
+    await importPlanDataIfEmpty();
     const [planData, notesData, journalData, progressData] = await Promise.all([
       db.getPlan(),
       db.getNotes(),
