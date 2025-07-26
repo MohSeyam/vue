@@ -5,9 +5,13 @@ import { Outlet } from "react-router-dom";
 export default function MainLayout() {
   return (
     <div className="min-h-screen flex bg-white dark:bg-dark-background">
-      <Sidebar />
+      <div className="hidden md:block">
+        <Sidebar />
+      </div>
       <div className="flex-1 flex flex-col">
-        <Navbar />
+        <div className="hidden md:block">
+          <Navbar />
+        </div>
         <main className="flex-1 p-4">
           <Outlet />
         </main>
