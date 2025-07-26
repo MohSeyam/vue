@@ -16,24 +16,30 @@ export default function PlanPhases() {
   if (!Array.isArray(plan) || plan.length === 0) {
     return <div className="text-center mt-10 text-slate-400">لا توجد خطة متاحة</div>;
   }
+  // استخرج أرقام المراحل الفعلية فقط
+  const phases = Array.from(new Set(plan.map(week => week.phase).filter(Boolean)));
+  if (phases.length === 0) {
+    return <div className="text-center mt-10 text-slate-400">لا توجد مراحل متاحة</div>;
+  }
   // استخراج اسم الخطة (إذا وجد)
   const planName = plan.find(w => w.planName)?.planName || "الخطة";
-  // استخراج المراحل الفريدة من plan (كل أسبوع له phase)
+  // بناء phaseMap لكل رقم مرحلة
   const phaseMap = {};
-  plan.forEach(week => {
-    const phase = week.phase || "غير محدد";
-    if (!phaseMap[phase]) phaseMap[phase] = { desc: week.phaseDesc || '', done: 0, total: 0, name: PHASE_NAMES[phase] || `المرحلة ${phase}` };
-    phaseMap[phase].total++;
-    // عدّ المهام المنجزة في كل أسبوع
-    if (week.days && Array.isArray(week.days)) {
-      week.days.forEach(day => {
-        if (day.tasks && Array.isArray(day.tasks)) {
-          phaseMap[phase].done += day.tasks.filter(t => t.done).length;
+  phases.forEach(phase => {
+    phaseMap[phase] = { done: 0, total: 0, name: PHASE_NAMES[phase] || `المرحلة ${phase}` };
+    plan.forEach(week => {
+      if (week.phase === phase) {
+        phaseMap[phase].total++;
+        if (week.days && Array.isArray(week.days)) {
+          week.days.forEach(day => {
+            if (day.tasks && Array.isArray(day.tasks)) {
+              phaseMap[phase].done += day.tasks.filter(t => t.done).length;
+            }
+          });
         }
-      });
-    }
+      }
+    });
   });
-  const phases = Object.keys(phaseMap);
   // حساب نسبة التقدم الكلية
   let totalTasks = 0, doneTasks = 0;
   plan.forEach(week => {
@@ -79,7 +85,6 @@ export default function PlanPhases() {
                 <span className="font-semibold text-lg">{phaseMap[phase].name}</span>
                 <span className="text-slate-500">#{idx + 1}</span>
               </div>
-              {phaseMap[phase].desc && <div className="text-slate-500 text-sm mb-2">{phaseMap[phase].desc}</div>}
               <div className="w-full bg-slate-100 rounded-full h-2">
                 <div className="bg-emerald-500 h-2 rounded-full" style={{width: phaseMap[phase].total ? ((phaseMap[phase].done/(phaseMap[phase].total*7))*100) + '%' : '0%'}}></div>
               </div>
