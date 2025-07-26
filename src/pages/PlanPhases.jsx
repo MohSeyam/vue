@@ -9,8 +9,8 @@ const PHASE_NAMES = {
 };
 
 export default function PlanPhases() {
-  const { plan } = useApp();
-  if (plan === undefined || plan === null) {
+  const { plan, loading } = useApp();
+  if (loading) {
     return <div className="text-center mt-10 text-slate-400">جاري تحميل الخطة...</div>;
   }
   if (!Array.isArray(plan) || plan.length === 0) {
