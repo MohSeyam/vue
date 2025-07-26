@@ -4,8 +4,11 @@ import { Edit, TrendingUp, Calendar } from "lucide-react";
 
 export default function PlanPhases() {
   const { plan } = useApp();
-  if (!plan || !Array.isArray(plan) || plan.length === 0) {
+  if (plan === undefined || plan === null) {
     return <div className="text-center mt-10 text-slate-400">جاري تحميل الخطة...</div>;
+  }
+  if (!Array.isArray(plan) || plan.length === 0) {
+    return <div className="text-center mt-10 text-slate-400">لا توجد خطة متاحة</div>;
   }
   // استخراج اسم الخطة (إذا وجد)
   const planName = plan.find(w => w.planName)?.planName || "الخطة";
