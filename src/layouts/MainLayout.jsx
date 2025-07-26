@@ -33,7 +33,7 @@ export default function MainLayout() {
         <Sidebar />
         {/* زر إغلاق */}
         <button
-          className="absolute top-4 left-4 bg-white dark:bg-dark-card border border-light-border dark:border-dark-border shadow p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+          className="absolute top-4 left-4 bg-white dark:bg-dark-card border border-light-border dark:border-dark-border shadow p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition ms-20"
           onClick={() => setSidebarOpen(false)}
           aria-label="إخفاء القائمة الجانبية"
         >
