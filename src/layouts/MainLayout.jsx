@@ -10,9 +10,7 @@ export default function MainLayout() {
         <Sidebar />
       </div>
       <div className="flex-1 flex flex-col">
-        <div className="hidden md:block">
-          <Navbar />
-        </div>
+        <Navbar />
         <main className="flex-1 p-4">
           <Outlet />
         </main>

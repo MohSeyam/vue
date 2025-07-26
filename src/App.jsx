@@ -12,6 +12,7 @@ import DayView from "./pages/DayView";
 import Notebook from "./pages/Notebook";
 import Achievements from "./pages/Achievements";
 import { Toaster } from "react-hot-toast";
+import PlanPhases from "./pages/PlanPhases";
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
                 <Route path="/day/:weekId/:dayKey" element={<DayView />} />
                 <Route path="/notebook" element={<Notebook />} />
                 <Route path="/achievements" element={<Achievements />} />
+                <Route path="/phases" element={<PlanPhases />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
