@@ -2,6 +2,12 @@ import { useApp } from "../context/AppContext";
 import { Link } from "react-router-dom";
 import { Edit, TrendingUp, Calendar } from "lucide-react";
 
+const PHASE_NAMES = {
+  1: "المرحلة التأسيسية",
+  2: "المرحلة المتوسطة",
+  3: "المرحلة النهائية"
+};
+
 export default function PlanPhases() {
   const { plan } = useApp();
   if (plan === undefined || plan === null) {
@@ -16,7 +22,7 @@ export default function PlanPhases() {
   const phaseMap = {};
   plan.forEach(week => {
     const phase = week.phase || "غير محدد";
-    if (!phaseMap[phase]) phaseMap[phase] = { desc: week.phaseDesc || '', done: 0, total: 0, name: week.phaseName };
+    if (!phaseMap[phase]) phaseMap[phase] = { desc: week.phaseDesc || '', done: 0, total: 0, name: PHASE_NAMES[phase] || `المرحلة ${phase}` };
     phaseMap[phase].total++;
     // عدّ المهام المنجزة في كل أسبوع
     if (week.days && Array.isArray(week.days)) {
@@ -70,7 +76,7 @@ export default function PlanPhases() {
           <Link to={`/phase/${phase}`} key={phase} className="block">
             <div className="bg-white dark:bg-dark-card rounded-lg shadow p-4 border border-light-border dark:border-dark-border hover:bg-blue-50 dark:hover:bg-slate-800 transition">
               <div className="flex items-center justify-between mb-1">
-                <span className="font-semibold text-lg">{phaseMap[phase].name || `المرحلة ${phase}`}</span>
+                <span className="font-semibold text-lg">{phaseMap[phase].name}</span>
                 <span className="text-slate-500">#{idx + 1}</span>
               </div>
               {phaseMap[phase].desc && <div className="text-slate-500 text-sm mb-2">{phaseMap[phase].desc}</div>}
