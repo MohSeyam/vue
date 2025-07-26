@@ -1,5 +1,6 @@
 import { useApp } from "../context/AppContext";
 import { Link } from "react-router-dom";
+import { Edit, TrendingUp, Calendar } from "lucide-react";
 
 export default function PlanPhases() {
   const { plan } = useApp();
@@ -23,12 +24,27 @@ export default function PlanPhases() {
   const percent = Math.round((done / total) * 100);
   return (
     <div className="max-w-md mx-auto mt-8">
-      <h2 className="text-2xl font-bold mb-2 text-center">{planName}</h2>
-      <div className="mb-6 text-center">
-        <div className="w-full bg-slate-200 rounded-full h-3 dark:bg-dark-border">
-          <div className="bg-blue-500 h-3 rounded-full transition-all" style={{width: percent + '%'}}></div>
+      <div className="bg-white dark:bg-dark-card rounded-lg shadow p-6 mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">{planName}</h2>
+          <button className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <Edit className="w-5 h-5" />
+          </button>
         </div>
-        <span className="text-sm text-slate-600 dark:text-slate-300">{percent}% من الخطة مكتمل</span>
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingUp className="w-5 h-5 text-blue-500" />
+            <span className="text-sm font-medium">التقدم العام</span>
+          </div>
+          <div className="w-full bg-slate-200 rounded-full h-3 dark:bg-dark-border">
+            <div className="bg-blue-500 h-3 rounded-full transition-all" style={{width: percent + '%'}}></div>
+          </div>
+          <span className="text-sm text-slate-600 dark:text-slate-300">{percent}% من الخطة مكتمل</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-slate-500">
+          <Calendar className="w-4 h-4" />
+          <span>{phases.length} مراحل</span>
+        </div>
       </div>
       <div className="grid gap-4">
         {phases.map((phase, idx) => (
