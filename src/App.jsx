@@ -13,6 +13,7 @@ import Notebook from "./pages/Notebook";
 import Achievements from "./pages/Achievements";
 import { Toaster } from "react-hot-toast";
 import PlanPhases from "./pages/PlanPhases";
+import Settings from "./pages/Settings";
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
                 <Route path="/notebook" element={<Notebook />} />
                 <Route path="/achievements" element={<Achievements />} />
                 <Route path="/phases" element={<PlanPhases />} />
+                <Route path="/settings" element={<Settings />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>

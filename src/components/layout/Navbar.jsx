@@ -2,12 +2,14 @@
 // شريط التنقل العلوي
 
 import { useApp } from "../../context/AppContext";
-import { Sun, Moon, Languages, ShieldCheck } from "lucide-react";
+import { Sun, Moon, ShieldCheck, Settings } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const { theme, setTheme, lang, setLang } = useApp();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
   const toggleLang = () => setLang(lang === "ar" ? "en" : "ar");
@@ -23,6 +25,9 @@ export default function Navbar() {
       <div className="flex items-center gap-3">
         <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label={t("theme", "تغيير الثيم")}>{theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}</button>
         <button onClick={toggleLang} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label={t("lang", "تغيير اللغة")}>{lang === "ar" ? "EN" : "AR"}</button>
+        <button onClick={() => navigate('/settings')} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="الإعدادات">
+          <Settings className="w-5 h-5" />
+        </button>
       </div>
     </header>
   );

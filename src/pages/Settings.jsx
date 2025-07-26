@@ -1,52 +1,33 @@
-import React, { useRef } from "react";
 import { useApp } from "../context/AppContext";
-import Card from "../components/ui/Card";
-import Button from "../components/ui/Button";
-import toast from "react-hot-toast";
+import { Sun, Moon, User } from "lucide-react";
 
 export default function Settings() {
-  const { plan, notes, journal, progress, savePlan, addNote, addJournalEntry, setTaskProgress } = useApp();
-  const fileInputRef = useRef();
-
-  // تصدير كل البيانات كـ JSON
-  const handleExport = () => {
-    const data = { plan, notes, journal, progress };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "cyberplan-backup.json";
-    a.click();
-    URL.revokeObjectURL(url);
-    toast.success("تم تصدير البيانات بنجاح!");
-  };
-
-  // استيراد كل البيانات من JSON
-  const handleImport = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const text = await file.text();
-    try {
-      const data = JSON.parse(text);
-      if (data.plan) await savePlan(data.plan);
-      if (data.notes) for (const n of data.notes) await addNote(n);
-      if (data.journal) for (const j of data.journal) await addJournalEntry(j);
-      if (data.progress) for (const p of data.progress) await setTaskProgress(p.weekId, p.dayKey, p.taskId, p.done);
-      toast.success("تم استيراد البيانات بنجاح!");
-    } catch {
-      toast.error("فشل في قراءة الملف. تأكد أنه نسخة احتياطية من التطبيق.");
-    }
-  };
-
+  const { theme, setTheme, lang, setLang } = useApp();
+  // اسم المستخدم وصورة رمزية افتراضية
+  const userName = "مستخدم افتراضي";
   return (
-    <div className="max-w-xl mx-auto py-10">
-      <Card className="p-6 flex flex-col gap-4">
-        <h2 className="text-2xl font-bold mb-2">إعدادات التطبيق</h2>
-        <div className="text-slate-600 dark:text-slate-300 mb-4">يمكنك تصدير نسخة احتياطية من جميع بياناتك أو استيرادها لاحقًا.</div>
-        <Button onClick={handleExport} className="w-full">تصدير جميع البيانات (JSON)</Button>
-        <input type="file" accept="application/json" ref={fileInputRef} style={{ display: "none" }} onChange={handleImport} />
-        <Button onClick={() => fileInputRef.current.click()} className="w-full" variant="secondary">استيراد نسخة احتياطية</Button>
-      </Card>
+    <div className="max-w-md mx-auto mt-8 p-4 bg-white dark:bg-dark-card rounded-lg shadow">
+      <div className="flex flex-col items-center mb-6">
+        <span className="inline-block bg-blue-100 dark:bg-blue-900 p-4 rounded-full mb-2">
+          <User className="w-10 h-10 text-blue-500 dark:text-blue-300" />
+        </span>
+        <div className="font-bold text-lg mb-1">{userName}</div>
+      </div>
+      <div className="mb-4">
+        <div className="font-semibold mb-2">تغيير اللغة</div>
+        <button onClick={() => setLang(lang === "ar" ? "en" : "ar")}
+          className="px-4 py-2 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+          {lang === "ar" ? "English" : "العربية"}
+        </button>
+      </div>
+      <div>
+        <div className="font-semibold mb-2">تغيير الثيم</div>
+        <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          className="px-4 py-2 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center gap-2">
+          {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          {theme === "dark" ? "وضع النهار" : "وضع الليل"}
+        </button>
+      </div>
     </div>
   );
 }
