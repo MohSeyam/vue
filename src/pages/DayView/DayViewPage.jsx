@@ -15,7 +15,8 @@ function NoteEditor({ note, taskDescription, onSave, onDelete }) {
     const [title, setTitle] = useState(note.title || '');
     const [content, setContent] = useState(note.content || '');
     const [keywords, setKeywords] = useState(note.keywords || '');
-
+    const [tags, setTags] = useState(note.tags || []);
+    const [error, setError] = useState("");
     const quillModules = {
       toolbar: [
         [{ 'header': [1, 2, false] }],
@@ -25,10 +26,10 @@ function NoteEditor({ note, taskDescription, onSave, onDelete }) {
         ['clean']
       ],
     };
-
     // حفظ الملاحظة فعليًا
     const handleSave = () => {
-        onSave({ title, content, keywords });
+        if (!title.trim()) { setError("يجب إدخال عنوان للملاحظة"); return; }
+        onSave({ title, content, keywords, tags });
         setModal({ isOpen: false, content: null });
     };
     // حذف الملاحظة فعليًا
@@ -36,7 +37,10 @@ function NoteEditor({ note, taskDescription, onSave, onDelete }) {
         onDelete();
         setModal({ isOpen: false, content: null });
     };
-
+    // اختيار التاجات
+    const toggleTag = (tag) => {
+      setTags(tags.includes(tag) ? tags.filter(t => t !== tag) : [...tags, tag]);
+    };
     return (
         <>
             <div className="p-6 border-b border-gray-200 dark:border-gray-800">
@@ -44,13 +48,26 @@ function NoteEditor({ note, taskDescription, onSave, onDelete }) {
                 <p className="text-sm text-gray-500 dark:text-gray-400">{t.noteOnTask} "{taskDescription}"</p>
             </div>
             <div className="p-6 flex-grow overflow-y-auto space-y-4">
+                {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
                 <div>
                     <label htmlFor="note-title-editor" className="block text-sm font-medium text-black dark:text-white">{t.noteTitle}</label>
                     <input id="note-title-editor" type="text" value={title} onChange={e => setTitle(e.target.value)} className="mt-1 w-full p-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md text-black dark:text-white" />
                 </div>
                 <div>
-                    <label htmlFor="note-keywords-editor" className="block text-sm font-medium text-black dark:text-white">{t.keywords}</label>
-                    <input id="note-keywords-editor" type="text" value={keywords} onChange={e => setKeywords(e.target.value)} className="mt-1 w-full p-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md text-black dark:text-white" />
+                    <label className="block text-sm font-medium mb-1 text-black dark:text-white">التاجات</label>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {NOTE_TAGS.map(tag => (
+                        <button
+                          key={tag}
+                          type="button"
+                          onClick={() => toggleTag(tag)}
+                          className={`px-3 py-1 rounded-full border text-xs font-medium transition focus:outline-none
+                            ${tags.includes(tag) ? 'bg-blue-600 text-white border-blue-700 shadow' : 'bg-gray-50 text-black dark:bg-gray-800 dark:text-white border-gray-200 dark:border-gray-700 hover:bg-blue-100 dark:hover:bg-blue-900/40'}`}
+                        >
+                          {tag}
+                        </button>
+                      ))}
+                    </div>
                 </div>
                 <div>
                     <label className="block text-sm font-medium mb-1 text-black dark:text-white">{t.noteContent}</label>
@@ -231,6 +248,10 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
     );
 }
 
+const NOTE_TAGS = [
+  "مهم", "مراجعة", "معلومة", "تجربة", "تحذير", "مصطلح", "سؤال", "ملخص", "تطبيق عملي", "ملاحظة شخصية"
+];
+
 // DayView main component
 export default function DayViewPage(props) {
     const { plan, progress, setTaskProgress } = useApp();
@@ -272,7 +293,7 @@ export default function DayViewPage(props) {
     };
     // دالة لفتح نافذة تعديل الملاحظات
     const openNoteModal = (taskId, taskDescription) => {
-        const note = appState.notes[weekId]?.days[dayIndex]?.[taskId] || { title: '', content: '', keywords: '' };
+        const note = appState.notes[weekId]?.days[dayIndex]?.[taskId] || { title: '', content: '', keywords: '', tags: [] };
         setModal({
             isOpen: true,
             content: <NoteEditor 
@@ -317,14 +338,21 @@ export default function DayViewPage(props) {
                         <h4 className="text-lg font-semibold mb-3 text-light-text dark:text-dark-text">{t.activeTasks}</h4>
                         <div className="space-y-3">
                             {dayData.tasks.map((task, taskIndex) => (
-                              <TaskItem
-                                key={task.id}
-                                task={task}
-                                weekId={weekId}
-                                dayKey={dayKey}
-                                checked={!!progress.find(p => p.weekId == weekId && p.dayKey == dayKey && p.taskId == task.id)?.done}
-                                onToggle={() => handleTaskToggle(taskIndex)}
-                              />
+                              <div key={task.id} className="flex items-center gap-2">
+                                <TaskItem
+                                  task={task}
+                                  weekId={weekId}
+                                  dayKey={dayKey}
+                                  checked={!!progress.find(p => p.weekId == weekId && p.dayKey == dayKey && p.taskId == task.id)?.done}
+                                  onToggle={() => handleTaskToggle(taskIndex)}
+                                />
+                                <button
+                                  className="px-2 py-1 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 text-xs font-bold hover:bg-blue-200 dark:hover:bg-blue-800 transition"
+                                  onClick={() => openNoteModal(task.id, task.description?.ar || task.description?.en || "")}
+                                >
+                                  + إضافة ملاحظة
+                                </button>
+                              </div>
                             ))}
                         </div>
                     </div>
