@@ -7,7 +7,7 @@ async function importPlanDataIfEmpty() {
   const plan = await db.getPlan();
   if (!plan || plan.length === 0) {
     // استورد البيانات من PlanData.json
-    const res = await fetch("/src/data/PlanData.json");
+    const res = await fetch("/PlanData.json");
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
