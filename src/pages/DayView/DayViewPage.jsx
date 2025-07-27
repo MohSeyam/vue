@@ -142,11 +142,9 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
     const [url, setUrl] = useState(resource?.url || '');
     const [type, setType] = useState(resource?.type || 'link');
     const [error, setError] = useState("");
-    // تحقق من صحة الرابط
     function isValidUrl(str) {
       try { new URL(str); return true; } catch { return false; }
     }
-    // حفظ أو تعديل مرجع
     const handleSave = () => {
         if (!title.trim()) { setError("يجب إدخال عنوان المرجع"); return; }
         if (!isValidUrl(url)) { setError("يجب إدخال رابط صحيح يبدأ بـ https:// أو http://"); return; }
@@ -164,7 +162,6 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
         });
         setModal({ isOpen: false, content: null });
     };
-    // حذف مرجع
     const handleDelete = () => {
         setAppState(prev => {
             const newState = JSON.parse(JSON.stringify(prev));
@@ -189,14 +186,16 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
             </div>
             <div>
                 <label className="block text-sm font-medium mb-1 text-black dark:text-white">{t.resourceType}</label>
-                <select className="w-full p-2 rounded border text-black dark:text-white bg-white dark:bg-gray-900" value={type} onChange={e => setType(e.target.value)}>
-                  {RESOURCE_TYPES.map(rt => (
-                    <option key={rt.value} value={rt.value}>{rt.label}</option>
-                  ))}
-                </select>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {RESOURCE_TYPES.map(rt => (
-                    <span key={rt.value} className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs border ${type === rt.value ? 'bg-blue-100 border-blue-400' : 'bg-gray-50 border-gray-200'} text-black dark:text-white`}>{rt.icon}{rt.label}</span>
+                    <button
+                      key={rt.value}
+                      type="button"
+                      onClick={() => setType(rt.value)}
+                      className={`inline-flex items-center gap-1 px-3 py-2 rounded text-sm border transition font-medium focus:outline-none ${type === rt.value ? 'bg-blue-600 text-white border-blue-700 shadow' : 'bg-gray-50 dark:bg-gray-800 text-black dark:text-white border-gray-200 dark:border-gray-700 hover:bg-blue-100 dark:hover:bg-blue-900/40'}`}
+                    >
+                      {rt.icon}{rt.label}
+                    </button>
                   ))}
                 </div>
             </div>
