@@ -96,3 +96,34 @@ export async function importAllData({ plan, notes, journal, settings }) {
     if (settings) await db.settings.bulkAdd(settings);
   });
 }
+
+// --- دوال متقدمة للملاحظات ---
+export async function getNotesByTask(weekId, dayKey, taskId) {
+  return await db.notes.where({ weekId, dayKey, taskId }).toArray();
+}
+export async function getNotesByDay(weekId, dayKey) {
+  return await db.notes.where({ weekId, dayKey }).toArray();
+}
+export async function getNotesByWeek(weekId) {
+  return await db.notes.where({ weekId }).toArray();
+}
+export async function addOrUpdateNote(note) {
+  // إذا كان هناك id استخدم update، وإلا أضف جديد
+  if (note.id) {
+    return await updateNote(note.id, note);
+  } else {
+    return await addNote(note);
+  }
+}
+// --- دوال متقدمة للمدونة اليومية ---
+export async function getJournalByDay(weekId, dayKey) {
+  return await db.journal.where({ weekId, dayKey }).toArray();
+}
+export async function addOrUpdateJournalEntry(entry) {
+  // إذا كان هناك id استخدم update، وإلا أضف جديد
+  if (entry.id) {
+    return await updateJournalEntry(entry.id, entry);
+  } else {
+    return await addJournalEntry(entry);
+  }
+}
