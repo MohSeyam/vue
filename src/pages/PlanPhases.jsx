@@ -90,16 +90,20 @@ export default function PlanPhases() {
             <div className={`bg-white dark:bg-dark-card rounded-2xl shadow p-6 border border-${PHASE_COLORS[phase]}-200 dark:border-${PHASE_COLORS[phase]}-800 hover:bg-${PHASE_COLORS[phase]}-50 dark:hover:bg-${PHASE_COLORS[phase]}-900/30 transition flex flex-col gap-2 h-full`}> 
               <div className="flex items-center gap-3 mb-2">
                 {PHASE_ICONS[phase]}
-                <span className="font-bold text-xl">{PHASE_NAMES[phase] || `المرحلة ${phase}`}</span>
+                <span className="font-bold text-xl text-gray-900 dark:text-white">{PHASE_NAMES[phase] || `المرحلة ${phase}`}</span>
                 <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded bg-${PHASE_COLORS[phase]}-100 text-${PHASE_COLORS[phase]}-700 dark:bg-${PHASE_COLORS[phase]}-900 dark:text-${PHASE_COLORS[phase]}-200`}>
                   رقم {phase}
                 </span>
               </div>
-              <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
+              {/* توضيح توزيع الأسابيع للمرحلة الأولى */}
+              {phase === 1 && (
+                <div className="text-xs font-bold text-gray-900 dark:text-white mb-1">من الأسبوع 1 إلى 17</div>
+              )}
+              <div className="flex items-center gap-2 text-xs text-gray-900 dark:text-white mb-2">
                 <Calendar className="w-4 h-4" /> {weeksCount} أسبوع
                 <ListChecks className="w-4 h-4 ml-2" /> {tasksCount} مهمة
               </div>
-              <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
+              <div className="flex items-center gap-2 text-xs text-gray-900 dark:text-white mb-2">
                 <CheckCircle className="w-4 h-4 text-emerald-500" />
                 <span>المهام المكتملة: {doneCount} / {tasksCount}</span>
                 <span className="ml-2">نسبة الإنجاز: {percent}%</span>
