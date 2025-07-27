@@ -6,7 +6,7 @@ import NotesPrompt from "./NotesPrompt";
 import TiptapJournalEditor from "./TiptapJournalEditor";
 import { useApp } from "../../context/AppContext";
 import toast from "react-hot-toast";
-import { FaVideo, FaRegFileAlt, FaBook, FaWrench, FaPodcast, FaChalkboardTeacher, FaQuestionCircle, FaProjectDiagram, FaUsers, FaNewspaper, FaLink } from "react-icons/fa";
+import { FaVideo, FaRegFileAlt, FaBook, FaWrench, FaPodcast, FaChalkboardTeacher, FaQuestionCircle, FaProjectDiagram, FaUsers, FaNewspaper, FaLink, FaRegStickyNote, FaEdit } from "react-icons/fa";
 
 // NoteEditor component
 function NoteEditor({ note, taskDescription, onSave, onDelete }) {
@@ -117,17 +117,17 @@ function ResourcesSection({ weekId, dayIndex }) {
     // جلب المراجع المضافة من appState
     const userResources = appState.resources[weekId]?.days[dayIndex] || [];
     // دالة لفتح نافذة تعديل أو إضافة مرجع
-    const openResourceModal = (resource, index) => {
+    const openResourceModal = (resource, index, isPlanResource) => {
         setModal({
             isOpen: true,
-            content: <ResourceEditorModal resource={resource} index={index} weekId={weekId} dayIndex={dayIndex} />
+            content: <ResourceEditorModal resource={resource} index={isPlanResource ? null : index} weekId={weekId} dayIndex={dayIndex} isPlanResource={isPlanResource} />
         });
     };
     return (
         <div>
             <div className="flex justify-between items-center mb-3">
                 <h4 className="text-lg font-semibold">{t.suggestedResources}</h4>
-                <button onClick={() => openResourceModal(null, null)} className="text-sm font-medium text-blue-600 hover:underline">{t.addResource}</button>
+                <button onClick={() => openResourceModal(null, null, false)} className="text-sm font-medium text-blue-600 hover:underline">{t.addResource}</button>
             </div>
             <div className="space-y-2">
                 {/* مراجع الخطة الأصلية */}
@@ -137,6 +137,9 @@ function ResourcesSection({ weekId, dayIndex }) {
                             <span className="w-6 h-6 me-3 text-gray-500 dark:text-gray-400">{RESOURCE_TYPES.find(rt => rt.value === res.type)?.icon || <FaLink />}</span>
                             <span className="text-blue-600 dark:text-blue-400 hover:underline truncate">{res.title}</span>
                         </a>
+                        <button onClick={() => openResourceModal(res, index, true)} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 ml-2" title="تعديل المرجع">
+                          <FaEdit className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                        </button>
                     </div>
                 ))}
                 {/* مراجع المستخدم */}
@@ -146,7 +149,7 @@ function ResourcesSection({ weekId, dayIndex }) {
                             <span className="w-6 h-6 me-3 text-gray-500 dark:text-gray-400">{RESOURCE_TYPES.find(rt => rt.value === res.type)?.icon || <FaLink />}</span>
                             <span className="text-blue-600 dark:text-blue-400 hover:underline truncate">{res.title}</span>
                         </a>
-                        <button onClick={() => openResourceModal(res, index)} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onClick={() => openResourceModal(res, index, false)} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 opacity-0 group-hover:opacity-100 transition-opacity" title="تعديل المرجع">
                             <Icons.edit className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                         </button>
                     </div>
@@ -171,7 +174,7 @@ const RESOURCE_TYPES = [
 ];
 
 // ResourceEditorModal component (placeholder for actual ResourceEditor UI)
-function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
+function ResourceEditorModal({ resource, index, weekId, dayIndex, isPlanResource }) {
     const { lang, setAppState, appState, setModal, translations } = useContext(AppContext);
     const t = translations[lang];
     const [title, setTitle] = useState(resource?.title || '');
@@ -187,7 +190,10 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
         setAppState(prev => {
             const newState = JSON.parse(JSON.stringify(prev));
             const arr = newState.resources[weekId]?.days[dayIndex] || [];
-            if (index === null || index === undefined) {
+            if (isPlanResource) {
+              // إذا كان المرجع من الخطة الأصلية، أضف نسخة معدلة في appState
+              arr.push({ title, url, type });
+            } else if (index === null || index === undefined) {
                 arr.push({ title, url, type });
             } else {
                 arr[index] = { title, url, type };
@@ -350,10 +356,11 @@ export default function DayViewPage(props) {
                                                 onToggle={() => handleTaskToggle(taskIndex)}
                                             />
                                             <button
-                                                className="px-2 py-1 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 text-xs font-bold hover:bg-blue-200 dark:hover:bg-blue-800 transition"
+                                                className="p-2 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 transition"
                                                 onClick={() => openNoteModal(task.id, task.description?.ar || task.description?.en || "")}
+                                                title="إضافة ملاحظة"
                                             >
-                                                + إضافة ملاحظة
+                                                <FaRegStickyNote className="w-5 h-5" />
                                             </button>
                                         </div>
                                         {/* عرض الملاحظة أسفل المهمة */}
