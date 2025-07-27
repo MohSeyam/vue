@@ -87,9 +87,18 @@ function NoteEditor({ note, taskDescription, onSave, onDelete }) {
 
 // ResourcesSection component
 function ResourcesSection({ weekId, dayIndex }) {
-    const { lang, appState, setAppState, setModal, translations, Icons } = useContext(AppContext);
+    const { lang, appState, setAppState, setModal, translations, Icons, planData } = useContext(AppContext);
     const t = translations[lang];
-    const resources = appState.resources[weekId]?.days[dayIndex] || [];
+    // جلب المراجع من الخطة الأصلية (planData)
+    let planResources = [];
+    if (planData && planData.find) {
+      const week = planData.find(w => String(w.week) === String(weekId));
+      if (week && week.days && week.days[dayIndex]) {
+        planResources = week.days[dayIndex].resources || [];
+      }
+    }
+    // جلب المراجع المضافة من appState
+    const userResources = appState.resources[weekId]?.days[dayIndex] || [];
     // دالة لفتح نافذة تعديل أو إضافة مرجع
     const openResourceModal = (resource, index) => {
         setModal({
@@ -104,10 +113,20 @@ function ResourcesSection({ weekId, dayIndex }) {
                 <button onClick={() => openResourceModal(null, null)} className="text-sm font-medium text-blue-600 hover:underline">{t.addResource}</button>
             </div>
             <div className="space-y-2">
-                {resources.map((res, index) => (
-                    <div key={index} className="flex items-center group">
+                {/* مراجع الخطة الأصلية */}
+                {planResources.map((res, index) => (
+                    <div key={index} className="flex items-center group opacity-80">
                         <a href={res.url} target="_blank" rel="noopener noreferrer" className="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors flex-grow min-w-0">
-                            <span className="w-6 h-6 me-3 text-gray-500 dark:text-gray-400">{Icons.resource(res.type)}</span>
+                            <span className="w-6 h-6 me-3 text-gray-500 dark:text-gray-400">{RESOURCE_TYPES.find(rt => rt.value === res.type)?.icon || <FaLink />}</span>
+                            <span className="text-blue-600 dark:text-blue-400 hover:underline truncate">{res.title}</span>
+                        </a>
+                    </div>
+                ))}
+                {/* مراجع المستخدم */}
+                {userResources.map((res, index) => (
+                    <div key={"user-"+index} className="flex items-center group">
+                        <a href={res.url} target="_blank" rel="noopener noreferrer" className="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors flex-grow min-w-0">
+                            <span className="w-6 h-6 me-3 text-gray-500 dark:text-gray-400">{RESOURCE_TYPES.find(rt => rt.value === res.type)?.icon || <FaLink />}</span>
                             <span className="text-blue-600 dark:text-blue-400 hover:underline truncate">{res.title}</span>
                         </a>
                         <button onClick={() => openResourceModal(res, index)} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -192,7 +211,11 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
                       key={rt.value}
                       type="button"
                       onClick={() => setType(rt.value)}
-                      className={`inline-flex items-center gap-1 px-3 py-2 rounded text-sm border transition font-medium focus:outline-none ${type === rt.value ? 'bg-blue-600 text-white border-blue-700 shadow' : 'bg-gray-50 dark:bg-gray-800 text-black dark:text-white border-gray-200 dark:border-gray-700 hover:bg-blue-100 dark:hover:bg-blue-900/40'}`}
+                      className={`inline-flex items-center gap-1 px-3 py-2 rounded text-sm border transition font-medium focus:outline-none
+                        ${type === rt.value
+                          ? 'bg-blue-600 text-white border-blue-700 shadow'
+                          : 'bg-gray-50 text-black dark:bg-gray-800 dark:text-white border-gray-200 dark:border-gray-700 hover:bg-blue-100 dark:hover:bg-blue-900/40'}
+                      `}
                     >
                       {rt.icon}{rt.label}
                     </button>
