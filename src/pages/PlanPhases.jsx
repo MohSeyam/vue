@@ -10,9 +10,6 @@ const PHASE_NAMES = {
 
 export default function PlanPhases() {
   const { plan, loading, progress } = useApp();
-  // طباعة أول 10 عناصر من الخطة للتشخيص
-  console.log('plan in PlanPhases:', Array.isArray(plan) ? plan.slice(0, 10) : plan);
-
   if (loading) {
     return <div className="text-center mt-10 text-slate-400">جاري تحميل الخطة...</div>;
   }
@@ -20,7 +17,7 @@ export default function PlanPhases() {
     return <div className="text-center mt-10 text-slate-400">لا توجد خطة متاحة</div>;
   }
 
-  // استخرج أرقام المراحل الفعلية فقط من plan
+  // استخرج أرقام المراحل الفريدة فقط
   const phases = Array.from(new Set(plan.map(week => week.phase).filter(Boolean)));
   if (phases.length === 0) {
     return <div className="text-center mt-10 text-slate-400">لا توجد مراحل متاحة</div>;
@@ -56,11 +53,14 @@ export default function PlanPhases() {
       <div className="grid gap-4">
         {phases.map((phase, idx) => (
           <Link to={`/phase/${phase}`} key={phase} className="block">
-            <div className="bg-white dark:bg-dark-card rounded-lg shadow p-4 border border-light-border dark:border-dark-border hover:bg-blue-50 dark:hover:bg-slate-800 transition">
-              <div className="flex items-center justify-between mb-1">
+            <div className="bg-white dark:bg-dark-card rounded-lg shadow p-4 border border-light-border dark:border-dark-border hover:bg-blue-50 dark:hover:bg-slate-800 transition flex items-center justify-between">
+              <div>
                 <span className="font-semibold text-lg">{PHASE_NAMES[phase] || `المرحلة ${phase}`}</span>
-                <span className="text-slate-500">#{idx + 1}</span>
+                <div className="text-xs text-slate-400 mt-1">رقم المرحلة: {phase}</div>
               </div>
+              <button className="px-4 py-2 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800 transition">
+                عرض الأسابيع
+              </button>
             </div>
           </Link>
         ))}
