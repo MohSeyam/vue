@@ -40,21 +40,21 @@ function NoteEditor({ note, taskDescription, onSave, onDelete }) {
     return (
         <>
             <div className="p-6 border-b border-gray-200 dark:border-gray-800">
-                <h3 className="text-lg font-semibold">{t.editNote}</h3>
+                <h3 className="text-lg font-semibold text-black dark:text-white">{t.editNote}</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">{t.noteOnTask} "{taskDescription}"</p>
             </div>
             <div className="p-6 flex-grow overflow-y-auto space-y-4">
                 <div>
-                    <label htmlFor="note-title-editor" className="block text-sm font-medium">{t.noteTitle}</label>
-                    <input id="note-title-editor" type="text" value={title} onChange={e => setTitle(e.target.value)} className="mt-1 w-full p-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md" />
+                    <label htmlFor="note-title-editor" className="block text-sm font-medium text-black dark:text-white">{t.noteTitle}</label>
+                    <input id="note-title-editor" type="text" value={title} onChange={e => setTitle(e.target.value)} className="mt-1 w-full p-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md text-black dark:text-white" />
                 </div>
                 <div>
-                    <label htmlFor="note-keywords-editor" className="block text-sm font-medium">{t.keywords}</label>
-                    <input id="note-keywords-editor" type="text" value={keywords} onChange={e => setKeywords(e.target.value)} className="mt-1 w-full p-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md" />
+                    <label htmlFor="note-keywords-editor" className="block text-sm font-medium text-black dark:text-white">{t.keywords}</label>
+                    <input id="note-keywords-editor" type="text" value={keywords} onChange={e => setKeywords(e.target.value)} className="mt-1 w-full p-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md text-black dark:text-white" />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium mb-1">{t.noteContent}</label>
-                    <div className="quill-container bg-white dark:bg-[#111]">
+                    <label className="block text-sm font-medium mb-1 text-black dark:text-white">{t.noteContent}</label>
+                    <div className="quill-container bg-white dark:bg-[#111] text-black dark:text-white">
                         { ReactQuill ? (
                             <ReactQuill 
                                 theme="snow" 
@@ -64,7 +64,7 @@ function NoteEditor({ note, taskDescription, onSave, onDelete }) {
                             />
                           ) : (
                             <textarea
-                                className="w-full h-48 p-2 border rounded bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700"
+                                className="w-full h-48 p-2 border rounded bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-black dark:text-white"
                                 value={content}
                                 onChange={(e) => setContent(e.target.value)}
                                 placeholder="Loading editor..."
@@ -77,7 +77,7 @@ function NoteEditor({ note, taskDescription, onSave, onDelete }) {
             <div className="flex justify-between items-center p-4 bg-gray-100 dark:bg-gray-800/50 rounded-b-lg">
                 <button onClick={handleDelete} className="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md">{t.deleteNote}</button>
                 <div className="flex gap-2">
-                    <button onClick={() => setModal({isOpen: false, content: null})} className="px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">{t.cancel}</button>
+                    <button onClick={() => setModal({isOpen: false, content: null})} className="px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 text-black dark:text-white">{t.cancel}</button>
                     <button onClick={handleSave} className="px-4 py-2 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">{t.saveNote}</button>
                 </div>
             </div>
@@ -177,32 +177,32 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
     };
     return (
         <div className="p-6 space-y-4">
-            <h3 className="text-lg font-semibold mb-2">{t.editResource}</h3>
+            <h3 className="text-lg font-semibold mb-2 text-black dark:text-white">{t.editResource}</h3>
             {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
             <div>
-                <label className="block text-sm font-medium mb-1">{t.resourceTitle}</label>
-                <input className="w-full p-2 rounded border" value={title} onChange={e => setTitle(e.target.value)} />
+                <label className="block text-sm font-medium mb-1 text-black dark:text-white">{t.resourceTitle}</label>
+                <input className="w-full p-2 rounded border text-black dark:text-white bg-white dark:bg-gray-900" value={title} onChange={e => setTitle(e.target.value)} />
             </div>
             <div>
-                <label className="block text-sm font-medium mb-1">{t.resourceUrl}</label>
-                <input className="w-full p-2 rounded border" value={url} onChange={e => setUrl(e.target.value)} />
+                <label className="block text-sm font-medium mb-1 text-black dark:text-white">{t.resourceUrl}</label>
+                <input className="w-full p-2 rounded border text-black dark:text-white bg-white dark:bg-gray-900" value={url} onChange={e => setUrl(e.target.value)} />
             </div>
             <div>
-                <label className="block text-sm font-medium mb-1">{t.resourceType}</label>
-                <select className="w-full p-2 rounded border" value={type} onChange={e => setType(e.target.value)}>
+                <label className="block text-sm font-medium mb-1 text-black dark:text-white">{t.resourceType}</label>
+                <select className="w-full p-2 rounded border text-black dark:text-white bg-white dark:bg-gray-900" value={type} onChange={e => setType(e.target.value)}>
                   {RESOURCE_TYPES.map(rt => (
-                    <option key={rt.value} value={rt.value}>{rt.icon} {rt.label}</option>
+                    <option key={rt.value} value={rt.value}>{rt.label}</option>
                   ))}
                 </select>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {RESOURCE_TYPES.map(rt => (
-                    <span key={rt.value} className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs border ${type === rt.value ? 'bg-blue-100 border-blue-400' : 'bg-gray-50 border-gray-200'}`}>{rt.icon}{rt.label}</span>
+                    <span key={rt.value} className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs border ${type === rt.value ? 'bg-blue-100 border-blue-400' : 'bg-gray-50 border-gray-200'} text-black dark:text-white`}>{rt.icon}{rt.label}</span>
                   ))}
                 </div>
             </div>
             <div className="flex gap-2 mt-4">
                 <button onClick={handleDelete} className="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md">{t.deleteResource}</button>
-                <button onClick={() => setModal({ isOpen: false, content: null })} className="px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">{t.cancel}</button>
+                <button onClick={() => setModal({ isOpen: false, content: null })} className="px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 text-black dark:text-white">{t.cancel}</button>
                 <button onClick={handleSave} className="px-4 py-2 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">{t.saveResource}</button>
             </div>
         </div>
