@@ -3,6 +3,7 @@ import i18n from "../i18n/i18n";
 import { getPlanData } from "../services/dataService";
 import { FaCheck, FaEdit, FaClock } from "react-icons/fa";
 import { useCyberPlan } from "../hooks/useCyberPlan";
+import * as db from "../services/dbService";
 
 const AppContext = createContext();
 
@@ -94,6 +95,65 @@ export function AppProvider({ children }) {
     }
     fetchPlan();
   }, []);
+
+  // تحميل جميع الملاحظات والمدونات من dbService عند بدء التطبيق
+  useEffect(() => {
+    async function fetchNotesAndJournal() {
+      const notesArr = await db.getNotes();
+      const journalArr = await db.getJournalEntries();
+      // تحويل الملاحظات إلى بنية appState.notes
+      const notesObj = {};
+      for (const n of notesArr) {
+        if (!notesObj[n.weekId]) notesObj[n.weekId] = { days: [] };
+        const dayIdx = n.dayIndex ?? n.dayIdx ?? n.dayKey ?? n.day; // دعم جميع الاحتمالات
+        if (!notesObj[n.weekId].days[dayIdx]) notesObj[n.weekId].days[dayIdx] = {};
+        notesObj[n.weekId].days[dayIdx][n.taskId] = n;
+      }
+      // تحويل المدونات إلى بنية appState.journal
+      const journalObj = {};
+      for (const j of journalArr) {
+        if (!journalObj[j.weekId]) journalObj[j.weekId] = {};
+        journalObj[j.weekId][j.dayKey] = j;
+      }
+      setAppState(prev => ({ ...prev, notes: notesObj, journal: journalObj }));
+    }
+    fetchNotesAndJournal();
+  }, []);
+
+  // عند كل تعديل على الملاحظات، احفظها في dbService
+  useEffect(() => {
+    async function saveNotesToDB() {
+      const notes = appState.notes;
+      for (const weekId in notes) {
+        notes[weekId].days.forEach((dayNotes, dayIdx) => {
+          if (!dayNotes) return;
+          for (const taskId in dayNotes) {
+            const note = dayNotes[taskId];
+            if (note && note.title) {
+              db.addOrUpdateNote({ ...note, weekId, dayIdx, taskId });
+            }
+          }
+        });
+      }
+    }
+    saveNotesToDB();
+  }, [appState.notes]);
+
+  // عند كل تعديل على المدونة اليومية، احفظها في dbService
+  useEffect(() => {
+    async function saveJournalToDB() {
+      const journal = appState.journal;
+      for (const weekId in journal) {
+        for (const dayKey in journal[weekId]) {
+          const entry = journal[weekId][dayKey];
+          if (entry && entry.content) {
+            db.addOrUpdateJournalEntry({ ...entry, weekId, dayKey });
+          }
+        }
+      }
+    }
+    saveJournalToDB();
+  }, [appState.journal]);
 
   // استعادة اللغة والثيم من localStorage عند بدء التطبيق
   useEffect(() => {
