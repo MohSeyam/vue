@@ -6,6 +6,7 @@ import NotesPrompt from "./NotesPrompt";
 import TiptapJournalEditor from "./TiptapJournalEditor";
 import { useApp } from "../../context/AppContext";
 import toast from "react-hot-toast";
+import { FaVideo, FaRegFileAlt, FaBook, FaWrench, FaPodcast, FaChalkboardTeacher, FaQuestionCircle, FaProjectDiagram, FaUsers, FaNewspaper, FaLink } from "react-icons/fa";
 
 // NoteEditor component
 function NoteEditor({ note, taskDescription, onSave, onDelete }) {
@@ -119,6 +120,20 @@ function ResourcesSection({ weekId, dayIndex }) {
     );
 }
 
+const RESOURCE_TYPES = [
+  { value: "video", label: "فيديو", icon: <FaVideo className="inline mr-1 text-blue-500" /> },
+  { value: "article", label: "مقالة", icon: <FaRegFileAlt className="inline mr-1 text-emerald-500" /> },
+  { value: "book", label: "كتاب", icon: <FaBook className="inline mr-1 text-violet-500" /> },
+  { value: "tool", label: "أداة", icon: <FaWrench className="inline mr-1 text-orange-500" /> },
+  { value: "podcast", label: "بودكاست", icon: <FaPodcast className="inline mr-1 text-pink-500" /> },
+  { value: "course", label: "دورة", icon: <FaChalkboardTeacher className="inline mr-1 text-cyan-500" /> },
+  { value: "quiz", label: "اختبار", icon: <FaQuestionCircle className="inline mr-1 text-yellow-500" /> },
+  { value: "project", label: "مشروع", icon: <FaProjectDiagram className="inline mr-1 text-indigo-500" /> },
+  { value: "community", label: "مجتمع", icon: <FaUsers className="inline mr-1 text-green-500" /> },
+  { value: "news", label: "خبر", icon: <FaNewspaper className="inline mr-1 text-gray-500" /> },
+  { value: "link", label: "رابط آخر", icon: <FaLink className="inline mr-1 text-slate-500" /> },
+];
+
 // ResourceEditorModal component (placeholder for actual ResourceEditor UI)
 function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
     const { lang, setAppState, appState, setModal, translations } = useContext(AppContext);
@@ -126,8 +141,15 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
     const [title, setTitle] = useState(resource?.title || '');
     const [url, setUrl] = useState(resource?.url || '');
     const [type, setType] = useState(resource?.type || 'link');
+    const [error, setError] = useState("");
+    // تحقق من صحة الرابط
+    function isValidUrl(str) {
+      try { new URL(str); return true; } catch { return false; }
+    }
     // حفظ أو تعديل مرجع
     const handleSave = () => {
+        if (!title.trim()) { setError("يجب إدخال عنوان المرجع"); return; }
+        if (!isValidUrl(url)) { setError("يجب إدخال رابط صحيح يبدأ بـ https:// أو http://"); return; }
         setAppState(prev => {
             const newState = JSON.parse(JSON.stringify(prev));
             const arr = newState.resources[weekId]?.days[dayIndex] || [];
@@ -156,6 +178,7 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
     return (
         <div className="p-6 space-y-4">
             <h3 className="text-lg font-semibold mb-2">{t.editResource}</h3>
+            {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
             <div>
                 <label className="block text-sm font-medium mb-1">{t.resourceTitle}</label>
                 <input className="w-full p-2 rounded border" value={title} onChange={e => setTitle(e.target.value)} />
@@ -167,10 +190,15 @@ function ResourceEditorModal({ resource, index, weekId, dayIndex }) {
             <div>
                 <label className="block text-sm font-medium mb-1">{t.resourceType}</label>
                 <select className="w-full p-2 rounded border" value={type} onChange={e => setType(e.target.value)}>
-                    <option value="video">{t.video}</option>
-                    <option value="article">{t.article}</option>
-                    <option value="link">{t.link}</option>
+                  {RESOURCE_TYPES.map(rt => (
+                    <option key={rt.value} value={rt.value}>{rt.icon} {rt.label}</option>
+                  ))}
                 </select>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {RESOURCE_TYPES.map(rt => (
+                    <span key={rt.value} className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs border ${type === rt.value ? 'bg-blue-100 border-blue-400' : 'bg-gray-50 border-gray-200'}`}>{rt.icon}{rt.label}</span>
+                  ))}
+                </div>
             </div>
             <div className="flex gap-2 mt-4">
                 <button onClick={handleDelete} className="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md">{t.deleteResource}</button>
