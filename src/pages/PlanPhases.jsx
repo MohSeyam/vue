@@ -1,11 +1,21 @@
 import { useApp } from "../context/AppContext";
 import { Link } from "react-router-dom";
-import { Edit, TrendingUp, Calendar } from "lucide-react";
+import { Edit, TrendingUp, Calendar, Layers, CheckCircle } from "lucide-react";
 
 const PHASE_NAMES = {
   1: "المرحلة التأسيسية",
   2: "المرحلة المتوسطة",
   3: "المرحلة النهائية"
+};
+const PHASE_COLORS = {
+  1: "blue",
+  2: "emerald",
+  3: "violet"
+};
+const PHASE_ICONS = {
+  1: <Layers className="w-7 h-7 text-blue-500" />,
+  2: <Layers className="w-7 h-7 text-emerald-500" />,
+  3: <Layers className="w-7 h-7 text-violet-500" />
 };
 
 export default function PlanPhases() {
@@ -25,6 +35,17 @@ export default function PlanPhases() {
 
   // استخراج اسم الخطة (إذا وجد)
   const planName = plan.find(w => w.planName)?.planName || "الخطة";
+
+  // حساب بيانات كل مرحلة
+  const phaseStats = phases.map(phase => {
+    const phaseWeeks = plan.filter(w => w.phase === phase);
+    const weeksCount = phaseWeeks.length;
+    const allTasks = phaseWeeks.flatMap(w => (w.days || []).flatMap(d => d.tasks || []));
+    const tasksCount = allTasks.length;
+    const doneCount = allTasks.filter(task => progress.find(p => p.taskId === task.id && p.done)).length;
+    const percent = tasksCount ? Math.round((doneCount / tasksCount) * 100) : 0;
+    return { phase, weeksCount, tasksCount, doneCount, percent };
+  });
 
   return (
     <div className="max-w-md mx-auto mt-8">
@@ -51,16 +72,27 @@ export default function PlanPhases() {
         </div>
       </div>
       <div className="grid gap-4">
-        {phases.map((phase, idx) => (
+        {phaseStats.map(({ phase, weeksCount, tasksCount, doneCount, percent }, idx) => (
           <Link to={`/phase/${phase}`} key={phase} className="block">
-            <div className="bg-white dark:bg-dark-card rounded-lg shadow p-4 border border-light-border dark:border-dark-border hover:bg-blue-50 dark:hover:bg-slate-800 transition flex items-center justify-between">
-              <div>
-                <span className="font-semibold text-lg">{PHASE_NAMES[phase] || `المرحلة ${phase}`}</span>
-                <div className="text-xs text-slate-400 mt-1">رقم المرحلة: {phase}</div>
+            <div className={`bg-white dark:bg-dark-card rounded-lg shadow p-4 border border-${PHASE_COLORS[phase]}-200 dark:border-${PHASE_COLORS[phase]}-800 hover:bg-${PHASE_COLORS[phase]}-50 dark:hover:bg-${PHASE_COLORS[phase]}-900/30 transition flex items-center gap-4 justify-between`}> 
+              <div className="flex flex-col gap-1 flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  {PHASE_ICONS[phase]}
+                  <span className="font-semibold text-lg">{PHASE_NAMES[phase] || `المرحلة ${phase}`}</span>
+                  <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded bg-${PHASE_COLORS[phase]}-100 text-${PHASE_COLORS[phase]}-700 dark:bg-${PHASE_COLORS[phase]}-900 dark:text-${PHASE_COLORS[phase]}-200`}>
+                    {weeksCount} أسبوع
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-slate-500">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  <span>المهام المكتملة: {doneCount} / {tasksCount}</span>
+                  <span className="ml-2">نسبة الإنجاز: {percent}%</span>
+                </div>
+                <div className="w-full bg-slate-100 rounded-full h-2 mt-2">
+                  <div className={`h-2 rounded-full bg-${PHASE_COLORS[phase]}-500 transition-all`} style={{width: percent + '%'}}></div>
+                </div>
               </div>
-              <button className="px-4 py-2 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800 transition">
-                عرض الأسابيع
-              </button>
+              <button className={`px-4 py-2 rounded bg-${PHASE_COLORS[phase]}-100 dark:bg-${PHASE_COLORS[phase]}-900 text-${PHASE_COLORS[phase]}-700 dark:text-${PHASE_COLORS[phase]}-200 hover:bg-${PHASE_COLORS[phase]}-200 dark:hover:bg-${PHASE_COLORS[phase]}-800 transition font-bold`}>عرض الأسابيع</button>
             </div>
           </Link>
         ))}
