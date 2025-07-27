@@ -6,6 +6,7 @@ import { FaTag, FaEdit, FaTrash, FaRegStickyNote } from "react-icons/fa";
 import { Dialog } from "../components/ui/Dialog";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import toast from "react-hot-toast";
+import NoteEditor from "./DayView/DayViewPage";
 
 function extractAllNotes(appState, planData, lang) {
   const notes = [];
@@ -37,7 +38,7 @@ function extractAllNotes(appState, planData, lang) {
 }
 
 export default function Notebook() {
-  const { appState, planData, lang, setAppState } = useContext(AppContext);
+  const { appState, planData, lang, setAppState, setModal } = useContext(AppContext);
   const [search, setSearch] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
   const [selectedNote, setSelectedNote] = useState(null);
@@ -70,10 +71,33 @@ export default function Notebook() {
   };
 
   function openEdit(note) {
-    setSelectedNote(note);
-    setEditTitle(note.title);
-    setEditTags(note.tags.join(", "));
-    setEditContent(note.content);
+    setModal({
+      isOpen: true,
+      content: <NoteEditor
+        note={appState.notes[note.weekId]?.days[note.dayIdx]?.[note.id.split("-")[2]] || { title: '', content: '', keywords: '', tags: [] }}
+        taskDescription={note.taskTitle}
+        onSave={(newNoteData) => {
+          setAppState(prev => {
+            const newState = JSON.parse(JSON.stringify(prev));
+            if (!newState.notes[note.weekId]) newState.notes[note.weekId] = { days: [] };
+            if (!newState.notes[note.weekId].days[note.dayIdx]) newState.notes[note.weekId].days[note.dayIdx] = {};
+            newState.notes[note.weekId].days[note.dayIdx][note.id.split("-")[2]] = newNoteData;
+            return newState;
+          });
+          setModal({ isOpen: false, content: null });
+        }}
+        onDelete={() => {
+          setAppState(prev => {
+            const newState = JSON.parse(JSON.stringify(prev));
+            if (newState.notes[note.weekId]?.days[note.dayIdx]?.[note.id.split("-")[2]]) {
+              delete newState.notes[note.weekId].days[note.dayIdx][note.id.split("-")[2]];
+            }
+            return newState;
+          });
+          setModal({ isOpen: false, content: null });
+        }}
+      />
+    });
   }
   function saveEdit() {
     // تحديث الملاحظة في appState
