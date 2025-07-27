@@ -95,9 +95,15 @@ export default function PlanPhases() {
                   رقم {phase}
                 </span>
               </div>
-              {/* توضيح توزيع الأسابيع للمرحلة الأولى */}
+              {/* توضيح توزيع الأسابيع لكل مرحلة */}
               {phase === 1 && (
                 <div className="text-xs font-bold text-gray-900 dark:text-white mb-1">من الأسبوع 1 إلى 17</div>
+              )}
+              {phase === 2 && (
+                <div className="text-xs font-bold text-gray-900 dark:text-white mb-1">من الأسبوع 18 إلى 37</div>
+              )}
+              {phase === 3 && (
+                <div className="text-xs font-bold text-gray-900 dark:text-white mb-1">من الأسبوع 38 إلى 50</div>
               )}
               <div className="flex items-center gap-2 text-xs text-gray-900 dark:text-white mb-2">
                 <Calendar className="w-4 h-4" /> {weeksCount} أسبوع
