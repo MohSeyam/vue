@@ -107,7 +107,6 @@ export default function PlanPhases() {
               <div className="w-full bg-slate-100 rounded-full h-2 mt-2">
                 <div className={`h-2 rounded-full bg-${PHASE_COLORS[phase]}-500 transition-all`} style={{width: percent + '%'}}></div>
               </div>
-              <button className={`mt-4 px-4 py-2 rounded bg-${PHASE_COLORS[phase]}-100 dark:bg-${PHASE_COLORS[phase]}-900 text-${PHASE_COLORS[phase]}-700 dark:text-${PHASE_COLORS[phase]}-200 hover:bg-${PHASE_COLORS[phase]}-200 dark:hover:bg-${PHASE_COLORS[phase]}-800 transition font-bold`}>عرض الأسابيع</button>
             </div>
           </Link>
         ))}
